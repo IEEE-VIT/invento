@@ -10,42 +10,51 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          TextLiquidFill(
-            boxBackgroundColor: Colors.white,
-            text: 'Invento',
-            waveColor: Colors.black,
+          TypewriterAnimatedTextKit(
+            isRepeatingAnimation: true,
+            speed: Duration(milliseconds: 500),
+            text: ['Invento'],
             textStyle: TextStyle(
-              fontSize: 80.0,
+              color: Colors.white,
+              fontSize:75.0,
               fontWeight: FontWeight.bold
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              MaterialButton(
-                child: Text(
-                  'Login',
-                  style: TextStyle(color: Colors.white),
+              Material(
+                borderRadius: BorderRadius.circular(30.0),
+                child: MaterialButton(
+                  child: Text(
+                    'Login',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'login');
+                  },
+                  minWidth: 150,
                 ),
-                color: Colors.black,
-                onPressed: () {},
-                minWidth: 100,
               ),
               SizedBox(
                 width: 10.0,
               ),
-              MaterialButton(
-                child: Text(
-                  'Register',
-                  style: TextStyle(color: Colors.white),
+              Material(
+                borderRadius: BorderRadius.circular(30.0),
+                child: MaterialButton(
+                  child: Text(
+                    'Register',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'reg');
+                  },
+                  minWidth: 150,
                 ),
-                color: Colors.black,
-                onPressed: () {},
-                minWidth: 100,
               ),
             ],
           )
