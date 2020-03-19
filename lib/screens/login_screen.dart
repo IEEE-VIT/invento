@@ -1,14 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RegistrationScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   bool showSpinner = false;
   final _auth = FirebaseAuth.instance;
   String email;
@@ -37,11 +36,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Text(
-                'Register',
+                'Login',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 70
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 70
                 ),
               ),
               Column(
@@ -61,7 +60,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         hintText: 'Enter your email',
                         hintStyle: TextStyle(color: Colors.black),
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         ),
@@ -116,7 +115,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     borderRadius: BorderRadius.circular(30.0),
                     child: MaterialButton(
                       child: Text(
-                        'Register',
+                        'Login',
                         style: TextStyle(color: Colors.black),
                       ),
                       onPressed: () async{
@@ -124,9 +123,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           showSpinner= true;
                         });
                         try{
-                          final newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+                          final newUser = await _auth.signInWithEmailAndPassword(email: email, password: password);
                           if(newUser!=null){
-                            Navigator.pushNamed(context, 'login');
+                            Navigator.pushNamed(context, 'welcome');
                           }
                           setState(() {
                             showSpinner=false;
