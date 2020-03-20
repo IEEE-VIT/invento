@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:invento/screens/component.dart';
+import 'package:invento/screens/component_page.dart';
 
 import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/registration_screen.dart';
