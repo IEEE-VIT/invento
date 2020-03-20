@@ -8,6 +8,30 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  void _showAuthFailedDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text('Could not log in'),
+          content: new Text('Double check your credentials and try again!'),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   bool showSpinner = false;
   final _auth = FirebaseAuth.instance;
   String email;
@@ -127,12 +151,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           if(newUser!=null){
                             Navigator.pushNamed(context, 'comp');
                           }
-                          setState(() {
-                            showSpinner=false;
-                          });
+
                         }
                         catch(e){
-                          print(e);
+                          _showAuthFailedDialog();
+                          setState(() {
+                            showSpinner = false;
+                          });
                         }
 
                       },
