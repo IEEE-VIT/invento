@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:invento/screens/login_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:page_transition/page_transition.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -9,11 +11,18 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  bool passwordVisible = false;
   bool showSpinner = false;
   final _auth = FirebaseAuth.instance;
   String email;
   String password;
 
+
+  @override
+  void initState() {
+    super.initState();
+    passwordVisible = true;
+  }
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -86,10 +95,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       onChanged: (value){
                         password = value;
                       },
-                      obscureText: true,
+                      obscureText: passwordVisible,
                       cursorRadius: Radius.circular(20),
                       autofocus: true,
                       decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                            icon: Icon(
+                              passwordVisible
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.black,
+                            ),
+                            onPressed: (){
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                            }),
                         fillColor: Colors.white,
                         hintText: 'Enter your password',
                         hintStyle: TextStyle(color: Colors.black),
@@ -126,7 +147,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         try{
                           final newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
                           if(newUser!=null){
-                            Navigator.pushNamed(context, 'login');
+                            Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft),);
                           }
                           setState(() {
                             showSpinner=false;

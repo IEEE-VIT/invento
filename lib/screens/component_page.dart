@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:invento/Helpers/color_loader.dart';
+import 'package:invento/screens/login_screen.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../Helpers/component_fields.dart';
 
@@ -27,6 +29,7 @@ class _ComponentPageState extends State<ComponentPage> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +40,7 @@ class _ComponentPageState extends State<ComponentPage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushNamed(context, 'login');
+            Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft),);
           },
         ),
         title: Text('Invento'),
@@ -47,7 +50,8 @@ class _ComponentPageState extends State<ComponentPage> {
               icon: Icon(Icons.close),
               onPressed: () {
                 _auth.signOut();
-                Navigator.pushNamed(context, 'login');
+
+                Navigator.popUntil(context, ModalRoute.withName('welcome'),);
               }),
         ],
       ),

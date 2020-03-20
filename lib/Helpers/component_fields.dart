@@ -73,10 +73,10 @@ class AddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         child: Icon(
           Icons.add,
-          color: Colors.black,
+          color: Colors.white,
         ),
         elevation: 20,
         onPressed: () {

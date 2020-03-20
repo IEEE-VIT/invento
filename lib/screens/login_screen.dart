@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:invento/screens/welcome_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:page_transition/page_transition.dart';
+import 'component_page.dart';
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool passwordVisible;
+  @override
+  void initState() {
+    super.initState();
+    passwordVisible = true;
+  }
 
   void _showAuthFailedDialog() {
     // flutter defined function
@@ -50,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
             color: Colors.white,
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(context, PageTransition(child: WelcomeScreen(), type: PageTransitionType.leftToRight),);
             },
           ),
         ),
@@ -109,10 +117,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       onChanged: (value){
                         password = value;
                       },
-                      obscureText: true,
+                      obscureText: passwordVisible,
                       cursorRadius: Radius.circular(20),
                       autofocus: true,
                       decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                            icon: Icon(
+                              passwordVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                              color: Colors.black,
+                            ),
+                            onPressed: (){
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                            }),
                         fillColor: Colors.white,
                         hintText: 'Enter your password',
                         hintStyle: TextStyle(color: Colors.black),
@@ -149,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         try{
                           final newUser = await _auth.signInWithEmailAndPassword(email: email, password: password);
                           if(newUser!=null){
-                            Navigator.pushNamed(context, 'comp');
+                            Navigator.push(context, PageTransition(child: ComponentPage(), type: PageTransitionType.rightToLeft),);
                           }
 
                         }

@@ -1,5 +1,10 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:invento/screens/component_page.dart';
+import 'package:invento/screens/login_screen.dart';
+import 'package:invento/screens/registration_screen.dart';
+import 'package:page_transition/page_transition.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -7,6 +12,24 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  final _auth = FirebaseAuth.instance;
+
+
+  @override
+  void initState() {
+    super.initState();
+    getUser().then((user){
+      if(user!=null){
+        Navigator.push(context, PageTransition(child: ComponentPage(), type: PageTransitionType.rightToLeft),);
+      }
+    });
+  }
+
+  Future<FirebaseUser>getUser() async{
+    return await _auth.currentUser();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +58,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     style: TextStyle(color: Colors.black),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, 'login');
+                    Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft),);
                   },
                   minWidth: 150,
                 ),
@@ -51,7 +74,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     style: TextStyle(color: Colors.black),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, 'reg');
+                    Navigator.push(context, PageTransition(child: RegistrationScreen(), type: PageTransitionType.rightToLeft),);
                   },
                   minWidth: 150,
                 ),
