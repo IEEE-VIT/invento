@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invento/screens/component.dart';
 
 import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/registration_screen.dart';
@@ -11,11 +12,12 @@ class Invento extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: 'welcome',
+      initialRoute: 'comp',
       routes: {
         'welcome': (context)=> WelcomeScreen(),
         'reg': (context)=>RegistrationScreen(),
         'login':(context)=>LoginScreen(),
+        'comp':(context)=>ComponentPage(),
 
       },
     );
