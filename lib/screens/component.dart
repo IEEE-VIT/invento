@@ -10,7 +10,6 @@ class ComponentPage extends StatefulWidget {
 }
 
 class _ComponentPageState extends State<ComponentPage> {
-
   final _auth = FirebaseAuth.instance;
   final _firestore = Firestore.instance;
   FirebaseUser loggedInUser;
@@ -18,22 +17,26 @@ class _ComponentPageState extends State<ComponentPage> {
   TextEditingController _quantityController = TextEditingController();
   String messageText;
 
-
-
+  Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
+    return makeListTile(
+      Component(
+          componentName: document['Component Name'],
+          quantity: document['Quantity'],
+          documentId: document.documentID),
+    );
+  }
 
   @override
-
-
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushNamed(context, 'login');
           },
         ),
         title: Text('Invento'),
@@ -48,15 +51,22 @@ class _ComponentPageState extends State<ComponentPage> {
         ],
       ),
       body: Container(
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            itemCount: getComponent.length,
-            itemBuilder: (BuildContext context, int index) {
-              return makeCard(
-                getComponent[index],
-              );
-            }),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: _firestore.collection('components').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Text('Loading');
+            }
+            return ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (context, index) {
+                return _buildListItem(context, snapshot.data.documents[index]);
+              },
+            );
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.white,
@@ -90,19 +100,9 @@ class _ComponentPageState extends State<ComponentPage> {
                       ),
                       FlatButton(
                         onPressed: () {
-                          setState(
-                            () {
-                              getComponent.add(
-                                Component(
-                                  componentName: _componentNameController.text,
-                                  quantity: int.parse(_quantityController.text),
-                                ),
-                              );
-                            },
-                          );
                           _firestore.collection('components').add({
-                            'Component Name':_componentNameController.text,
-                            'Quanitity':int.parse(_quantityController.text)
+                            'Component Name': _componentNameController.text,
+                            'Quantity': int.parse(_quantityController.text)
                           });
                           _componentNameController.clear();
                           _quantityController.clear();

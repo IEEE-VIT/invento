@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Component {
   String componentName;
   int quantity;
+  String documentId;
 
-  Component({this.componentName, this.quantity});
+  Component({@required this.componentName, @required this.quantity,this.documentId});
 }
 
-List<Component> getComponent = [
-  Component(componentName: "Motors", quantity: 10,),
-  Component(componentName: "Motors", quantity: 10, )
-];
+final _firestore = Firestore.instance;
 
 Card makeCard(Component component) => Card(
       elevation: 8,
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+
         ),
         child: makeListTile(component),
       ),
@@ -47,9 +46,12 @@ ListTile makeListTile(Component component) => ListTile(
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),
-      trailing: Icon(
-        Icons.keyboard_arrow_right,
+      trailing: IconButton(
+        icon: Icon(Icons.delete,size: 25,),
         color: Colors.black,
-        size: 30,
+        onPressed: (){
+          _firestore.collection('components').document(component.documentId).delete();
+        },
+
       ),
     );
