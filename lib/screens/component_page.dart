@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:invento/Helpers/color_loader.dart';
 
 import '../Helpers/component_fields.dart';
 
@@ -55,7 +56,10 @@ class _ComponentPageState extends State<ComponentPage> {
           stream: _firestore.collection('components').snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const Text('Loading');
+              return ColorLoader(
+                colors: [Colors.red,Colors.green,Colors.indigo,Colors.pinkAccent,Colors.blue],
+                duration:Duration(milliseconds: 1200),
+              );
             }
             return ListView.builder(
               scrollDirection: Axis.vertical,
