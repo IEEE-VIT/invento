@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -9,7 +10,7 @@ class Component {
   String documentId;
   Function onPress;
 
-  Component({@required this.componentName, @required this.quantity,this.documentId,this.onPress});
+  Component({@required this.componentName, @required this.quantity,this.documentId,this.onPress,});
 }
 
 final _firestore = Firestore.instance;

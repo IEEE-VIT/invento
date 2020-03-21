@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import 'package:invento/screens/detail_page.dart';
-import 'package:invento/screens/login_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../Helpers/component_fields.dart';
