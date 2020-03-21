@@ -17,13 +17,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   String email;
   String password;
-
+  String name;
 
   @override
   void initState() {
     super.initState();
     passwordVisible = true;
   }
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -49,19 +50,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               Text(
                 'Register',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 70
-                ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 70),
               ),
               Column(
                 children: <Widget>[
                   Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(32), color: Colors.white),
+                        borderRadius: BorderRadius.circular(32),
+                        color: Colors.white),
                     child: TextField(
-                      onChanged: (value){
-                        email = value;
+                      onChanged: (value) {
+                        name = value;
                       },
                       keyboardType: TextInputType.emailAddress,
                       cursorRadius: Radius.circular(20),
@@ -70,47 +71,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         fillColor: Colors.white,
                         hintText: 'Enter your name',
                         hintStyle: TextStyle(color: Colors.black),
-                        contentPadding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 20.0),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 1.0),
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black, width: 2.0),
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(32), color: Colors.white),
-                    child: TextField(
-                      onChanged: (value){
-                        email = value;
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                      cursorRadius: Radius.circular(20),
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        hintText: 'Enter your email',
-                        hintStyle: TextStyle(color: Colors.black),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black, width: 1.0),
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 2.0),
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         ),
                       ),
@@ -121,9 +94,46 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(32), color: Colors.white),
+                        borderRadius: BorderRadius.circular(32),
+                        color: Colors.white),
                     child: TextField(
-                      onChanged: (value){
+                      onChanged: (value) {
+                        email = value;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      cursorRadius: Radius.circular(20),
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        hintText: 'Enter your email',
+                        hintStyle: TextStyle(color: Colors.black),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 20.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 1.0),
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 2.0),
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(32),
+                        color: Colors.white),
+                    child: TextField(
+                      onChanged: (value) {
                         password = value;
                       },
                       obscureText: passwordVisible,
@@ -137,7 +147,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   : Icons.visibility,
                               color: Colors.black,
                             ),
-                            onPressed: (){
+                            onPressed: () {
                               setState(() {
                                 passwordVisible = !passwordVisible;
                               });
@@ -145,24 +155,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         fillColor: Colors.white,
                         hintText: 'Enter your password',
                         hintStyle: TextStyle(color: Colors.black),
-                        contentPadding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 20.0),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black, width: 1.0),
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 1.0),
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 2.0),
                           borderRadius: BorderRadius.all(Radius.circular(32.0)),
                         ),
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 80,
                   ),
                   Material(
                     borderRadius: BorderRadius.circular(30.0),
@@ -171,34 +183,50 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         'Register',
                         style: TextStyle(color: Colors.black),
                       ),
-                      onPressed: () async{
+                      onPressed: () async {
                         setState(() {
-                          showSpinner= true;
+                          showSpinner = true;
                         });
-                        try{
-                          final newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-                          if(newUser!=null){
-                            Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft),);
+                        try {
+                          final newUser = await _auth
+                              .createUserWithEmailAndPassword(
+                                  email: email, password: password);
+//                              .then((result) {
+//                            UserUpdateInfo updateInfo = UserUpdateInfo();
+//                            updateInfo.displayName = name;
+//                            result.user.updateProfile(updateInfo);
+//                          });
+
+                          if (newUser != null) {
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: LoginScreen(),
+                                  type: PageTransitionType.rightToLeft),
+                            );
+
                             Firestore.instance.collection('users').add({
-                              'Email':newUser.user.email,
-                              'UID': newUser.user.uid
+                              'email':newUser.user.email,
+                              'UUID': newUser.user.uid,
+                              'name': name
                             });
+
+                          }
+                          else{
+                            print('not working');
                           }
                           setState(() {
-                            showSpinner=false;
+                            showSpinner = false;
                           });
-                        }
-                        catch(e){
+                        } catch (e) {
                           print(e);
                         }
-
                       },
                       minWidth: 150,
                     ),
                   ),
                 ],
               ),
-
             ],
           ),
         ),
