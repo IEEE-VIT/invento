@@ -7,8 +7,9 @@ class Component {
   String componentName;
   int quantity;
   String documentId;
+  Function onPress;
 
-  Component({@required this.componentName, @required this.quantity,this.documentId});
+  Component({@required this.componentName, @required this.quantity,this.documentId,this.onPress});
 }
 
 final _firestore = Firestore.instance;
@@ -56,6 +57,7 @@ ListTile makeListTile(Component component) => ListTile(
         },
 
       ),
+  onTap: component.onPress,
     );
 
 class AddButton extends StatelessWidget {

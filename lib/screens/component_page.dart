@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:invento/Helpers/color_loader.dart';
+import 'package:invento/screens/detail_page.dart';
 import 'package:invento/screens/login_screen.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -25,7 +26,12 @@ class _ComponentPageState extends State<ComponentPage> {
       Component(
           componentName: document['Component Name'],
           quantity: document['Quantity'],
-          documentId: document.documentID),
+          documentId: document.documentID,
+      onPress: (){
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context)=>DetailPage(componentName: document['Component Name'],quantity: document['Quantity'],documentID: document.documentID,)
+            ),);
+      },),
     );
   }
 
