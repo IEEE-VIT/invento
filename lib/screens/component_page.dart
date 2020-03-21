@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,54 +36,83 @@ class _ComponentPageState extends State<ComponentPage> {
     );
   }
 
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Exit'),
+          content: Text('Do you want to exit the app?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                exit(0);
+              },
+            )
+          ],
+        );
+      },
+    ) ?? false;
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.account_circle),
-          onPressed: () {
-            //Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft),);
-          },
-        ),
-        title: Text('Invento'),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                _auth.signOut();
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.account_circle),
+            onPressed: () {
+              //Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft),);
+            },
+          ),
+          title: Text('Invento'),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  _auth.signOut();
 
-                Navigator.popUntil(context, ModalRoute.withName('welcome'),);
-              }),
-        ],
-      ),
-      body: Container(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: _firestore.collection('components').snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return ColorLoader(
-                colors: [Colors.red,Colors.green,Colors.indigo,Colors.pinkAccent,Colors.blue],
-                duration:Duration(milliseconds: 1200),
-              );
-            }
-            return ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: snapshot.data.documents.length,
-              itemBuilder: (context, index) {
-                return _buildListItem(context, snapshot.data.documents[index]);
-              },
-            );
-          },
+                  Navigator.popUntil(context, ModalRoute.withName('welcome'),);
+                }),
+          ],
         ),
+        body: Container(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: _firestore.collection('components').snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return ColorLoader(
+                  colors: [Colors.red,Colors.green,Colors.indigo,Colors.pinkAccent,Colors.blue],
+                  duration:Duration(milliseconds: 1200),
+                );
+              }
+              return ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (context, index) {
+                  return _buildListItem(context, snapshot.data.documents[index]);
+                },
+              );
+            },
+          ),
+        ),
+        floatingActionButton: AddButton(componentNameController: _componentNameController, quantityController: _quantityController, firestore: _firestore),
       ),
-      floatingActionButton: AddButton(componentNameController: _componentNameController, quantityController: _quantityController, firestore: _firestore),
     );
   }
 }
