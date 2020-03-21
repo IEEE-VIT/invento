@@ -3,7 +3,7 @@ import 'package:invento/screens/welcome_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:page_transition/page_transition.dart';
-import 'component_page.dart';
+import 'inventory_page.dart';
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -169,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         try{
                           final newUser = await _auth.signInWithEmailAndPassword(email: email, password: password);
                           if(newUser!=null){
-                            Navigator.push(context, PageTransition(child: ComponentPage(), type: PageTransitionType.rightToLeft),);
+                            Navigator.push(context, PageTransition(child: InventoryPage(), type: PageTransitionType.rightToLeft),);
                           }
 
                         }

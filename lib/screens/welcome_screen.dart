@@ -1,7 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:invento/screens/component_page.dart';
+import 'package:invento/screens/inventory_page.dart';
 import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/registration_screen.dart';
 import 'package:page_transition/page_transition.dart';
@@ -20,7 +20,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     super.initState();
     getUser().then((user){
       if(user!=null){
-        Navigator.push(context, PageTransition(child: ComponentPage(), type: PageTransitionType.rightToLeft),);
+        Navigator.push(context, PageTransition(child: InventoryPage(), type: PageTransitionType.rightToLeft),);
       }
     });
   }

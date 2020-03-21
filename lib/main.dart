@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:invento/screens/component_page.dart';
+import 'package:invento/screens/inventory_page_admin.dart';
 
 import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/registration_screen.dart';
@@ -17,7 +17,7 @@ class Invento extends StatelessWidget {
         'welcome': (context)=> WelcomeScreen(),
         'reg': (context)=>RegistrationScreen(),
         'login':(context)=>LoginScreen(),
-        'comp':(context)=>ComponentPage(),
+        'comp':(context)=>InventoryAdminPage(),
 
       },
     );
