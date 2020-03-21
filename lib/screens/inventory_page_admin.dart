@@ -31,6 +31,10 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
         quantity: document['Quantity'],
         documentId: document.documentID,
         onPress: () {
+          _firestore
+              .collection('components')
+              .document(document.documentID)
+              .updateData({'UUID': document.documentID});
           Navigator.push(
             context,
             MaterialPageRoute(

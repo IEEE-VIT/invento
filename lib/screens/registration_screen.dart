@@ -4,6 +4,7 @@ import 'package:invento/screens/login_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -55,6 +56,36 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               Column(
                 children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(32), color: Colors.white),
+                    child: TextField(
+                      onChanged: (value){
+                        email = value;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      cursorRadius: Radius.circular(20),
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        hintText: 'Enter your name',
+                        hintStyle: TextStyle(color: Colors.black),
+                        contentPadding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 1.0),
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 2.0),
+                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        ),
+                      ),
+                    ),
+                  ),
                   Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(32), color: Colors.white),
@@ -148,6 +179,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           final newUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
                           if(newUser!=null){
                             Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft),);
+                            Firestore.instance.collection('users').add({
+                              'Email':newUser.user.email,
+                              'UID': newUser.user.uid
+                            });
                           }
                           setState(() {
                             showSpinner=false;

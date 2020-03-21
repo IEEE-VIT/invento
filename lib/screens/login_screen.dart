@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:invento/screens/welcome_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -170,6 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           final newUser = await _auth.signInWithEmailAndPassword(email: email, password: password);
                           if(newUser!=null){
                             Navigator.push(context, PageTransition(child: InventoryPage(), type: PageTransitionType.rightToLeft),);
+
                           }
 
                         }
