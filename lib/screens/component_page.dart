@@ -44,9 +44,9 @@ class _ComponentPageState extends State<ComponentPage> {
         backgroundColor: Colors.black,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.account_circle),
           onPressed: () {
-            Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft),);
+            //Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft),);
           },
         ),
         title: Text('Invento'),
