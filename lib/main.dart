@@ -12,7 +12,7 @@ class Invento extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: 'login',
+      initialRoute: 'welcome',
       routes: {
         'welcome': (context)=> WelcomeScreen(),
         'reg': (context)=>RegistrationScreen(),
