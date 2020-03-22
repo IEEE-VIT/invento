@@ -5,76 +5,44 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/rendering.dart';
 import 'package:invento/Helpers/color_loader.dart';
-import 'package:invento/screens/detail_page.dart';
 import 'package:invento/screens/inventory_page.dart';
+import 'package:invento/screens/inventory_page_admin.dart';
 import 'package:page_transition/page_transition.dart';
-import 'request_page.dart';
 import '../Helpers/component_fields.dart';
-
-
 
 Widget buildListItem(BuildContext context, DocumentSnapshot document) {
   return makeListTileAdmin(
     Component(
-      collection: 'components',
+      collection: 'requests',
       componentName: document['Component Name'],
       quantity: document['Quantity'],
       documentId: document.documentID,
-      onPress: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DetailPage(
-                    componentName: document['Component Name'],
-                    quantity: document['Quantity'],
-                    documentID: document.documentID,
-                  )),
-        );
-      },
     ),
   );
 }
 
-
-
-
-class InventoryAdminPage extends StatefulWidget {
-
-
+class RequestPage extends StatefulWidget {
   @override
-  _InventoryAdminPageState createState() => _InventoryAdminPageState();
+  _RequestPageState createState() => _RequestPageState();
 }
 
-class _InventoryAdminPageState extends State<InventoryAdminPage> {
+class _RequestPageState extends State<RequestPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCurrentUser();
+  }
 
   final _auth = FirebaseAuth.instance;
   final _firestore = Firestore.instance;
   TextEditingController _componentNameController = TextEditingController();
   TextEditingController _quantityController = TextEditingController();
+  String userUID;
 
-
-
-
-
-  Widget buildListItem(BuildContext context, DocumentSnapshot document) {
-    return makeListTileAdmin(
-      Component(
-        componentName: document['Component Name'],
-        quantity: document['Quantity'],
-        documentId: document.documentID,
-        onPress: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DetailPage(
-                      componentName: document['Component Name'],
-                      quantity: document['Quantity'],
-                      documentID: document.documentID,
-                    )),
-          );
-        },
-      ),
-    );
+  getCurrentUser() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    userUID = user.uid;
   }
 
   Future<bool> _onBackPressed() {
@@ -165,7 +133,7 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
         appBar: AppBar(
           backgroundColor: Colors.black,
           elevation: 0,
-          title: Text('Edit Invento'),
+          title: Text('Request Component'),
           centerTitle: true,
           actions: <Widget>[
             IconButton(
@@ -182,7 +150,7 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
         ),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
-            stream: _firestore.collection('components').snapshots(),
+            stream: _firestore.collection('requests').snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return ColorLoader(
@@ -208,11 +176,11 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
           ),
         ),
         floatingActionButton: AddButton(
-            collection: 'components',
+            userUID: userUID,
+            collection: 'requests',
             componentNameController: _componentNameController,
             quantityController: _quantityController,
-            firestore: _firestore,
-        ),
+            firestore: _firestore),
       ),
     );
   }

@@ -3,20 +3,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:invento/Helpers/component_fields.dart';
 import 'package:invento/screens/inventory_page_admin.dart';
+import 'package:invento/screens/request_page.dart';
 import 'dart:io';
 import 'package:page_transition/page_transition.dart';
 import 'package:invento/Helpers/color_loader.dart';
 
 class InventoryPage extends StatefulWidget {
-
   List admins = [];
   String userUID;
+
   @override
   _InventoryPageState createState() => _InventoryPageState();
 }
 
 class _InventoryPageState extends State<InventoryPage> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -30,17 +30,16 @@ class _InventoryPageState extends State<InventoryPage> {
   FirebaseUser loggedInUser;
   String messageText;
 
-
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
     return makeListTile(
       Component(
         componentName: document['Component Name'],
         quantity: document['Quantity'],
         documentId: document.documentID,
-
       ),
     );
   }
+
   void _showAdminAuthFailedDialog() {
     // flutter defined function
     showDialog(
@@ -49,7 +48,8 @@ class _InventoryPageState extends State<InventoryPage> {
         // return object of type Dialog
         return AlertDialog(
           title: new Text('Could not edit the Inventory'),
-          content: new Text("You don't have admin access. Try contacting an admin to change the value"),
+          content: new Text(
+              "You don't have admin access. Try contacting an admin to change the value"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
@@ -64,46 +64,44 @@ class _InventoryPageState extends State<InventoryPage> {
     );
   }
 
-  void getAdmins()async{
-    final QuerySnapshot result = await Firestore.instance.collection('admins').getDocuments();
+  void getAdmins() async {
+    final QuerySnapshot result =
+        await Firestore.instance.collection('admins').getDocuments();
     final List<DocumentSnapshot> documents = result.documents;
     documents.forEach((data) => widget.admins.add(data.documentID));
   }
 
-  Future<FirebaseUser>getCurrentUser()async {
+  Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     widget.userUID = user.uid;
   }
 
   Future<bool> _onBackPressed() {
     return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Exit'),
-          content: Text('Do you want to exit the app?'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('No'),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-            ),
-            FlatButton(
-              child: Text('Yes'),
-              onPressed: () {
-                exit(0);
-              },
-            )
-          ],
-        );
-      },
-    ) ??
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Exit'),
+              content: Text('Do you want to exit the app?'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('No'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                FlatButton(
+                  child: Text('Yes'),
+                  onPressed: () {
+                    exit(0);
+                  },
+                )
+              ],
+            );
+          },
+        ) ??
         false;
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -118,25 +116,33 @@ class _InventoryPageState extends State<InventoryPage> {
                   decoration: BoxDecoration(
                     color: Colors.black,
                   ),
-                  child: Image.asset('images/logo.png')
-              ),
+                  child: Image.asset('images/logo.png')),
               ListTile(
                 leading: Icon(Icons.inbox),
                 title: Text('Inventory'),
-                onTap: (){
-                  Navigator.push(context, PageTransition(child: InventoryPage(), type: PageTransitionType.rightToLeft),);
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                        child: InventoryPage(),
+                        type: PageTransitionType.rightToLeft),
+                  );
                 },
               ),
               ListTile(
                 leading: Icon(Icons.edit),
                 title: Text('Edit Inventory'),
-                onTap: (){
+                onTap: () {
                   getCurrentUser();
                   getAdmins();
-                  if(widget.admins.contains(widget.userUID)){
-                    Navigator.push(context, PageTransition(child: InventoryAdminPage(), type: PageTransitionType.rightToLeft),);
-                  }
-                  else{
+                  if (widget.admins.contains(widget.userUID)) {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child: InventoryAdminPage(),
+                          type: PageTransitionType.rightToLeft),
+                    );
+                  } else {
                     _showAdminAuthFailedDialog();
                   }
                 },
@@ -148,6 +154,14 @@ class _InventoryPageState extends State<InventoryPage> {
               ListTile(
                 leading: Icon(Icons.get_app),
                 title: Text('Request'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                        child: RequestPage(),
+                        type: PageTransitionType.rightToLeft),
+                  );
+                },
               )
             ],
           ),

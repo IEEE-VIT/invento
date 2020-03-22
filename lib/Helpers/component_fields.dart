@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/rendering.dart';
+import 'package:uuid/uuid.dart';
 
 
 
@@ -9,8 +11,9 @@ class Component {
   int quantity;
   String documentId;
   Function onPress;
+  String collection;
 
-  Component({@required this.componentName, @required this.quantity,this.documentId,this.onPress,});
+  Component({@required this.componentName, @required this.quantity,@required this.collection, this.documentId,this.onPress,});
 }
 
 final _firestore = Firestore.instance;
@@ -65,7 +68,7 @@ ListTile makeListTileAdmin(Component component) => ListTile(
         icon: Icon(Icons.delete,size: 25,),
         color: Colors.black,
         onPressed: (){
-          _firestore.collection('components').document(component.documentId).delete();
+          _firestore.collection(component.collection).document(component.documentId).delete();
         },
 
       ),
@@ -105,11 +108,16 @@ class AddButton extends StatelessWidget {
     @required TextEditingController componentNameController,
     @required TextEditingController quantityController,
     @required Firestore firestore,
-  }) : _componentNameController = componentNameController, _quantityController = quantityController, _firestore = firestore, super(key: key);
+    @required String collection,
+    String userUID
+  }) : _componentNameController = componentNameController, _quantityController = quantityController,_collection=collection,_userUID=userUID, _firestore = firestore, super(key: key);
 
   final TextEditingController _componentNameController;
   final TextEditingController _quantityController;
   final Firestore _firestore;
+  final String _collection;
+  final String _userUID;
+
 
   @override
   Widget build(BuildContext context) {
@@ -145,10 +153,25 @@ class AddButton extends StatelessWidget {
                     ),
                     FlatButton(
                       onPressed: () {
-                        _firestore.collection('components').add({
-                          'Component Name': _componentNameController.text,
-                          'Quantity': int.parse(_quantityController.text)
-                        });
+                        var uuid = Uuid();
+                        if(_collection == 'components') {
+                          _firestore.collection(_collection)
+                              .document(uuid.v1())
+                              .setData({
+                            'Component Name': _componentNameController.text,
+                            'Quantity': int.parse(_quantityController.text),
+                            'Component UUID': uuid.v1(),
+                          });
+                        }
+                        else if(_collection == 'requests'){
+                          _firestore.collection(_collection)
+                              .document(uuid.v1())
+                              .setData({
+                            'Component Name': _componentNameController.text,
+                            'Quantity': int.parse(_quantityController.text),
+                            'User UUID':_userUID
+                          });
+                        }
                         _componentNameController.clear();
                         _quantityController.clear();
                         Navigator.of(context).pop();
@@ -179,7 +202,7 @@ class AddButton extends StatelessWidget {
                         textInputAction: TextInputAction.next,
                         controller: _quantityController,
                         decoration: InputDecoration(
-                          hintText: 'Enter present quanitity',
+                          hintText: 'Enter Quanitity',
                         ),
                       ),
                     ],

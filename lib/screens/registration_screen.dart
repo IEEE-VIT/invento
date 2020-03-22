@@ -5,6 +5,8 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
+
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -18,6 +20,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String email;
   String password;
   String name;
+  var uuid = Uuid();
 
   @override
   void initState() {
@@ -188,14 +191,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           showSpinner = true;
                         });
                         try {
-                          final newUser = await _auth
-                              .createUserWithEmailAndPassword(
+                          final newUser =
+                              await _auth.createUserWithEmailAndPassword(
                                   email: email, password: password);
-//                              .then((result) {
-//                            UserUpdateInfo updateInfo = UserUpdateInfo();
-//                            updateInfo.displayName = name;
-//                            result.user.updateProfile(updateInfo);
-//                          });
+
 
                           if (newUser != null) {
                             Navigator.push(
@@ -204,15 +203,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   child: LoginScreen(),
                                   type: PageTransitionType.rightToLeft),
                             );
-
-                            Firestore.instance.collection('users').add({
-                              'email':newUser.user.email,
-                              'UUID': newUser.user.uid,
+                            Firestore.instance
+                                .collection('users')
+                                .document(uuid.v1())
+                                .setData({
+                              'email': newUser.user.email,
+                              'UUID': uuid.v1(),
                               'name': name
                             });
-
-                          }
-                          else{
+                          } else {
                             print('not working');
                           }
                           setState(() {
