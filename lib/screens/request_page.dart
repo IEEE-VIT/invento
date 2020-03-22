@@ -22,16 +22,23 @@ Widget buildListItem(BuildContext context, DocumentSnapshot document) {
 }
 
 class RequestPage extends StatefulWidget {
+  List<String> usersID = [];
+  var userData ={};
+  String userName;
+
   @override
   _RequestPageState createState() => _RequestPageState();
 }
 
 class _RequestPageState extends State<RequestPage> {
+
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getCurrentUser();
+    getUsers();
   }
 
   final _auth = FirebaseAuth.instance;
@@ -43,6 +50,16 @@ class _RequestPageState extends State<RequestPage> {
   getCurrentUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     userUID = user.uid;
+  }
+
+  getUsers() async {
+    final QuerySnapshot result =
+    await Firestore.instance.collection('users').getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    documents.forEach((data){
+      widget.userData[data.documentID]=data['name'];
+    });
+    widget.userName= widget.userData[userUID];
   }
 
   Future<bool> _onBackPressed() {
@@ -176,6 +193,7 @@ class _RequestPageState extends State<RequestPage> {
           ),
         ),
         floatingActionButton: AddButton(
+            userName: widget.userName,
             userUID: userUID,
             collection: 'requests',
             componentNameController: _componentNameController,

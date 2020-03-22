@@ -205,11 +205,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             );
                             Firestore.instance
                                 .collection('users')
-                                .document(uuid.v1())
+                                .document(newUser.user.uid)
                                 .setData({
-                              'email': newUser.user.email,
-                              'UUID': uuid.v1(),
-                              'name': name
+                              'Email': newUser.user.email,
+                              'UUID': newUser.user.uid,
+                              'Name': name
                             });
                           } else {
                             print('not working');

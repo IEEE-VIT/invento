@@ -59,10 +59,12 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
   Widget buildListItem(BuildContext context, DocumentSnapshot document) {
     return makeListTileAdmin(
       Component(
+        collection: 'components',
         componentName: document['Component Name'],
         quantity: document['Quantity'],
         documentId: document.documentID,
         onPress: () {
+          print(document.documentID);
           Navigator.push(
             context,
             MaterialPageRoute(

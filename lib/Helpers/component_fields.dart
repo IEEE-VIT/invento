@@ -109,14 +109,16 @@ class AddButton extends StatelessWidget {
     @required TextEditingController quantityController,
     @required Firestore firestore,
     @required String collection,
-    String userUID
-  }) : _componentNameController = componentNameController, _quantityController = quantityController,_collection=collection,_userUID=userUID, _firestore = firestore, super(key: key);
+    String userUID,
+    String userName
+  }) : _componentNameController = componentNameController, _quantityController = quantityController,_collection=collection,_userUID=userUID,_userName =userName,  _firestore = firestore, super(key: key);
 
   final TextEditingController _componentNameController;
   final TextEditingController _quantityController;
   final Firestore _firestore;
   final String _collection;
   final String _userUID;
+  final String _userName;
 
 
   @override
@@ -169,7 +171,8 @@ class AddButton extends StatelessWidget {
                               .setData({
                             'Component Name': _componentNameController.text,
                             'Quantity': int.parse(_quantityController.text),
-                            'User UUID':_userUID
+                            'User UUID':_userUID,
+                            'User Name': _userName
                           });
                         }
                         _componentNameController.clear();
