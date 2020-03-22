@@ -9,6 +9,7 @@ import 'package:invento/screens/inventory_page.dart';
 import 'package:invento/screens/inventory_page_admin.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Helpers/component_fields.dart';
+import 'package:uuid/uuid.dart';
 
 Widget buildListItem(BuildContext context, DocumentSnapshot document) {
   return makeListTileRequest(
@@ -57,9 +58,10 @@ class _RequestPageState extends State<RequestPage> {
     await Firestore.instance.collection('users').getDocuments();
     final List<DocumentSnapshot> documents = result.documents;
     documents.forEach((data){
-      widget.userData[data.documentID]=data['name'];
+      widget.userData[data.documentID]=data['Name'];
     });
     widget.userName= widget.userData[userUID];
+    print(widget.userName);
   }
 
   Future<bool> _onBackPressed() {
@@ -192,13 +194,86 @@ class _RequestPageState extends State<RequestPage> {
             },
           ),
         ),
-        floatingActionButton: AddButton(
-            userName: widget.userName,
-            userUID: userUID,
-            collection: 'requests',
-            componentNameController: _componentNameController,
-            quantityController: _quantityController,
-            firestore: _firestore),
+        floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.black,
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            elevation: 20,
+            onPressed: () {
+              return showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            _componentNameController.clear();
+                            _quantityController.clear();
+                          },
+                          child: Text(
+                            "CANCEL",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        FlatButton(
+                          onPressed: () {
+                            var uuid = Uuid();
+                              _firestore.collection('requests')
+                                  .document(uuid.v1())
+                                  .setData({
+                                'Component Name': _componentNameController.text,
+                                'Quantity': int.parse(_quantityController.text),
+                                'User UUID':userUID,
+                                'User Name': widget.userName
+                              });
+
+                            _componentNameController.clear();
+                            _quantityController.clear();
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            'ADD',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        )
+                      ],
+                      title: Column(
+                        children: <Widget>[
+                          Center(
+                            child: Text('Add a new component'),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextField(
+                            textInputAction: TextInputAction.next,
+                            controller: _componentNameController,
+                            decoration: InputDecoration(
+                              hintText: 'Enter Component Name',
+                            ),
+                          ),
+                          TextField(
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.next,
+                            controller: _quantityController,
+                            decoration: InputDecoration(
+                              hintText: 'Enter Quanitity',
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  });
+            })
       ),
     );
   }
