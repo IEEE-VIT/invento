@@ -11,7 +11,7 @@ import 'package:page_transition/page_transition.dart';
 import '../Helpers/component_fields.dart';
 
 Widget buildListItem(BuildContext context, DocumentSnapshot document) {
-  return makeListTileAdmin(
+  return makeListTileRequest(
     Component(
       collection: 'requests',
       componentName: document['Component Name'],

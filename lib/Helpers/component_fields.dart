@@ -101,6 +101,43 @@ ListTile makeListTile(Component component) => ListTile(
   ),
 );
 
+ListTile makeListTileRequest(Component component) => ListTile(
+  contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  leading: Container(
+    padding: EdgeInsets.only(right: 12),
+    decoration: BoxDecoration(
+      border: Border(
+        right: BorderSide(width: 1, color: Colors.blue),
+      ),
+    ),
+    child: Icon(
+      Icons.subdirectory_arrow_right,
+      color: Colors.black,
+    ),
+  ),
+  title: Text(
+    component.componentName,
+    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+  ),
+  subtitle: Container(
+    child: Text(
+      component.quantity.toString(),
+      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    ),
+  ),
+  trailing: IconButton(
+    icon: Icon(Icons.delete,size: 25,),
+    color: Colors.black,
+    onPressed: (){
+      _firestore.collection(component.collection).document(component.documentId).delete();
+    },
+
+  ),
+  onTap: component.onPress,
+);
+
+
+
 
 class AddButton extends StatelessWidget {
   const AddButton({
