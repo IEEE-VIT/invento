@@ -23,7 +23,6 @@ class RequestPageAdmin extends StatefulWidget {
 
 class _RequestPageAdminState extends State<RequestPageAdmin> {
   Widget buildListItem(BuildContext context, DocumentSnapshot document) {
-
     return makeListTileRequestAdmin(
       Component(
         componentID: document['Component UUID'],
@@ -60,7 +59,7 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
 
   getUsers() async {
     final QuerySnapshot result =
-    await Firestore.instance.collection('users').getDocuments();
+        await Firestore.instance.collection('users').getDocuments();
     final List<DocumentSnapshot> documents = result.documents;
     documents.forEach((data) {
       widget.userData[data.documentID] = data['Name'];
@@ -75,28 +74,28 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
 
   Future<bool> _onBackPressed() {
     return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Exit'),
-          content: Text('Do you want to exit the app?'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('No'),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-            ),
-            FlatButton(
-              child: Text('Yes'),
-              onPressed: () {
-                exit(0);
-              },
-            )
-          ],
-        );
-      },
-    ) ??
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Exit'),
+              content: Text('Do you want to exit the app?'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('No'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                FlatButton(
+                  child: Text('Yes'),
+                  onPressed: () {
+                    exit(0);
+                  },
+                )
+              ],
+            );
+          },
+        ) ??
         false;
   }
 
@@ -190,20 +189,35 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
         ),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
-            stream: _firestore
-                .collection('requests')
-                .snapshots(),
+            stream: _firestore.collection('requests').snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return ColorLoader(
-                  colors: [
-                    Colors.red,
-                    Colors.green,
-                    Colors.indigo,
-                    Colors.pinkAccent,
-                    Colors.blue
+                return Column(
+                  children: <Widget>[
+                    ColorLoader(
+                      colors: [
+                        Colors.red,
+                        Colors.green,
+                        Colors.indigo,
+                        Colors.pinkAccent,
+                        Colors.blue
+                      ],
+                      duration: Duration(milliseconds: 1200),
+                    ),
                   ],
-                  duration: Duration(milliseconds: 1200),
+                );
+              } else if (snapshot.data.documents.length == 0) {
+                return Container(
+                  child: Center(
+                    child: Text(
+                      'No Requests',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey
+                      ),
+                    ),
+                  ),
                 );
               }
               return ListView.builder(
