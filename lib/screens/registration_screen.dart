@@ -28,6 +28,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     passwordVisible = true;
   }
 
+  void _showAuthFailedDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text('Could not register'),
+          content: new Text('Double check your email format and password! Note: The password should be min 6 characters'),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -211,13 +234,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               'UUID': newUser.user.uid,
                               'Name': name
                             });
-                          } else {
-                            print('not working');
                           }
+
+                        } catch (e) {
+                          _showAuthFailedDialog();
                           setState(() {
                             showSpinner = false;
                           });
-                        } catch (e) {
                           print(e);
                         }
                       },

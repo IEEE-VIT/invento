@@ -191,7 +191,7 @@ ListTile makeListTile(Component component) => ListTile(
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.next,
                         onChanged: (value) {
-                          wanted = int.parse(value);
+                          wanted = int.parse(value).floor();
                         },
                         decoration: InputDecoration(
                           hintText: 'Enter Quantity',
