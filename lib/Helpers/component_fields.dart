@@ -138,11 +138,12 @@ ListTile makeListTile(Component component) => ListTile(
                     FlatButton(
                       onPressed: () {
                         var uuid = Uuid();
+                        String temp = uuid.v1();
                         _firestore
                             .collection('users')
                             .document(component.userUID)
                             .collection('RequestedComponents')
-                            .document(uuid.v1())
+                            .document(temp)
                             .setData({
                           'Component Name': component.componentName,
                           'Quantity': wanted,
@@ -152,7 +153,7 @@ ListTile makeListTile(Component component) => ListTile(
                         });
                         _firestore
                             .collection('requests')
-                            .document(uuid.v1())
+                            .document(temp)
                             .setData({
                           'Component Name': component.componentName,
                           'Quantity': wanted,
@@ -237,6 +238,7 @@ ListTile makeListTileRequest(Component component) => ListTile(
               .collection('RequestedComponents')
               .document(component.documentId)
               .delete();
+          _firestore.collection('requests').document(component.documentId).delete();
         },
       ),
       onTap: component.onPress,
