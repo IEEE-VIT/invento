@@ -7,13 +7,14 @@ import 'package:uuid/uuid.dart';
 
 
 class Component {
+  String userUID;
   String componentName;
   int quantity;
   String documentId;
   Function onPress;
   String collection;
 
-  Component({@required this.componentName, @required this.quantity,@required this.collection, this.documentId,this.onPress,});
+  Component({@required this.componentName, @required this.quantity,@required this.collection, this.documentId,this.onPress,this.userUID});
 }
 
 final _firestore = Firestore.instance;
@@ -129,7 +130,7 @@ ListTile makeListTileRequest(Component component) => ListTile(
     icon: Icon(Icons.delete,size: 25,),
     color: Colors.black,
     onPressed: (){
-      _firestore.collection(component.collection).document(component.documentId).delete();
+      _firestore.collection('users').document(component.userUID).collection('RequestedComponents').document(component.documentId).delete();
     },
 
   ),
@@ -202,9 +203,9 @@ class AddButton extends StatelessWidget {
                             'Component UUID': uuid.v1(),
                           });
                         }
-                        else if(_collection == 'requests'){
+                        else if(_collection == 'users'){
                           _firestore.collection(_collection)
-                              .document(uuid.v1())
+                              .document(_userUID).collection('RequestedComponents').document(uuid.v1())
                               .setData({
                             'Component Name': _componentNameController.text,
                             'Quantity': int.parse(_quantityController.text),

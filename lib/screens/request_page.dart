@@ -11,16 +11,7 @@ import 'package:page_transition/page_transition.dart';
 import '../Helpers/component_fields.dart';
 import 'package:uuid/uuid.dart';
 
-Widget buildListItem(BuildContext context, DocumentSnapshot document) {
-  return makeListTileRequest(
-    Component(
-      collection: 'requests',
-      componentName: document['Component Name'],
-      quantity: document['Quantity'],
-      documentId: document.documentID,
-    ),
-  );
-}
+
 
 class RequestPage extends StatefulWidget {
   List<String> usersID = [];
@@ -32,6 +23,18 @@ class RequestPage extends StatefulWidget {
 }
 
 class _RequestPageState extends State<RequestPage> {
+
+  Widget buildListItem(BuildContext context, DocumentSnapshot document) {
+    return makeListTileRequest(
+      Component(
+        userUID: userUID,
+        collection: 'users',
+        componentName: document['Component Name'],
+        quantity: document['Quantity'],
+        documentId: document.documentID,
+      ),
+    );
+  }
 
 
   @override
@@ -50,7 +53,10 @@ class _RequestPageState extends State<RequestPage> {
 
   getCurrentUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    userUID = user.uid;
+
+    setState(() {
+      userUID = user.uid;
+    });
   }
 
   getUsers() async {
@@ -169,7 +175,7 @@ class _RequestPageState extends State<RequestPage> {
         ),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
-            stream: _firestore.collection('requests').snapshots(),
+            stream: _firestore.collection('users').document(userUID).collection('RequestedComponents').snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return ColorLoader(
@@ -227,7 +233,7 @@ class _RequestPageState extends State<RequestPage> {
                         FlatButton(
                           onPressed: () {
                             var uuid = Uuid();
-                              _firestore.collection('requests')
+                              _firestore.collection('users').document(userUID).collection('RequestedComponents')
                                   .document(uuid.v1())
                                   .setData({
                                 'Component Name': _componentNameController.text,
