@@ -16,6 +16,8 @@ class RequestPage extends StatefulWidget {
   List<String> usersID = [];
   var userData = {};
   String userName;
+  String status;
+  Color color;
 
   @override
   _RequestPageState createState() => _RequestPageState();
@@ -23,8 +25,19 @@ class RequestPage extends StatefulWidget {
 
 class _RequestPageState extends State<RequestPage> {
   Widget buildListItem(BuildContext context, DocumentSnapshot document) {
+    if(document['Status']=='Applied'){
+      widget.color = Colors.yellow;
+    }
+    else if(document['Status']=='Denied'){
+      widget.color=Colors.red;
+    }
+    else{
+      widget.color=Colors.green;
+    }
     return makeListTileRequest(
       Component(
+        color: widget.color,
+        status: document['Status'],
         userUID: userUID,
         collection: 'users',
         componentName: document['Component Name'],

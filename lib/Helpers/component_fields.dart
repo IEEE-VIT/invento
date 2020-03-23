@@ -4,6 +4,9 @@ import 'package:flutter/rendering.dart';
 import 'package:uuid/uuid.dart';
 
 class Component {
+  String componentID;
+  Color color;
+  String status;
   BuildContext context;
   String userUID;
   String componentName;
@@ -21,7 +24,10 @@ class Component {
       this.onPress,
       this.userUID,
       this.context,
-      this.userName});
+      this.userName,
+      this.status,
+      this.color,
+      this.componentID});
 }
 
 final _firestore = Firestore.instance;
@@ -149,7 +155,8 @@ ListTile makeListTile(Component component) => ListTile(
                           'Quantity': wanted,
                           'User UUID': component.userUID,
                           'User Name': component.userName,
-                          'Component UUID': component.documentId
+                          'Component UUID': component.documentId,
+                          'Status': 'Applied'
                         });
                         _firestore
                             .collection('requests')
@@ -158,7 +165,8 @@ ListTile makeListTile(Component component) => ListTile(
                           'Component Name': component.componentName,
                           'Quantity': wanted,
                           'Component UUID': component.documentId,
-                          'User Name': component.userName
+                          'User Name': component.userName,
+                          'Status': 'Applied'
                         });
 
 //                        _componentNameController.clear();
@@ -186,7 +194,7 @@ ListTile makeListTile(Component component) => ListTile(
                           wanted = int.parse(value);
                         },
                         decoration: InputDecoration(
-                          hintText: 'Enter Quanitity',
+                          hintText: 'Enter Quantity',
                         ),
                       ),
                     ],
@@ -219,12 +227,29 @@ ListTile makeListTileRequest(Component component) => ListTile(
         component.componentName,
         style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ),
-      subtitle: Container(
-        child: Text(
-          component.quantity.toString(),
+      subtitle: Row(children: <Widget>[
+        Text(
+          'Quantity: ${component.quantity.toString()}',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
-      ),
+        SizedBox(width: 10,),
+        Text(
+          'Status: ',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(width: 10,),
+        Container(
+          padding: EdgeInsets.all(5),
+          color: component.color,
+          child: Text(
+            component.status,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold
+            ),
+          ),
+        )
+      ]),
       trailing: IconButton(
         icon: Icon(
           Icons.delete,
@@ -238,7 +263,10 @@ ListTile makeListTileRequest(Component component) => ListTile(
               .collection('RequestedComponents')
               .document(component.documentId)
               .delete();
-          _firestore.collection('requests').document(component.documentId).delete();
+          _firestore
+              .collection('requests')
+              .document(component.documentId)
+              .delete();
         },
       ),
       onTap: component.onPress,
@@ -296,7 +324,11 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30)),
                         color: Colors.red,
-                        onPressed: () {},
+                        onPressed: () {
+                          _firestore.collection('requests').document(component.documentId).delete();
+                          _firestore.collection('users').document(component.userUID).collection('RequestedComponents').document(component.documentId).updateData({'Status': 'Denied'});
+                          Navigator.of(context).pop();
+                        },
                         child: Row(
                           children: <Widget>[
                             Icon(
@@ -323,7 +355,13 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30)),
                         color: Colors.green,
-                        onPressed: () {},
+                        onPressed: () {
+                          print('new ${component.componentID}');
+                          _firestore.collection('requests').document(component.documentId).delete();
+                          _firestore.collection('users').document(component.userUID).collection('RequestedComponents').document(component.documentId).updateData({'Status': 'Approved'});
+                          _firestore.collection('components').document(component.componentID).updateData({'Quantity': FieldValue.increment(-(component.quantity))});
+                          Navigator.of(context).pop();
+                        },
                         child: Row(
                           children: <Widget>[
                             Icon(

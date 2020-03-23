@@ -23,8 +23,10 @@ class RequestPageAdmin extends StatefulWidget {
 
 class _RequestPageAdminState extends State<RequestPageAdmin> {
   Widget buildListItem(BuildContext context, DocumentSnapshot document) {
+
     return makeListTileRequestAdmin(
       Component(
+        componentID: document['Component UUID'],
         context: context,
         userName: document['User Name'],
         userUID: userUID,
