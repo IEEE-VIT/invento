@@ -26,7 +26,7 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
     return makeListTileRequestAdmin(
       Component(
         context: context,
-        userName: widget.userName,
+        userName: document['User Name'],
         userUID: userUID,
         collection: 'users',
         componentName: document['Component Name'],
@@ -63,7 +63,11 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
     documents.forEach((data) {
       widget.userData[data.documentID] = data['Name'];
     });
-    widget.userName = widget.userData[userUID];
+
+    setState(() {
+      widget.userName = widget.userData[userUID];
+    });
+
     print(widget.userName);
   }
 

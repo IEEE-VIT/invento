@@ -268,9 +268,11 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
         SizedBox(
           width: 20,
         ),
-        Text(
-          'User: ${component.userName}',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        Expanded(
+          child: Text(
+            'User: ${component.userName}',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
         ),
       ]),
       trailing: MaterialButton(

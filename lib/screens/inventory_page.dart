@@ -92,7 +92,10 @@ class _InventoryPageState extends State<InventoryPage> {
     documents.forEach((data) {
       widget.userData[data.documentID] = data['Name'];
     });
-    widget.userName = widget.userData[widget.userUID];
+    setState(() {
+      widget.userName = widget.userData[widget.userUID];
+    });
+
     print(widget.userName);
   }
 
