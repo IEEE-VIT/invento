@@ -27,6 +27,7 @@ dependencies:
   animations: ^1.0.0+5
   page_transition: ^1.1.5
   uuid: ^2.0.4
+  intl: ^0.16.1
 
 
 

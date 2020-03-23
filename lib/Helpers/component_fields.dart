@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
 import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart';
+
+
 
 class Component {
   String componentID;
@@ -325,6 +328,7 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                             borderRadius: BorderRadius.circular(30)),
                         color: Colors.red,
                         onPressed: () {
+
                           _firestore.collection('requests').document(component.documentId).delete();
                           _firestore.collection('users').document(component.userUID).collection('RequestedComponents').document(component.documentId).updateData({'Status': 'Denied'});
                           Navigator.of(context).pop();
@@ -356,10 +360,17 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                             borderRadius: BorderRadius.circular(30)),
                         color: Colors.green,
                         onPressed: () {
+                          DateTime now = DateTime.now();
+                          String formattedDate = DateFormat('kk:mm:ss \n EEE d MMM').format(now);
                           print('new ${component.componentID}');
                           _firestore.collection('requests').document(component.documentId).delete();
                           _firestore.collection('users').document(component.userUID).collection('RequestedComponents').document(component.documentId).updateData({'Status': 'Approved'});
                           _firestore.collection('components').document(component.componentID).updateData({'Quantity': FieldValue.increment(-(component.quantity))});
+                          _firestore.collection('users').document(component.userUID).collection('ComponentsIssued').document(component.componentID).setData({
+                            'Component Name': component.componentName,
+                            'Quantity': component.quantity,
+                            'Date': formattedDate
+                          });
                           Navigator.of(context).pop();
                         },
                         child: Row(
