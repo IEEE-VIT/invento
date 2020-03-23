@@ -1,46 +1,34 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:invento/Helpers/component_fields.dart';
+import 'package:flutter/rendering.dart';
+import 'package:invento/Helpers/color_loader.dart';
+import 'package:invento/screens/inventory_page.dart';
 import 'package:invento/screens/inventory_page_admin.dart';
 import 'package:invento/screens/request_page.dart';
-import 'package:invento/screens/requests_admin.dart';
-import 'dart:io';
 import 'package:page_transition/page_transition.dart';
-import 'package:invento/Helpers/color_loader.dart';
+import '../Helpers/component_fields.dart';
+import 'package:uuid/uuid.dart';
 
-class InventoryPage extends StatefulWidget {
-  List admins = [];
-  String userUID;
+class RequestPageAdmin extends StatefulWidget {
   List<String> usersID = [];
   var userData = {};
   String userName;
 
   @override
-  _InventoryPageState createState() => _InventoryPageState();
+  _RequestPageAdminState createState() => _RequestPageAdminState();
 }
 
-class _InventoryPageState extends State<InventoryPage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getCurrentUser();
-    getAdmins();
-    getUsers();
-  }
-
-  final _auth = FirebaseAuth.instance;
-  final _firestore = Firestore.instance;
-  FirebaseUser loggedInUser;
-  String messageText;
-
-  Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-    return makeListTile(
+class _RequestPageAdminState extends State<RequestPageAdmin> {
+  Widget buildListItem(BuildContext context, DocumentSnapshot document) {
+    return makeListTileRequestAdmin(
       Component(
-        userName: widget.userName,
-        userUID: widget.userUID,
         context: context,
+        userName: widget.userName,
+        userUID: userUID,
+        collection: 'users',
         componentName: document['Component Name'],
         quantity: document['Quantity'],
         documentId: document.documentID,
@@ -48,41 +36,24 @@ class _InventoryPageState extends State<InventoryPage> {
     );
   }
 
-  void _showAdminAuthFailedDialog() {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text('Could not edit the Inventory'),
-          content: new Text(
-              "You don't have admin access. Try contacting an admin to change the value"),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCurrentUser();
+    getUsers();
   }
 
+  final _auth = FirebaseAuth.instance;
+  final _firestore = Firestore.instance;
+  String userUID;
 
-  void getAdmins() async {
-    final QuerySnapshot result =
-        await Firestore.instance.collection('admins').getDocuments();
-    final List<DocumentSnapshot> documents = result.documents;
-    documents.forEach((data) => widget.admins.add(data.documentID));
-  }
-
-  Future<FirebaseUser> getCurrentUser() async {
+  getCurrentUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    widget.userUID = user.uid;
+
+    setState(() {
+      userUID = user.uid;
+    });
   }
 
   getUsers() async {
@@ -92,34 +63,34 @@ class _InventoryPageState extends State<InventoryPage> {
     documents.forEach((data) {
       widget.userData[data.documentID] = data['Name'];
     });
-    widget.userName = widget.userData[widget.userUID];
+    widget.userName = widget.userData[userUID];
     print(widget.userName);
   }
 
   Future<bool> _onBackPressed() {
     return showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Exit'),
-              content: Text('Do you want to exit the app?'),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('No'),
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                ),
-                FlatButton(
-                  child: Text('Yes'),
-                  onPressed: () {
-                    exit(0);
-                  },
-                )
-              ],
-            );
-          },
-        ) ??
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Exit'),
+          content: Text('Do you want to exit the app?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                exit(0);
+              },
+            )
+          ],
+        );
+      },
+    ) ??
         false;
   }
 
@@ -153,18 +124,12 @@ class _InventoryPageState extends State<InventoryPage> {
                 leading: Icon(Icons.edit),
                 title: Text('Edit Inventory'),
                 onTap: () {
-                  getCurrentUser();
-                  getAdmins();
-                  if (widget.admins.contains(widget.userUID)) {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                          child: InventoryAdminPage(),
-                          type: PageTransitionType.rightToLeft),
-                    );
-                  } else {
-                    _showAdminAuthFailedDialog();
-                  }
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                        child: InventoryAdminPage(),
+                        type: PageTransitionType.rightToLeft),
+                  );
                 },
               ),
               ListTile(
@@ -195,7 +160,6 @@ class _InventoryPageState extends State<InventoryPage> {
                   );
                 },
               ),
-
             ],
           ),
         ),
@@ -203,7 +167,7 @@ class _InventoryPageState extends State<InventoryPage> {
         appBar: AppBar(
           backgroundColor: Colors.black,
           elevation: 0,
-          title: Text('Invento'),
+          title: Text('All Requested Components'),
           centerTitle: true,
           actions: <Widget>[
             IconButton(
@@ -220,7 +184,9 @@ class _InventoryPageState extends State<InventoryPage> {
         ),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
-            stream: _firestore.collection('components').snapshots(),
+            stream: _firestore
+                .collection('requests')
+                .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return ColorLoader(
@@ -239,8 +205,7 @@ class _InventoryPageState extends State<InventoryPage> {
                 shrinkWrap: true,
                 itemCount: snapshot.data.documents.length,
                 itemBuilder: (context, index) {
-                  return _buildListItem(
-                      context, snapshot.data.documents[index]);
+                  return buildListItem(context, snapshot.data.documents[index]);
                 },
               );
             },

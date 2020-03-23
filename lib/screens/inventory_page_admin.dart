@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import 'package:invento/screens/detail_page.dart';
 import 'package:invento/screens/inventory_page.dart';
+import 'package:invento/screens/requests_admin.dart';
 import 'package:page_transition/page_transition.dart';
 import 'request_page.dart';
 import '../Helpers/component_fields.dart';
@@ -150,7 +151,7 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
               ),
               ListTile(
                 leading: Icon(Icons.get_app),
-                title: Text('Request'),
+                title: Text('Requested Components'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -159,7 +160,19 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
                         type: PageTransitionType.rightToLeft),
                   );
                 },
-              )
+              ),ListTile(
+                leading: Icon(Icons.get_app),
+                title: Text('All Requested Components'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                        child: RequestPageAdmin(),
+                        type: PageTransitionType.rightToLeft),
+                  );
+                },
+              ),
+
             ],
           ),
         ),

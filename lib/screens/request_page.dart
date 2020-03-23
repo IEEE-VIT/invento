@@ -7,15 +7,14 @@ import 'package:flutter/rendering.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import 'package:invento/screens/inventory_page.dart';
 import 'package:invento/screens/inventory_page_admin.dart';
+import 'package:invento/screens/requests_admin.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Helpers/component_fields.dart';
 import 'package:uuid/uuid.dart';
 
-
-
 class RequestPage extends StatefulWidget {
   List<String> usersID = [];
-  var userData ={};
+  var userData = {};
   String userName;
 
   @override
@@ -23,7 +22,6 @@ class RequestPage extends StatefulWidget {
 }
 
 class _RequestPageState extends State<RequestPage> {
-
   Widget buildListItem(BuildContext context, DocumentSnapshot document) {
     return makeListTileRequest(
       Component(
@@ -35,7 +33,6 @@ class _RequestPageState extends State<RequestPage> {
       ),
     );
   }
-
 
   @override
   void initState() {
@@ -61,12 +58,12 @@ class _RequestPageState extends State<RequestPage> {
 
   getUsers() async {
     final QuerySnapshot result =
-    await Firestore.instance.collection('users').getDocuments();
+        await Firestore.instance.collection('users').getDocuments();
     final List<DocumentSnapshot> documents = result.documents;
-    documents.forEach((data){
-      widget.userData[data.documentID]=data['Name'];
+    documents.forEach((data) {
+      widget.userData[data.documentID] = data['Name'];
     });
-    widget.userName= widget.userData[userUID];
+    widget.userName = widget.userData[userUID];
     print(widget.userName);
   }
 
@@ -119,7 +116,7 @@ class _RequestPageState extends State<RequestPage> {
                     context,
                     PageTransition(
                         child: InventoryPage(),
-                        type: PageTransitionType.leftToRight),
+                        type: PageTransitionType.rightToLeft),
                   );
                 },
               ),
@@ -141,7 +138,7 @@ class _RequestPageState extends State<RequestPage> {
               ),
               ListTile(
                 leading: Icon(Icons.get_app),
-                title: Text('Request'),
+                title: Text('Requested Components'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -150,7 +147,19 @@ class _RequestPageState extends State<RequestPage> {
                         type: PageTransitionType.rightToLeft),
                   );
                 },
-              )
+              ),
+              ListTile(
+                leading: Icon(Icons.get_app),
+                title: Text('All Requested Components'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                        child: RequestPageAdmin(),
+                        type: PageTransitionType.rightToLeft),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -158,7 +167,7 @@ class _RequestPageState extends State<RequestPage> {
         appBar: AppBar(
           backgroundColor: Colors.black,
           elevation: 0,
-          title: Text('Request Component'),
+          title: Text('Requested Components'),
           centerTitle: true,
           actions: <Widget>[
             IconButton(
@@ -175,7 +184,11 @@ class _RequestPageState extends State<RequestPage> {
         ),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
-            stream: _firestore.collection('users').document(userUID).collection('RequestedComponents').snapshots(),
+            stream: _firestore
+                .collection('users')
+                .document(userUID)
+                .collection('RequestedComponents')
+                .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return ColorLoader(
@@ -200,86 +213,23 @@ class _RequestPageState extends State<RequestPage> {
             },
           ),
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton.extended(
+            label: Text('Add Request'),
             backgroundColor: Colors.black,
-            child: Icon(
+            icon: Icon(
               Icons.add,
               color: Colors.white,
             ),
             elevation: 20,
             onPressed: () {
-              return showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      actions: <Widget>[
-                        FlatButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            _componentNameController.clear();
-                            _quantityController.clear();
-                          },
-                          child: Text(
-                            "CANCEL",
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        FlatButton(
-                          onPressed: () {
-                            var uuid = Uuid();
-                              _firestore.collection('users').document(userUID).collection('RequestedComponents')
-                                  .document(uuid.v1())
-                                  .setData({
-                                'Component Name': _componentNameController.text,
-                                'Quantity': int.parse(_quantityController.text),
-                                'User UUID':userUID,
-                                'User Name': widget.userName
-                              });
-
-                            _componentNameController.clear();
-                            _quantityController.clear();
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(
-                            'ADD',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        )
-                      ],
-                      title: Column(
-                        children: <Widget>[
-                          Center(
-                            child: Text('Add a new component'),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextField(
-                            textInputAction: TextInputAction.next,
-                            controller: _componentNameController,
-                            decoration: InputDecoration(
-                              hintText: 'Enter Component Name',
-                            ),
-                          ),
-                          TextField(
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.next,
-                            controller: _quantityController,
-                            decoration: InputDecoration(
-                              hintText: 'Enter Quanitity',
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  });
-            })
+              Navigator.push(
+                context,
+                PageTransition(
+                    child: InventoryPage(),
+                    type: PageTransitionType.rightToLeft),
+              );
+            }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
   }
