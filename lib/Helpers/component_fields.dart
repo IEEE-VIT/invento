@@ -4,9 +4,8 @@ import 'package:flutter/rendering.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
-
-
 class Component {
+  bool validate;
   String componentID;
   Color color;
   String status;
@@ -30,7 +29,8 @@ class Component {
       this.userName,
       this.status,
       this.color,
-      this.componentID});
+      this.componentID,
+      this.validate});
 }
 
 final _firestore = Firestore.instance;
@@ -146,36 +146,83 @@ ListTile makeListTile(Component component) => ListTile(
                     ),
                     FlatButton(
                       onPressed: () {
-                        var uuid = Uuid();
-                        String temp = uuid.v1();
-                        _firestore
-                            .collection('users')
-                            .document(component.userUID)
-                            .collection('RequestedComponents')
-                            .document(temp)
-                            .setData({
-                          'Component Name': component.componentName,
-                          'Quantity': wanted,
-                          'User UUID': component.userUID,
-                          'User Name': component.userName,
-                          'Component UUID': component.documentId,
-                          'Status': 'Applied'
-                        });
-                        _firestore
-                            .collection('requests')
-                            .document(temp)
-                            .setData({
-                          'Component Name': component.componentName,
-                          'Quantity': wanted,
-                          'Component UUID': component.documentId,
-                          'User Name': component.userName,
-                          'Status': 'Applied'
-                        });
+                        print((component.quantity));
+                        print(wanted);
+                        if (component.quantity >= wanted && wanted>=0) {
+                          var uuid = Uuid();
+                          String temp = uuid.v1();
+                          _firestore
+                              .collection('users')
+                              .document(component.userUID)
+                              .collection('RequestedComponents')
+                              .document(temp)
+                              .setData({
+                            'Component Name': component.componentName,
+                            'Quantity': wanted,
+                            'User UUID': component.userUID,
+                            'User Name': component.userName,
+                            'Component UUID': component.documentId,
+                            'Status': 'Applied'
+                          });
+                          _firestore
+                              .collection('requests')
+                              .document(temp)
+                              .setData({
+                            'Component Name': component.componentName,
+                            'Quantity': wanted,
+                            'Component UUID': component.documentId,
+                            'User Name': component.userName,
+                            'Status': 'Applied'
+                          });
 
 //                        _componentNameController.clear();
 //                        _quantityController.clear();
-                        Navigator.of(context).pop();
-                      },
+                          Navigator.of(context).pop();
+                        }
+                        else if(wanted<0){
+                          Navigator.of(context).pop();
+                          return showDialog(
+                              context: component.context,
+                              builder: (BuildContext context){
+                                return AlertDialog(
+                                  title: new Text('Could not process the request'),
+                                  content: new Text('Requested quantity can\'t be less than 0'),
+                                  actions: <Widget>[
+                                    // usually buttons at the bottom of the dialog
+                                    new FlatButton(
+                                      child: new Text('Close'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              }
+                          );
+
+                        }
+                        else{
+                          return showDialog(
+                              context: component.context,
+                              builder: (BuildContext context){
+                                return AlertDialog(
+                                  title: new Text('Could not process the request'),
+                                  content: new Text('Requested quantity is more than the available quantity. Please try again!'),
+                                  actions: <Widget>[
+                                    // usually buttons at the bottom of the dialog
+                                    new FlatButton(
+                                      child: new Text('Close'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              }
+                          );
+                        }
+                        return null;
+                        },
                       child: Text(
                         'REQUEST',
                         style: TextStyle(color: Colors.black),
@@ -191,11 +238,12 @@ ListTile makeListTile(Component component) => ListTile(
                         height: 20,
                       ),
                       TextField(
+                        autofocus: true,
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.next,
                         onChanged: (value) {
-                          wanted = int.parse(value).floor();
-                        },
+                            wanted = int.parse(value).floor();
+                            },
                         decoration: InputDecoration(
                           hintText: 'Enter Quantity',
                         ),
@@ -235,21 +283,22 @@ ListTile makeListTileRequest(Component component) => ListTile(
           'Quantity: ${component.quantity.toString()}',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        SizedBox(width: 10,),
+        SizedBox(
+          width: 10,
+        ),
         Text(
           'Status: ',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        SizedBox(width: 10,),
+        SizedBox(
+          width: 10,
+        ),
         Container(
           padding: EdgeInsets.all(5),
           color: component.color,
           child: Text(
             component.status,
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold
-            ),
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         )
       ]),
@@ -328,9 +377,16 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                             borderRadius: BorderRadius.circular(30)),
                         color: Colors.red,
                         onPressed: () {
-
-                          _firestore.collection('requests').document(component.documentId).delete();
-                          _firestore.collection('users').document(component.userUID).collection('RequestedComponents').document(component.documentId).updateData({'Status': 'Denied'});
+                          _firestore
+                              .collection('requests')
+                              .document(component.documentId)
+                              .delete();
+                          _firestore
+                              .collection('users')
+                              .document(component.userUID)
+                              .collection('RequestedComponents')
+                              .document(component.documentId)
+                              .updateData({'Status': 'Denied'});
                           Navigator.of(context).pop();
                         },
                         child: Row(
@@ -361,12 +417,32 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                         color: Colors.green,
                         onPressed: () {
                           DateTime now = DateTime.now();
-                          String formattedDate = DateFormat('kk:mm:ss \n EEE d MMM').format(now);
+                          String formattedDate =
+                              DateFormat('kk:mm:ss \n EEE d MMM').format(now);
                           print('new ${component.componentID}');
-                          _firestore.collection('requests').document(component.documentId).delete();
-                          _firestore.collection('users').document(component.userUID).collection('RequestedComponents').document(component.documentId).updateData({'Status': 'Approved'});
-                          _firestore.collection('components').document(component.componentID).updateData({'Quantity': FieldValue.increment(-(component.quantity))});
-                          _firestore.collection('users').document(component.userUID).collection('ComponentsIssued').document(component.componentID).setData({
+                          _firestore
+                              .collection('requests')
+                              .document(component.documentId)
+                              .delete();
+                          _firestore
+                              .collection('users')
+                              .document(component.userUID)
+                              .collection('RequestedComponents')
+                              .document(component.documentId)
+                              .updateData({'Status': 'Approved'});
+                          _firestore
+                              .collection('components')
+                              .document(component.componentID)
+                              .updateData({
+                            'Quantity':
+                                FieldValue.increment(-(component.quantity))
+                          });
+                          _firestore
+                              .collection('users')
+                              .document(component.userUID)
+                              .collection('ComponentsIssued')
+                              .document(component.componentID)
+                              .setData({
                             'Component Name': component.componentName,
                             'Quantity': component.quantity,
                             'Date': formattedDate

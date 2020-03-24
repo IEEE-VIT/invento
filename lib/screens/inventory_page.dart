@@ -38,6 +38,7 @@ class _InventoryPageState extends State<InventoryPage> {
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
     return makeListTile(
       Component(
+        validate: false,
         userName: widget.userName,
         userUID: widget.userUID,
         context: context,
@@ -47,6 +48,7 @@ class _InventoryPageState extends State<InventoryPage> {
       ),
     );
   }
+
 
   void _showAdminAuthFailedDialog() {
     // flutter defined function
@@ -237,15 +239,32 @@ class _InventoryPageState extends State<InventoryPage> {
                   duration: Duration(milliseconds: 1200),
                 );
               }
-              return ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (context, index) {
-                  return _buildListItem(
-                      context, snapshot.data.documents[index]);
-                },
-              );
+              else if (snapshot.data.documents.length == 0) {
+                return Container(
+                  child: Center(
+                    child: Text(
+                      'No Components',
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+                return ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (context, index) {
+                    return _buildListItem(
+                        context, snapshot.data.documents[index]);
+                  },
+                );
+
+
             },
           ),
         ),

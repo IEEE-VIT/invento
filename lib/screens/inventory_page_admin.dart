@@ -211,6 +211,20 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
                   duration: Duration(milliseconds: 1200),
                 );
               }
+              else if (snapshot.data.documents.length == 0) {
+                return Container(
+                  child: Center(
+                    child: Text(
+                      'No Components',
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey
+                      ),
+                    ),
+                  ),
+                );
+              }
               return ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
