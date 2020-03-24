@@ -50,7 +50,7 @@ class _InventoryPageState extends State<InventoryPage> {
   }
 
 
-  void _showAdminAuthFailedDialog() {
+  void showAdminAuthFailedDialog() {
     // flutter defined function
     showDialog(
       context: context,
@@ -156,7 +156,7 @@ class _InventoryPageState extends State<InventoryPage> {
               ),
               ListTile(
                 leading: Icon(Icons.edit),
-                title: Text('Edit Inventory'),
+                title: Text('Edit Inventory (Admin)'),
                 onTap: () {
                   getCurrentUser();
                   getAdmins();
@@ -168,7 +168,7 @@ class _InventoryPageState extends State<InventoryPage> {
                           type: PageTransitionType.rightToLeft),
                     );
                   } else {
-                    _showAdminAuthFailedDialog();
+                    showAdminAuthFailedDialog();
                   }
                 },
               ),
@@ -189,15 +189,19 @@ class _InventoryPageState extends State<InventoryPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.get_app),
-                title: Text('All Requested Components'),
+                leading: Icon(Icons.list),
+                title: Text('All Requested Components (Admin)'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: RequestPageAdmin(),
-                        type: PageTransitionType.rightToLeft),
-                  );
+                  if (widget.admins.contains(widget.userUID)) {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child: RequestPageAdmin(),
+                          type: PageTransitionType.rightToLeft),
+                    );
+                  } else {
+                    showAdminAuthFailedDialog();
+                  }
                 },
               ),
 

@@ -13,6 +13,7 @@ import '../Helpers/component_fields.dart';
 import 'package:uuid/uuid.dart';
 
 class RequestPage extends StatefulWidget {
+  List admins = [];
   List<String> usersID = [];
   var userData = {};
   String userName;
@@ -25,14 +26,12 @@ class RequestPage extends StatefulWidget {
 
 class _RequestPageState extends State<RequestPage> {
   Widget buildListItem(BuildContext context, DocumentSnapshot document) {
-    if(document['Status']=='Applied'){
+    if (document['Status'] == 'Applied') {
       widget.color = Colors.yellow;
-    }
-    else if(document['Status']=='Denied'){
-      widget.color=Colors.red;
-    }
-    else{
-      widget.color=Colors.green;
+    } else if (document['Status'] == 'Denied') {
+      widget.color = Colors.red;
+    } else {
+      widget.color = Colors.green;
     }
     return makeListTileRequest(
       Component(
@@ -67,6 +66,37 @@ class _RequestPageState extends State<RequestPage> {
     setState(() {
       userUID = user.uid;
     });
+  }
+
+  void showAdminAuthFailedDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text('Could not edit the Inventory'),
+          content: new Text(
+              "You don't have admin access. Try contacting an admin to change the value"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void getAdmins() async {
+    final QuerySnapshot result =
+    await Firestore.instance.collection('admins').getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    documents.forEach((data) => widget.admins.add(data.documentID));
   }
 
   getUsers() async {
@@ -135,14 +165,20 @@ class _RequestPageState extends State<RequestPage> {
               ),
               ListTile(
                 leading: Icon(Icons.edit),
-                title: Text('Edit Inventory'),
+                title: Text('Edit Inventory(Admin)'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: InventoryAdminPage(),
-                        type: PageTransitionType.rightToLeft),
-                  );
+                  getCurrentUser();
+                  getAdmins();
+                  if (widget.admins.contains(userUID)) {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child: InventoryAdminPage(),
+                          type: PageTransitionType.rightToLeft),
+                    );
+                  } else {
+                    showAdminAuthFailedDialog();
+                  }
                 },
               ),
               ListTile(
@@ -163,14 +199,21 @@ class _RequestPageState extends State<RequestPage> {
               ),
               ListTile(
                 leading: Icon(Icons.get_app),
-                title: Text('All Requested Components'),
+                title: Text('All Requested Components(Admin)'),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: RequestPageAdmin(),
-                        type: PageTransitionType.rightToLeft),
-                  );
+                  getAdmins();
+                  getUsers();
+                  getCurrentUser();
+                  if (widget.admins.contains(userUID)) {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child: RequestPageAdmin(),
+                          type: PageTransitionType.rightToLeft),
+                    );
+                  } else {
+                    showAdminAuthFailedDialog();
+                  }
                 },
               ),
             ],
@@ -214,8 +257,7 @@ class _RequestPageState extends State<RequestPage> {
                   ],
                   duration: Duration(milliseconds: 1200),
                 );
-              }
-              else if (snapshot.data.documents.length == 0) {
+              } else if (snapshot.data.documents.length == 0) {
                 return Container(
                   child: Center(
                     child: Text(
@@ -223,8 +265,7 @@ class _RequestPageState extends State<RequestPage> {
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey
-                      ),
+                          color: Colors.grey),
                     ),
                   ),
                 );

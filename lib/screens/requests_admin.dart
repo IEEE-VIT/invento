@@ -127,7 +127,7 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
               ),
               ListTile(
                 leading: Icon(Icons.edit),
-                title: Text('Edit Inventory'),
+                title: Text('Edit Inventory(Admin)'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -155,7 +155,7 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
               ),
               ListTile(
                 leading: Icon(Icons.get_app),
-                title: Text('All Requested Components'),
+                title: Text('All Requested Components(Admin)'),
                 onTap: () {
                   Navigator.push(
                     context,

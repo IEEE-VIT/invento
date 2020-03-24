@@ -135,7 +135,7 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
               ),
               ListTile(
                 leading: Icon(Icons.edit),
-                title: Text('Edit Inventory'),
+                title: Text('Edit Inventory(Admin)'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -161,8 +161,8 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
                   );
                 },
               ),ListTile(
-                leading: Icon(Icons.get_app),
-                title: Text('All Requested Components'),
+                leading: Icon(Icons.list),
+                title: Text('All Requested Components(Admin)'),
                 onTap: () {
                   Navigator.push(
                     context,
