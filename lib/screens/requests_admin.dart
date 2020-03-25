@@ -25,7 +25,7 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
         componentID: document['Component UUID'],
         context: context,
         userName: document['User Name'],
-        RequestUserUID: document['User UUID'],
+        requestUserUID: document['User UUID'],
         collection: 'users',
         componentName: document['Component Name'],
         quantity: document['Quantity'],
@@ -104,7 +104,7 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawer(context),
+        drawer: buildDrawer(context,userUID),
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.black,

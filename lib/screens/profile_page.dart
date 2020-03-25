@@ -68,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
         title: Text('Profile'),
         centerTitle: true,
       ),
-      drawer: buildDrawer(context),
+      drawer: buildDrawer(context,widget.userUID),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[

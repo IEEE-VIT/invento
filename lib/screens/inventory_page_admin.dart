@@ -37,6 +37,13 @@ class InventoryAdminPage extends StatefulWidget {
 }
 
 class _InventoryAdminPageState extends State<InventoryAdminPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadCurrentUser();
+  }
   final _firestore = Firestore.instance;
   TextEditingController _componentNameController = TextEditingController();
   TextEditingController _quantityController = TextEditingController();
@@ -62,6 +69,20 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
       ),
     );
   }
+  String currentUID;
+
+  loadCurrentUser() async {
+    var currentUID = await _getCurrentUID();
+    setState(() {
+      this.currentUID = currentUID;
+    });
+  }
+
+  Future<String> _getCurrentUID() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return user.uid;
+  }
+
 
   Future<bool> _onBackPressed() {
     return showDialog(
@@ -100,7 +121,7 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawer(context),
+        drawer: buildDrawer(context,currentUID),
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.black,

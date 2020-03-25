@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
 class Component {
-  String RequestUserUID;
+  String requestUserUID;
   dynamic presentQuantity;
   String issueID;
   String date;
@@ -38,7 +38,7 @@ class Component {
       this.validate,
       this.date,
       this.issueID,
-      this.RequestUserUID});
+      this.requestUserUID});
 }
 
 final _firestore = Firestore.instance;
@@ -460,7 +460,7 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                                 .delete();
                             _firestore
                                 .collection('users')
-                                .document(component.RequestUserUID)
+                                .document(component.requestUserUID)
                                 .collection('RequestedComponents')
                                 .document(component.documentId)
                                 .updateData({'Status': 'Denied'});
@@ -514,7 +514,7 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                                   .delete();
                               _firestore
                                   .collection('users')
-                                  .document(component.RequestUserUID)
+                                  .document(component.requestUserUID)
                                   .collection('RequestedComponents')
                                   .document(component.documentId)
                                   .updateData({'Status': 'Approved'});
@@ -527,7 +527,7 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                               });
                               _firestore
                                   .collection('users')
-                                  .document(component.RequestUserUID)
+                                  .document(component.requestUserUID)
                                   .collection('ComponentsIssued')
                                   .document(component.componentID)
                                   .setData({

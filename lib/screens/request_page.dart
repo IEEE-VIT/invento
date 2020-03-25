@@ -34,7 +34,7 @@ class _RequestPageState extends State<RequestPage> {
     }
     return makeListTileRequest(
       Component(
-        RequestUserUID: document['User UUID'],
+        requestUserUID: document['User UUID'],
         color: widget.color,
         status: document['Status'],
         userUID: widget.userUID,
@@ -143,7 +143,7 @@ class _RequestPageState extends State<RequestPage> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawer(context),
+        drawer: buildDrawer(context,widget.userUID),
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.black,

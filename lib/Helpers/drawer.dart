@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:invento/screens/profile_page.dart';
 import 'package:page_transition/page_transition.dart';
@@ -50,7 +52,7 @@ void showAdminAuthFailedDialog(BuildContext context) {
   );
 }
 
-Drawer buildDrawer(BuildContext context) {
+Drawer buildDrawer(BuildContext context, String userUID) {
   return Drawer(
     child: ListView(
       padding: EdgeInsets.zero,
@@ -118,6 +120,8 @@ Drawer buildDrawer(BuildContext context) {
           leading: Icon(Icons.list),
           title: Text('All Requested Components (Admin)'),
           onTap: () {
+            getAdmins();
+            getCurrentUser();
             if (admins.contains(userUID)) {
               Navigator.push(
                 context,
@@ -130,6 +134,14 @@ Drawer buildDrawer(BuildContext context) {
             }
           },
         ),
+        ListTile(
+          leading: Icon(Icons.exit_to_app),
+          title: Text('Logout'),
+          onTap: (){
+            FirebaseAuth.instance.signOut();
+            exit(0);
+          },
+        )
 
       ],
     ),

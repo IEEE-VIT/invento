@@ -6,25 +6,31 @@ import 'dart:io';
 import 'package:invento/Helpers/color_loader.dart';
 import 'package:invento/Helpers/drawer.dart';
 
+FirebaseUser loggedInUser;
+
+
 class InventoryPage extends StatefulWidget {
-  List admins = [];
-  String userUID;
-  List<String> usersID = [];
-  var userData = {};
-  String userName;
+  final List admins = [];
 
   @override
   _InventoryPageState createState() => _InventoryPageState();
 }
 
 class _InventoryPageState extends State<InventoryPage> {
+  final _auth = FirebaseAuth.instance;
+  String userUID;
+  String userName;
+  List<String> usersID = [];
+  var userData = {};
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCurrentUser();
+    loadCurrentUser();
     getAdmins();
     getUsers();
+
   }
 
   final _firestore = Firestore.instance;
@@ -35,8 +41,8 @@ class _InventoryPageState extends State<InventoryPage> {
     return makeListTile(
       Component(
         validate: false,
-        userName: widget.userName,
-        userUID: widget.userUID,
+        userName: userName,
+        userUID: userUID,
         context: context,
         componentName: document['Component Name'],
         quantity: document['Quantity'],
@@ -78,20 +84,36 @@ class _InventoryPageState extends State<InventoryPage> {
     documents.forEach((data) => widget.admins.add(data.documentID));
   }
 
-  Future<FirebaseUser> getCurrentUser() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    widget.userUID = user.uid;
+
+  loadCurrentUser() async {
+    var currentUID = await _getCurrentUID();
+    setState(() {
+      this.userUID = currentUID;
+    });
   }
+
+  Future<String> _getCurrentUID() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    return user.uid;
+  }
+
+
+//    getCurrentUser()async {
+//    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+//    userUID = user.uid;
+//    print(userUID);
+//    return userUID;
+//  }
 
   getUsers() async {
     final QuerySnapshot result =
     await Firestore.instance.collection('users').getDocuments();
     final List<DocumentSnapshot> documents = result.documents;
     documents.forEach((data) {
-      widget.userData[data.documentID] = data['Name'];
+      userData[data.documentID] = data['Name'];
     });
     setState(() {
-      widget.userName = widget.userData[widget.userUID];
+      userName = userData[userUID];
     });
 
   }
@@ -127,10 +149,11 @@ class _InventoryPageState extends State<InventoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(userUID);
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawer(context),
+        drawer: buildDrawer(context,userUID),
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.black,
