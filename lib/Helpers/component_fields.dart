@@ -90,10 +90,12 @@ ListTile makeListTileProfile(Component component) => ListTile(
             SizedBox(
               width: 10,
             ),
-            Text(
-              "On: ${component.date}",
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            Expanded(
+              child: Text(
+                "On: ${component.date}",
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
@@ -446,64 +448,12 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                   content: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      MaterialButton(
-                        minWidth: 100,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        color: Colors.red,
-                        onPressed: () {
-                          _firestore
-                              .collection('requests')
-                              .document(component.documentId)
-                              .delete();
-                          _firestore
-                              .collection('users')
-                              .document(component.RequestUserUID)
-                              .collection('RequestedComponents')
-                              .document(component.documentId)
-                              .updateData({'Status': 'Denied'});
-                          Navigator.of(context).pop();
-                        },
-                        child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.clear,
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Deny',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            SizedBox(
-                              width: 15,
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      MaterialButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        color: Colors.green,
-                        onPressed: () async {
-                          final DocumentReference document = Firestore.instance
-                              .collection("components")
-                              .document(component.componentID);
-                          await document
-                              .get()
-                              .then<dynamic>((DocumentSnapshot snapshot) async {
-                            component.presentQuantity = snapshot.data;
-                          });
-                          if (component.presentQuantity['Quantity'] >=
-                              component.quantity) {
-                            DateTime now = DateTime.now();
-                            String formattedDate =
-                                DateFormat('EEE d MMM').format(now);
+                      Expanded(
+                        child: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                          color: Colors.red,
+                          onPressed: () {
                             _firestore
                                 .collection('requests')
                                 .document(component.documentId)
@@ -513,64 +463,118 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                                 .document(component.RequestUserUID)
                                 .collection('RequestedComponents')
                                 .document(component.documentId)
-                                .updateData({'Status': 'Approved'});
-                            _firestore
-                                .collection('components')
-                                .document(component.componentID)
-                                .updateData({
-                              'Quantity':
-                                  FieldValue.increment(-(component.quantity))
-                            });
-                            _firestore
-                                .collection('users')
-                                .document(component.RequestUserUID)
-                                .collection('ComponentsIssued')
-                                .document(component.componentID)
-                                .setData({
-                              'Component Name': component.componentName,
-                              'Component UUID': component.componentID,
-                              'Quantity': component.quantity,
-                              'Date': formattedDate,
-                              'Issue ID': component.documentId,
-                            });
+                                .updateData({'Status': 'Denied'});
                             Navigator.of(context).pop();
-                          } else {
-                            return showDialog(
-                                context: component.context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: new Text(
-                                        'Could not process the request'),
-                                    content: new Text(
-                                        'Requested quantity is more than the available quantity. Please try again!'),
-                                    actions: <Widget>[
-                                      // usually buttons at the bottom of the dialog
-                                      new FlatButton(
-                                        child: new Text('Close'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                });
-                          }
-
-                        },
-                        child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.check,
-                              color: Colors.white,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Approve',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.clear,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Deny',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                          color: Colors.green,
+                          onPressed: () async {
+                            final DocumentReference document = Firestore
+                                .instance
+                                .collection("components")
+                                .document(component.componentID);
+                            await document.get().then<dynamic>(
+                                (DocumentSnapshot snapshot) async {
+                              component.presentQuantity = snapshot.data;
+                            });
+                            if (component.presentQuantity['Quantity'] >=
+                                component.quantity) {
+                              DateTime now = DateTime.now();
+                              String formattedDate =
+                                  DateFormat('EEE d MMM').format(now);
+                              _firestore
+                                  .collection('requests')
+                                  .document(component.documentId)
+                                  .delete();
+                              _firestore
+                                  .collection('users')
+                                  .document(component.RequestUserUID)
+                                  .collection('RequestedComponents')
+                                  .document(component.documentId)
+                                  .updateData({'Status': 'Approved'});
+                              _firestore
+                                  .collection('components')
+                                  .document(component.componentID)
+                                  .updateData({
+                                'Quantity':
+                                    FieldValue.increment(-(component.quantity))
+                              });
+                              _firestore
+                                  .collection('users')
+                                  .document(component.RequestUserUID)
+                                  .collection('ComponentsIssued')
+                                  .document(component.componentID)
+                                  .setData({
+                                'Component Name': component.componentName,
+                                'Component UUID': component.componentID,
+                                'Quantity': component.quantity,
+                                'Date': formattedDate,
+                                'Issue ID': component.documentId,
+                              });
+                              Navigator.of(context).pop();
+                            } else {
+                              return showDialog(
+                                  context: component.context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: new Text(
+                                          'Could not process the request'),
+                                      content: new Text(
+                                          'Requested quantity is more than the available quantity. Please try again!'),
+                                      actions: <Widget>[
+                                        // usually buttons at the bottom of the dialog
+                                        new FlatButton(
+                                          child: new Text('Close'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            }
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.check,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Approve',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
