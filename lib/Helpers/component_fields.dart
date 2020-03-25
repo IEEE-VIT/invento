@@ -444,6 +444,7 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                               .document(component.componentID)
                               .setData({
                             'Component Name': component.componentName,
+                            'Component UUID': component.componentID,
                             'Quantity': component.quantity,
                             'Date': formattedDate
                           });
@@ -588,7 +589,7 @@ class AddButton extends StatelessWidget {
                         textInputAction: TextInputAction.next,
                         controller: _quantityController,
                         decoration: InputDecoration(
-                          hintText: 'Enter Quanitity',
+                          hintText: 'Enter Quantity',
                         ),
                       ),
                     ],

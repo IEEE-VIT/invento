@@ -1,16 +1,12 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/rendering.dart';
+import 'package:invento/Helpers/drawer.dart';
 import 'package:invento/Helpers/color_loader.dart';
-import 'package:invento/screens/inventory_page.dart';
-import 'package:invento/screens/inventory_page_admin.dart';
-import 'package:invento/screens/request_page.dart';
-import 'package:page_transition/page_transition.dart';
 import '../Helpers/component_fields.dart';
-import 'package:uuid/uuid.dart';
+
 
 class RequestPageAdmin extends StatefulWidget {
   List<String> usersID = [];
@@ -45,7 +41,6 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
     getUsers();
   }
 
-  final _auth = FirebaseAuth.instance;
   final _firestore = Firestore.instance;
   String userUID;
 
@@ -80,13 +75,15 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
               title: Text('Exit'),
               content: Text('Do you want to exit the app?'),
               actions: <Widget>[
-                FlatButton(
+                MaterialButton(
+                  color: Colors.black,
                   child: Text('No'),
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
                 ),
-                FlatButton(
+                MaterialButton(
+                  color: Colors.black,
                   child: Text('Yes'),
                   onPressed: () {
                     exit(0);
@@ -104,88 +101,13 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                  ),
-                  child: Image.asset('images/logo.png')),
-              ListTile(
-                leading: Icon(Icons.inbox),
-                title: Text('Inventory'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: InventoryPage(),
-                        type: PageTransitionType.rightToLeft),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.edit),
-                title: Text('Edit Inventory(Admin)'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: InventoryAdminPage(),
-                        type: PageTransitionType.rightToLeft),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.account_circle),
-                title: Text('Profile'),
-              ),
-              ListTile(
-                leading: Icon(Icons.get_app),
-                title: Text('Requested Components'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: RequestPage(),
-                        type: PageTransitionType.rightToLeft),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.get_app),
-                title: Text('All Requested Components(Admin)'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: RequestPageAdmin(),
-                        type: PageTransitionType.rightToLeft),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
+        drawer: buildDrawer(context),
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.black,
           elevation: 0,
           title: Text('All Requested Components'),
           centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  _auth.signOut();
-
-                  Navigator.popUntil(
-                    context,
-                    ModalRoute.withName('welcome'),
-                  );
-                }),
-          ],
         ),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(

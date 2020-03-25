@@ -4,13 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/rendering.dart';
+import 'package:invento/Helpers/drawer.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import 'package:invento/screens/inventory_page.dart';
-import 'package:invento/screens/inventory_page_admin.dart';
-import 'package:invento/screens/requests_admin.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Helpers/component_fields.dart';
-import 'package:uuid/uuid.dart';
 
 class RequestPage extends StatefulWidget {
   List admins = [];
@@ -19,6 +17,7 @@ class RequestPage extends StatefulWidget {
   String userName;
   String status;
   Color color;
+  String userUID;
 
   @override
   _RequestPageState createState() => _RequestPageState();
@@ -37,7 +36,7 @@ class _RequestPageState extends State<RequestPage> {
       Component(
         color: widget.color,
         status: document['Status'],
-        userUID: userUID,
+        userUID: widget.userUID,
         collection: 'users',
         componentName: document['Component Name'],
         quantity: document['Quantity'],
@@ -54,17 +53,13 @@ class _RequestPageState extends State<RequestPage> {
     getUsers();
   }
 
-  final _auth = FirebaseAuth.instance;
   final _firestore = Firestore.instance;
-  TextEditingController _componentNameController = TextEditingController();
-  TextEditingController _quantityController = TextEditingController();
-  String userUID;
 
   getCurrentUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
     setState(() {
-      userUID = user.uid;
+      widget.userUID = user.uid;
     });
   }
 
@@ -94,7 +89,7 @@ class _RequestPageState extends State<RequestPage> {
 
   void getAdmins() async {
     final QuerySnapshot result =
-    await Firestore.instance.collection('admins').getDocuments();
+        await Firestore.instance.collection('admins').getDocuments();
     final List<DocumentSnapshot> documents = result.documents;
     documents.forEach((data) => widget.admins.add(data.documentID));
   }
@@ -106,7 +101,10 @@ class _RequestPageState extends State<RequestPage> {
     documents.forEach((data) {
       widget.userData[data.documentID] = data['Name'];
     });
-    widget.userName = widget.userData[userUID];
+
+    setState(() {
+      widget.userName = widget.userData[widget.userUID];
+    });
     print(widget.userName);
   }
 
@@ -118,13 +116,15 @@ class _RequestPageState extends State<RequestPage> {
               title: Text('Exit'),
               content: Text('Do you want to exit the app?'),
               actions: <Widget>[
-                FlatButton(
+                MaterialButton(
+                  color: Colors.black,
                   child: Text('No'),
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
                 ),
-                FlatButton(
+                MaterialButton(
+                  color: Colors.black,
                   child: Text('Yes'),
                   onPressed: () {
                     exit(0);
@@ -142,107 +142,19 @@ class _RequestPageState extends State<RequestPage> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                  ),
-                  child: Image.asset('images/logo.png')),
-              ListTile(
-                leading: Icon(Icons.inbox),
-                title: Text('Inventory'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: InventoryPage(),
-                        type: PageTransitionType.rightToLeft),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.edit),
-                title: Text('Edit Inventory(Admin)'),
-                onTap: () {
-                  getCurrentUser();
-                  getAdmins();
-                  if (widget.admins.contains(userUID)) {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                          child: InventoryAdminPage(),
-                          type: PageTransitionType.rightToLeft),
-                    );
-                  } else {
-                    showAdminAuthFailedDialog();
-                  }
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.account_circle),
-                title: Text('Profile'),
-              ),
-              ListTile(
-                leading: Icon(Icons.get_app),
-                title: Text('Requested Components'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: RequestPage(),
-                        type: PageTransitionType.rightToLeft),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.get_app),
-                title: Text('All Requested Components(Admin)'),
-                onTap: () {
-                  getAdmins();
-                  getUsers();
-                  getCurrentUser();
-                  if (widget.admins.contains(userUID)) {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                          child: RequestPageAdmin(),
-                          type: PageTransitionType.rightToLeft),
-                    );
-                  } else {
-                    showAdminAuthFailedDialog();
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
+        drawer: buildDrawer(context),
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.black,
           elevation: 0,
           title: Text('Requested Components'),
           centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  _auth.signOut();
-
-                  Navigator.popUntil(
-                    context,
-                    ModalRoute.withName('welcome'),
-                  );
-                }),
-          ],
         ),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore
                 .collection('users')
-                .document(userUID)
+                .document(widget.userUID)
                 .collection('RequestedComponents')
                 .snapshots(),
             builder: (context, snapshot) {
