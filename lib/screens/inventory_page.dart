@@ -94,7 +94,6 @@ class _InventoryPageState extends State<InventoryPage> {
       widget.userName = widget.userData[widget.userUID];
     });
 
-    print(widget.userName);
   }
 
   Future<bool> _onBackPressed() {

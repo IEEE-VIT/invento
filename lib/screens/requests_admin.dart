@@ -63,8 +63,6 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
     setState(() {
       widget.userName = widget.userData[userUID];
     });
-
-    print(widget.userName);
   }
 
   Future<bool> _onBackPressed() {

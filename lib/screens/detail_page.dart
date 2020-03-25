@@ -83,9 +83,6 @@ class _DetailPageState extends State<DetailPage> {
                           widget.quantity--;
                         });
                       }
-                      else{
-                        print('nope');
-                      }
                     },
                   ),
                 ],

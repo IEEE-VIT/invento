@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invento/screens/profile_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:invento/screens/inventory_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -92,6 +93,14 @@ Drawer buildDrawer(BuildContext context) {
         ListTile(
           leading: Icon(Icons.account_circle),
           title: Text('Profile'),
+          onTap: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                  child: ProfilePage(),
+                  type: PageTransitionType.rightToLeft),
+            );
+          },
         ),
         ListTile(
           leading: Icon(Icons.get_app),
@@ -126,3 +135,4 @@ Drawer buildDrawer(BuildContext context) {
     ),
   );
 }
+

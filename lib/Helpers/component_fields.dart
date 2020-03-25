@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
+import 'package:invento/Helpers/drawer.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
 class Component {
+  String issueID;
+  String date;
   bool validate;
   String componentID;
   Color color;
@@ -30,7 +33,9 @@ class Component {
       this.status,
       this.color,
       this.componentID,
-      this.validate});
+      this.validate,
+      this.date,
+      this.issueID});
 }
 
 final _firestore = Firestore.instance;
@@ -51,6 +56,62 @@ Card makeCard(Component component) => Card(
         decoration: BoxDecoration(),
         child: makeListTile(component),
       ),
+    );
+
+ListTile makeListTileProfile(Component component) => ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      leading: Container(
+        padding: EdgeInsets.only(right: 12),
+        decoration: BoxDecoration(
+          border: Border(
+            right: BorderSide(width: 1, color: Colors.blue),
+          ),
+        ),
+        child: Icon(
+          Icons.arrow_forward,
+          color: Colors.black,
+        ),
+      ),
+      title: Text(
+        component.componentName,
+        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      ),
+      subtitle: Container(
+        child: Row(
+          children: <Widget>[
+            Text(
+              'Quantity: ${component.quantity.toString()}',
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(width: 10,),
+            Text(
+                "On: ${component.date}",
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+      trailing: MaterialButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30)
+        ),
+        child: Text(
+          'Return',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        color: Colors.black,
+        onPressed: () {
+          _firestore
+              .collection('users').document(userUID).collection('ComponentsIssued')
+              .document(component.documentId)
+              .delete();
+          _firestore.collection('users').document(userUID).collection('RequestedComponents').document(component.issueID).delete();
+          _firestore.collection('components').document(component.componentID).updateData({'Quantity': FieldValue.increment(component.quantity)});
+        },
+      ),
+      onTap: component.onPress,
     );
 
 ListTile makeListTileAdmin(Component component) => ListTile(
@@ -146,9 +207,7 @@ ListTile makeListTile(Component component) => ListTile(
                     ),
                     FlatButton(
                       onPressed: () {
-                        print((component.quantity));
-                        print(wanted);
-                        if (component.quantity >= wanted && wanted>=0) {
+                        if (component.quantity >= wanted && wanted >= 0) {
                           var uuid = Uuid();
                           String temp = uuid.v1();
                           _firestore
@@ -178,15 +237,16 @@ ListTile makeListTile(Component component) => ListTile(
 //                        _componentNameController.clear();
 //                        _quantityController.clear();
                           Navigator.of(context).pop();
-                        }
-                        else if(wanted<0){
+                        } else if (wanted < 0) {
                           Navigator.of(context).pop();
                           return showDialog(
                               context: component.context,
-                              builder: (BuildContext context){
+                              builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: new Text('Could not process the request'),
-                                  content: new Text('Requested quantity can\'t be less than 0'),
+                                  title:
+                                      new Text('Could not process the request'),
+                                  content: new Text(
+                                      'Requested quantity can\'t be less than 0'),
                                   actions: <Widget>[
                                     // usually buttons at the bottom of the dialog
                                     new FlatButton(
@@ -197,17 +257,16 @@ ListTile makeListTile(Component component) => ListTile(
                                     ),
                                   ],
                                 );
-                              }
-                          );
-
-                        }
-                        else{
+                              });
+                        } else {
                           return showDialog(
                               context: component.context,
-                              builder: (BuildContext context){
+                              builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: new Text('Could not process the request'),
-                                  content: new Text('Requested quantity is more than the available quantity. Please try again!'),
+                                  title:
+                                      new Text('Could not process the request'),
+                                  content: new Text(
+                                      'Requested quantity is more than the available quantity. Please try again!'),
                                   actions: <Widget>[
                                     // usually buttons at the bottom of the dialog
                                     new FlatButton(
@@ -218,11 +277,10 @@ ListTile makeListTile(Component component) => ListTile(
                                     ),
                                   ],
                                 );
-                              }
-                          );
+                              });
                         }
                         return null;
-                        },
+                      },
                       child: Text(
                         'REQUEST',
                         style: TextStyle(color: Colors.black),
@@ -242,8 +300,8 @@ ListTile makeListTile(Component component) => ListTile(
                         keyboardType: TextInputType.number,
                         textInputAction: TextInputAction.next,
                         onChanged: (value) {
-                            wanted = int.parse(value).floor();
-                            },
+                          wanted = int.parse(value).floor();
+                        },
                         decoration: InputDecoration(
                           hintText: 'Enter Quantity',
                         ),
@@ -418,8 +476,7 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                         onPressed: () {
                           DateTime now = DateTime.now();
                           String formattedDate =
-                              DateFormat('kk:mm:ss \n EEE d MMM').format(now);
-                          print('new ${component.componentID}');
+                              DateFormat('EEE d MMM').format(now);
                           _firestore
                               .collection('requests')
                               .document(component.documentId)
@@ -446,7 +503,8 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                             'Component Name': component.componentName,
                             'Component UUID': component.componentID,
                             'Quantity': component.quantity,
-                            'Date': formattedDate
+                            'Date': formattedDate,
+                            'Issue ID':component.documentId,
                           });
                           Navigator.of(context).pop();
                         },

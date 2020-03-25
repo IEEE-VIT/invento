@@ -63,6 +63,7 @@ class _RequestPageState extends State<RequestPage> {
     });
   }
 
+
   void showAdminAuthFailedDialog() {
     // flutter defined function
     showDialog(
@@ -105,7 +106,6 @@ class _RequestPageState extends State<RequestPage> {
     setState(() {
       widget.userName = widget.userData[widget.userUID];
     });
-    print(widget.userName);
   }
 
   Future<bool> _onBackPressed() {

@@ -49,7 +49,6 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
         quantity: document['Quantity'],
         documentId: document.documentID,
         onPress: () {
-          print(document.documentID);
           Navigator.push(
             context,
             MaterialPageRoute(
