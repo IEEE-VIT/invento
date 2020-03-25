@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:invento/screens/inventory_page.dart';
 import 'package:invento/screens/login_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -223,7 +224,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             Navigator.push(
                               context,
                               PageTransition(
-                                  child: LoginScreen(),
+                                  child: InventoryPage(),
                                   type: PageTransitionType.rightToLeft),
                             );
                             Firestore.instance

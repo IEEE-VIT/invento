@@ -74,13 +74,18 @@ class _DetailPageState extends State<DetailPage> {
                   IconButton(
                     icon: Icon(Icons.remove),
                     onPressed: () {
-                      widget._firestore
-                          .collection('components')
-                          .document(widget.documentID)
-                          .updateData({'Quantity': widget.quantity - 1});
-                      setState(() {
-                        widget.quantity--;
-                      });
+                      if(widget.quantity>0) {
+                        widget._firestore
+                            .collection('components')
+                            .document(widget.documentID)
+                            .updateData({'Quantity': widget.quantity - 1});
+                        setState(() {
+                          widget.quantity--;
+                        });
+                      }
+                      else{
+                        print('nope');
+                      }
                     },
                   ),
                 ],
