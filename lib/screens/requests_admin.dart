@@ -21,10 +21,11 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
   Widget buildListItem(BuildContext context, DocumentSnapshot document) {
     return makeListTileRequestAdmin(
       Component(
+        userUID: userUID,
         componentID: document['Component UUID'],
         context: context,
         userName: document['User Name'],
-        userUID: userUID,
+        RequestUserUID: document['User UUID'],
         collection: 'users',
         componentName: document['Component Name'],
         quantity: document['Quantity'],
@@ -51,6 +52,10 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
       userUID = user.uid;
     });
   }
+
+
+
+
 
   getUsers() async {
     final QuerySnapshot result =

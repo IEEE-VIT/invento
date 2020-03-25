@@ -34,6 +34,7 @@ class _RequestPageState extends State<RequestPage> {
     }
     return makeListTileRequest(
       Component(
+        RequestUserUID: document['User UUID'],
         color: widget.color,
         status: document['Status'],
         userUID: widget.userUID,

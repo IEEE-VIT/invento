@@ -6,6 +6,8 @@ import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 
 class Component {
+  String RequestUserUID;
+  dynamic presentQuantity;
   String issueID;
   String date;
   bool validate;
@@ -35,7 +37,8 @@ class Component {
       this.componentID,
       this.validate,
       this.date,
-      this.issueID});
+      this.issueID,
+      this.RequestUserUID});
 }
 
 final _firestore = Firestore.instance;
@@ -81,20 +84,22 @@ ListTile makeListTileProfile(Component component) => ListTile(
           children: <Widget>[
             Text(
               'Quantity: ${component.quantity.toString()}',
-              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             Text(
-                "On: ${component.date}",
-              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              "On: ${component.date}",
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
           ],
         ),
       ),
       trailing: MaterialButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         child: Text(
           'Return',
           style: TextStyle(
@@ -104,11 +109,22 @@ ListTile makeListTileProfile(Component component) => ListTile(
         color: Colors.black,
         onPressed: () {
           _firestore
-              .collection('users').document(userUID).collection('ComponentsIssued')
+              .collection('users')
+              .document(userUID)
+              .collection('ComponentsIssued')
               .document(component.documentId)
               .delete();
-          _firestore.collection('users').document(userUID).collection('RequestedComponents').document(component.issueID).delete();
-          _firestore.collection('components').document(component.componentID).updateData({'Quantity': FieldValue.increment(component.quantity)});
+          _firestore
+              .collection('users')
+              .document(userUID)
+              .collection('RequestedComponents')
+              .document(component.issueID)
+              .delete();
+          _firestore
+              .collection('components')
+              .document(component.componentID)
+              .updateData(
+                  {'Quantity': FieldValue.increment(component.quantity)});
         },
       ),
       onTap: component.onPress,
@@ -231,7 +247,8 @@ ListTile makeListTile(Component component) => ListTile(
                             'Quantity': wanted,
                             'Component UUID': component.documentId,
                             'User Name': component.userName,
-                            'Status': 'Applied'
+                            'Status': 'Applied',
+                            'User UUID': component.userUID,
                           });
 
 //                        _componentNameController.clear();
@@ -441,7 +458,7 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                               .delete();
                           _firestore
                               .collection('users')
-                              .document(component.userUID)
+                              .document(component.RequestUserUID)
                               .collection('RequestedComponents')
                               .document(component.documentId)
                               .updateData({'Status': 'Denied'});
@@ -473,40 +490,72 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30)),
                         color: Colors.green,
-                        onPressed: () {
-                          DateTime now = DateTime.now();
-                          String formattedDate =
-                              DateFormat('EEE d MMM').format(now);
-                          _firestore
-                              .collection('requests')
-                              .document(component.documentId)
-                              .delete();
-                          _firestore
-                              .collection('users')
-                              .document(component.userUID)
-                              .collection('RequestedComponents')
-                              .document(component.documentId)
-                              .updateData({'Status': 'Approved'});
-                          _firestore
-                              .collection('components')
-                              .document(component.componentID)
-                              .updateData({
-                            'Quantity':
-                                FieldValue.increment(-(component.quantity))
+                        onPressed: () async {
+                          final DocumentReference document = Firestore.instance
+                              .collection("components")
+                              .document(component.componentID);
+                          await document
+                              .get()
+                              .then<dynamic>((DocumentSnapshot snapshot) async {
+                            component.presentQuantity = snapshot.data;
                           });
-                          _firestore
-                              .collection('users')
-                              .document(component.userUID)
-                              .collection('ComponentsIssued')
-                              .document(component.componentID)
-                              .setData({
-                            'Component Name': component.componentName,
-                            'Component UUID': component.componentID,
-                            'Quantity': component.quantity,
-                            'Date': formattedDate,
-                            'Issue ID':component.documentId,
-                          });
-                          Navigator.of(context).pop();
+                          if (component.presentQuantity['Quantity'] >=
+                              component.quantity) {
+                            DateTime now = DateTime.now();
+                            String formattedDate =
+                                DateFormat('EEE d MMM').format(now);
+                            _firestore
+                                .collection('requests')
+                                .document(component.documentId)
+                                .delete();
+                            _firestore
+                                .collection('users')
+                                .document(component.RequestUserUID)
+                                .collection('RequestedComponents')
+                                .document(component.documentId)
+                                .updateData({'Status': 'Approved'});
+                            _firestore
+                                .collection('components')
+                                .document(component.componentID)
+                                .updateData({
+                              'Quantity':
+                                  FieldValue.increment(-(component.quantity))
+                            });
+                            _firestore
+                                .collection('users')
+                                .document(component.RequestUserUID)
+                                .collection('ComponentsIssued')
+                                .document(component.componentID)
+                                .setData({
+                              'Component Name': component.componentName,
+                              'Component UUID': component.componentID,
+                              'Quantity': component.quantity,
+                              'Date': formattedDate,
+                              'Issue ID': component.documentId,
+                            });
+                            Navigator.of(context).pop();
+                          } else {
+                            return showDialog(
+                                context: component.context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: new Text(
+                                        'Could not process the request'),
+                                    content: new Text(
+                                        'Requested quantity is more than the available quantity. Please try again!'),
+                                    actions: <Widget>[
+                                      // usually buttons at the bottom of the dialog
+                                      new FlatButton(
+                                        child: new Text('Close'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                });
+                          }
+
                         },
                         child: Row(
                           children: <Widget>[
