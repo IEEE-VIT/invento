@@ -121,7 +121,7 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawer(context,currentUID),
+        drawer: buildDrawerAdmin(context,currentUID),
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.black,

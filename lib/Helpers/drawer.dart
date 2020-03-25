@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/profile_page.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:invento/screens/inventory_page.dart';
@@ -52,7 +53,59 @@ void showAdminAuthFailedDialog(BuildContext context) {
   );
 }
 
-Drawer buildDrawer(BuildContext context, String userUID) {
+Drawer buildDrawerAdmin(BuildContext context, String userUID) {
+  return Drawer(
+    child: ListView(
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.black,
+            ),
+            child: Image.asset('images/logo.png')),
+        ListTile(
+          leading: Icon(Icons.edit),
+          title: Text('Edit Inventory (Admin)'),
+          onTap: () {
+            getCurrentUser();
+            getAdmins();
+            Navigator.push(
+              context,
+              PageTransition(
+                  child: InventoryAdminPage(),
+                  type: PageTransitionType.rightToLeft),
+            );
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.list),
+          title: Text('All Requested Components (Admin)'),
+          onTap: () {
+            getAdmins();
+            getCurrentUser();
+            Navigator.push(
+              context,
+              PageTransition(
+                  child: RequestPageAdmin(),
+                  type: PageTransitionType.rightToLeft),
+            );
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.exit_to_app),
+          title: Text('Logout'),
+          onTap: () {
+            Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft));
+            FirebaseAuth.instance.signOut();
+          },
+        )
+
+      ],
+    ),
+  );
+}
+
+Drawer buildDrawerUser(BuildContext context) {
   return Drawer(
     child: ListView(
       padding: EdgeInsets.zero,
@@ -72,24 +125,6 @@ Drawer buildDrawer(BuildContext context, String userUID) {
                   child: InventoryPage(),
                   type: PageTransitionType.rightToLeft),
             );
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.edit),
-          title: Text('Edit Inventory (Admin)'),
-          onTap: () {
-            getCurrentUser();
-            getAdmins();
-            if (admins.contains(userUID)) {
-              Navigator.push(
-                context,
-                PageTransition(
-                    child: InventoryAdminPage(),
-                    type: PageTransitionType.rightToLeft),
-              );
-            } else {
-              showAdminAuthFailedDialog(context);
-            }
           },
         ),
         ListTile(
@@ -117,29 +152,11 @@ Drawer buildDrawer(BuildContext context, String userUID) {
           },
         ),
         ListTile(
-          leading: Icon(Icons.list),
-          title: Text('All Requested Components (Admin)'),
-          onTap: () {
-            getAdmins();
-            getCurrentUser();
-            if (admins.contains(userUID)) {
-              Navigator.push(
-                context,
-                PageTransition(
-                    child: RequestPageAdmin(),
-                    type: PageTransitionType.rightToLeft),
-              );
-            } else {
-              showAdminAuthFailedDialog(context);
-            }
-          },
-        ),
-        ListTile(
           leading: Icon(Icons.exit_to_app),
           title: Text('Logout'),
-          onTap: (){
+          onTap: () {
+            Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft));
             FirebaseAuth.instance.signOut();
-            exit(0);
           },
         )
 
@@ -147,4 +164,3 @@ Drawer buildDrawer(BuildContext context, String userUID) {
     ),
   );
 }
-

@@ -112,7 +112,7 @@ ListTile makeListTileProfile(Component component) => ListTile(
         onPressed: () {
           _firestore
               .collection('users')
-              .document(userUID)
+              .document(component.userUID)
               .collection('ComponentsIssued')
               .document(component.documentId)
               .delete();

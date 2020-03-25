@@ -1,12 +1,17 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:invento/screens/inventory_page.dart';
+import 'package:invento/screens/inventory_page_admin.dart';
 import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/registration_screen.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WelcomeScreen extends StatefulWidget {
+  List admins = [];
+
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -14,21 +19,40 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final _auth = FirebaseAuth.instance;
 
-
   @override
   void initState() {
     super.initState();
-    getUser().then((user){
-      if(user!=null){
-        Navigator.push(context, PageTransition(child: InventoryPage(), type: PageTransitionType.rightToLeft),);
-      }
+    getAdmins();
+    Timer(Duration(milliseconds: 2500), () {
+      getUser().then((user) {
+        if (widget.admins.contains(user.uid)) {
+          Navigator.push(
+            context,
+            PageTransition(
+                child: InventoryAdminPage(),
+                type: PageTransitionType.rightToLeft),
+          );
+        } else {
+          Navigator.push(
+            context,
+            PageTransition(
+                child: InventoryPage(), type: PageTransitionType.rightToLeft),
+          );
+        }
+      });
     });
   }
 
-  Future<FirebaseUser>getUser() async{
+  Future<FirebaseUser> getUser() async {
     return await _auth.currentUser();
   }
 
+  void getAdmins() async {
+    final QuerySnapshot result =
+        await Firestore.instance.collection('admins').getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    documents.forEach((data) => widget.admins.add(data.documentID));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +66,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             speed: Duration(milliseconds: 500),
             text: ['Invento'],
             textStyle: TextStyle(
-              color: Colors.white,
-              fontSize:75.0,
-              fontWeight: FontWeight.bold
-            ),
+                color: Colors.white,
+                fontSize: 75.0,
+                fontWeight: FontWeight.bold),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +81,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     style: TextStyle(color: Colors.black),
                   ),
                   onPressed: () {
-                    Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft),);
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child: LoginScreen(),
+                          type: PageTransitionType.rightToLeft),
+                    );
                   },
                   minWidth: 150,
                 ),
@@ -74,7 +102,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     style: TextStyle(color: Colors.black),
                   ),
                   onPressed: () {
-                    Navigator.push(context, PageTransition(child: RegistrationScreen(), type: PageTransitionType.rightToLeft),);
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child: RegistrationScreen(),
+                          type: PageTransitionType.rightToLeft),
+                    );
                   },
                   minWidth: 150,
                 ),

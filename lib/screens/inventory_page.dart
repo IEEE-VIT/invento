@@ -153,7 +153,7 @@ class _InventoryPageState extends State<InventoryPage> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawer(context,userUID),
+        drawer: buildDrawerUser(context),
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.black,
