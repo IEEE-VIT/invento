@@ -8,6 +8,7 @@ import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/registration_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity/connectivity.dart';
 
 class WelcomeScreen extends StatefulWidget {
   List admins = [];
@@ -19,28 +20,46 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final _auth = FirebaseAuth.instance;
 
+  String _connectionStatus;
+  final Connectivity _connectivity = new Connectivity();
+
+  //For subscription to the ConnectivityResult stream
+  StreamSubscription<ConnectivityResult> _connectionSubscription;
+
   @override
   void initState() {
     super.initState();
     getAdmins();
     Timer(Duration(milliseconds: 2500), () {
       getUser().then((user) {
-        if (widget.admins.contains(user.uid)) {
-          Navigator.push(
-            context,
-            PageTransition(
-                child: InventoryAdminPage(),
-                type: PageTransitionType.rightToLeft),
-          );
-        } else {
-          Navigator.push(
-            context,
-            PageTransition(
-                child: InventoryPage(), type: PageTransitionType.rightToLeft),
-          );
+        try {
+          if (widget.admins.contains(user.uid)) {
+            Navigator.push(
+              context,
+              PageTransition(
+                  child: InventoryAdminPage(),
+                  type: PageTransitionType.rightToLeft),
+            );
+          } else {
+            Navigator.push(
+              context,
+              PageTransition(
+                  child: InventoryPage(), type: PageTransitionType.rightToLeft),
+            );
+          }
+        }
+        catch(e){
+          print(e);
         }
       });
     });
+    _connectionSubscription =
+        _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        _connectionStatus = result.toString();
+      });
+    });
+    print("Initstate: $_connectionStatus");
   }
 
   Future<FirebaseUser> getUser() async {

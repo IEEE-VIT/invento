@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(32), color: Colors.white),
                       child: TextField(
                         onChanged: (value){
-                          email = value;
+                          email = value.trim();
                         },
                         keyboardType: TextInputType.emailAddress,
                         cursorRadius: Radius.circular(20),

@@ -689,6 +689,7 @@ class AddButton extends StatelessWidget {
                         height: 20,
                       ),
                       TextField(
+                        textCapitalization: TextCapitalization.words,
                         textInputAction: TextInputAction.next,
                         controller: _componentNameController,
                         decoration: InputDecoration(
