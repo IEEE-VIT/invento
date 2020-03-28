@@ -7,6 +7,7 @@ import 'package:invento/screens/inventory_page.dart';
 import 'package:invento/screens/inventory_page_admin.dart';
 import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/registration_screen.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
@@ -19,6 +20,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  bool _showSpinner = false;
   final _auth = FirebaseAuth.instance;
   var _connectionStatus = 'Unknown';
   Connectivity connectivity;
@@ -37,10 +39,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           print(_connectionStatus);
           if (result == ConnectivityResult.wifi ||
               result == ConnectivityResult.mobile) {
-            setState(() {});
+            setState(() {
+              _showSpinner = true;
+            });
             getAdmins();
             Timer(Duration(milliseconds: 2500), () {
-
+                    setState(() {
+                      _showSpinner=false;
+                    });
               getUser().then((user) {
                 try {
                   if (widget.admins.contains(user.uid)) {
@@ -111,65 +117,68 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     print(_connectionStatus);
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          TypewriterAnimatedTextKit(
-            isRepeatingAnimation: true,
-            speed: Duration(milliseconds: 500),
-            text: ['Invento'],
-            textStyle: TextStyle(
-                color: Colors.white,
-                fontSize: 75.0,
-                fontWeight: FontWeight.bold),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Material(
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  child: Text(
-                    'Login',
-                    style: TextStyle(color: Colors.black),
+    return ModalProgressHUD(
+      inAsyncCall: _showSpinner,
+      child: Scaffold(
+        backgroundColor: Colors.black,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            TypewriterAnimatedTextKit(
+              isRepeatingAnimation: true,
+              speed: Duration(milliseconds: 500),
+              text: ['Invento'],
+              textStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: 75.0,
+                  fontWeight: FontWeight.bold),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Material(
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: MaterialButton(
+                    child: Text(
+                      'Login',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                            child: LoginScreen(),
+                            type: PageTransitionType.rightToLeft),
+                      );
+                    },
+                    minWidth: 150,
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                          child: LoginScreen(),
-                          type: PageTransitionType.rightToLeft),
-                    );
-                  },
-                  minWidth: 150,
                 ),
-              ),
-              SizedBox(
-                width: 10.0,
-              ),
-              Material(
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  child: Text(
-                    'Register',
-                    style: TextStyle(color: Colors.black),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Material(
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: MaterialButton(
+                    child: Text(
+                      'Register',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                            child: RegistrationScreen(),
+                            type: PageTransitionType.rightToLeft),
+                      );
+                    },
+                    minWidth: 150,
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                          child: RegistrationScreen(),
-                          type: PageTransitionType.rightToLeft),
-                    );
-                  },
-                  minWidth: 150,
                 ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
