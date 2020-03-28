@@ -8,17 +8,15 @@ import 'package:invento/screens/inventory_page.dart';
 
 class ProfilePage extends StatefulWidget {
   String userUID;
-  var userData ={};
+  var userData = {};
   String userName;
   String userEmail;
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
-
-
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     widget.userUID = user.uid;
@@ -42,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   getUsers() async {
     final QuerySnapshot result =
-    await Firestore.instance.collection('users').getDocuments();
+        await Firestore.instance.collection('users').getDocuments();
     final List<DocumentSnapshot> documents = result.documents;
     documents.forEach((data) {
       widget.userData[data.documentID] = data['Name'];
@@ -61,6 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   final _firestore = Firestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,19 +90,34 @@ class _ProfilePageState extends State<ProfilePage> {
                   '${widget.userName}',
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   '${widget.userEmail}',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 70,),
+                SizedBox(
+                  height: 70,
+                ),
               ],
             ),
           ),
           Container(
             child: Column(
               children: <Widget>[
-                Text('Components Issued'),
+                Text(
+                  'Components Issued',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                ),
+                SizedBox(
+                  height: 10,
+                  width: 300,
+                  child: Divider(
+                    thickness: 2,
+                    color: Colors.black,
+                  ),
+                ),
                 Container(
                   child: Container(
                     child: StreamBuilder<QuerySnapshot>(
@@ -128,7 +142,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           return Container(
                             child: Column(
                               children: <Widget>[
-                                SizedBox(height: 200,),
+                                SizedBox(
+                                  height: 200,
+                                ),
                                 Center(
                                   child: Text(
                                     'No Issues',
@@ -147,7 +163,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           shrinkWrap: true,
                           itemCount: snapshot.data.documents.length,
                           itemBuilder: (context, index) {
-                            return _buildListItem(context, snapshot.data.documents[index]);
+                            return _buildListItem(
+                                context, snapshot.data.documents[index]);
                           },
                         );
                       },

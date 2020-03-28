@@ -110,23 +110,51 @@ ListTile makeListTileProfile(Component component) => ListTile(
         ),
         color: Colors.black,
         onPressed: () {
-          _firestore
-              .collection('users')
-              .document(component.userUID)
-              .collection('ComponentsIssued')
-              .document(component.documentId)
-              .delete();
-          _firestore
-              .collection('users')
-              .document(userUID)
-              .collection('RequestedComponents')
-              .document(component.issueID)
-              .delete();
-          _firestore
-              .collection('components')
-              .document(component.componentID)
-              .updateData(
-                  {'Quantity': FieldValue.increment(component.quantity)});
+          showDialog(
+            context: component.context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Confirm Return?'),
+                content: Text('Do you want to return this component?',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700
+                  ),),
+                actions: <Widget>[
+                  MaterialButton(
+                    color: Colors.black,
+                    child: Text('No'),
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                  ),
+                  MaterialButton(
+                    color: Colors.black,
+                    child: Text('Yes'),
+                    onPressed: () {
+                      _firestore
+                          .collection('users')
+                          .document(component.userUID)
+                          .collection('ComponentsIssued')
+                          .document(component.documentId)
+                          .delete();
+                      _firestore
+                          .collection('users')
+                          .document(component.userUID)
+                          .collection('RequestedComponents')
+                          .document(component.issueID)
+                          .delete();
+                      _firestore
+                          .collection('components')
+                          .document(component.componentID)
+                          .updateData(
+                          {'Quantity': FieldValue.increment(component.quantity)});
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            },
+          );
         },
       ),
       onTap: component.onPress,

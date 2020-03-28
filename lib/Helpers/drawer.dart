@@ -132,7 +132,6 @@ Drawer buildDrawerUser(BuildContext context) {
           onTap: () {
             Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft));
             FirebaseAuth.instance.signOut();
-            SystemChannels.platform.invokeListMethod('SystemNavigator.pop');
           },
         )
 
