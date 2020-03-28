@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/profile_page.dart';
 import 'package:page_transition/page_transition.dart';
@@ -28,30 +27,6 @@ Future<FirebaseUser> getCurrentUser() async {
   userUID = user.uid;
 }
 
-void showAdminAuthFailedDialog(BuildContext context) {
-  // flutter defined function
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      // return object of type Dialog
-      return AlertDialog(
-        title: new Text('Could not edit the Inventory'),
-        content: new Text(
-            "You don't have admin access. Try contacting an admin to change the value"),
-        actions: <Widget>[
-          // usually buttons at the bottom of the dialog
-          new MaterialButton(
-            color: Colors.black,
-            child: new Text('Close'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
 
 Drawer buildDrawerAdmin(BuildContext context, String userUID) {
   return Drawer(
@@ -157,6 +132,7 @@ Drawer buildDrawerUser(BuildContext context) {
           onTap: () {
             Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft));
             FirebaseAuth.instance.signOut();
+            SystemChannels.platform.invokeListMethod('SystemNavigator.pop');
           },
         )
 

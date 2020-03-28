@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:invento/screens/inventory_page.dart';
 import 'package:invento/screens/inventory_page_admin.dart';
 import 'package:invento/screens/login_screen.dart';
@@ -19,47 +20,81 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final _auth = FirebaseAuth.instance;
+  var _connectionStatus = 'Unknown';
+  Connectivity connectivity;
+  StreamSubscription<ConnectivityResult> subscription;
 
-  String _connectionStatus;
-  final Connectivity _connectivity = new Connectivity();
 
-  //For subscription to the ConnectivityResult stream
-  StreamSubscription<ConnectivityResult> _connectionSubscription;
 
   @override
   void initState() {
     super.initState();
-    getAdmins();
-    Timer(Duration(milliseconds: 2500), () {
-      getUser().then((user) {
-        try {
-          if (widget.admins.contains(user.uid)) {
-            Navigator.push(
-              context,
-              PageTransition(
-                  child: InventoryAdminPage(),
-                  type: PageTransitionType.rightToLeft),
-            );
-          } else {
-            Navigator.push(
-              context,
-              PageTransition(
-                  child: InventoryPage(), type: PageTransitionType.rightToLeft),
+
+    connectivity = new Connectivity();
+    subscription =
+        connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+          _connectionStatus = result.toString();
+          print(_connectionStatus);
+          if (result == ConnectivityResult.wifi ||
+              result == ConnectivityResult.mobile) {
+            setState(() {});
+            getAdmins();
+            Timer(Duration(milliseconds: 2500), () {
+
+              getUser().then((user) {
+                try {
+                  if (widget.admins.contains(user.uid)) {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child: InventoryAdminPage(),
+                          type: PageTransitionType.rightToLeft),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          child: InventoryPage(), type: PageTransitionType.rightToLeft),
+                    );
+                  }
+                }
+                catch(e){
+                  print(e);
+                }
+              });
+            });
+          }
+          else{
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('No Internet Connection'),
+                  content: Text('Please turn on your WiFi or Mobile data and try again!',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700
+                    ),),
+                  actions: <Widget>[
+                    MaterialButton(
+                      color: Colors.black,
+                      child: Text('Okay'),
+                      onPressed: () {
+                        SystemChannels.platform.invokeListMethod('SystemNavigator.pop');
+                      },
+                    )
+                  ],
+                );
+              },
             );
           }
-        }
-        catch(e){
-          print(e);
-        }
-      });
-    });
-    _connectionSubscription =
-        _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() {
-        _connectionStatus = result.toString();
-      });
-    });
-    print("Initstate: $_connectionStatus");
+        });
+
+  }
+
+  @override
+  void dispose(){
+    subscription.cancel();
+    super.dispose();
   }
 
   Future<FirebaseUser> getUser() async {
@@ -75,6 +110,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(_connectionStatus);
     return Scaffold(
       backgroundColor: Colors.black,
       body: Column(
