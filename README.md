@@ -15,12 +15,20 @@ a variety of other things. It would be also be able to display all the component
 <br>
 <img src="images/1.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
 <br>
+<br>
+<br>
 <img src="images/2.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+<br>
+<br>
 <br>
 <img src="images/3.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
 <br>
+<br>
+<br>
 <img src="images/4.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
-</p>
+<br>
+<br>
+<br>
 
 
 
