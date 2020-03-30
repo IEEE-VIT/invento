@@ -1,11 +1,21 @@
 # Invento
 
-This is an app that will help us keep track of our inventory. This mainly consists of the electronics components that we use for projects and
-a variety of other things. It would be also be able to display all the components that any certain individual may have at the moment.
+This app will help us keep track of our inventory at IEEE-VIT Student Branch. It mainly consists of the electronics components that we use for projects and a variety of other things. 
+
+### A user will be able to:
+
+* Request
+* Check the status of a request application 
+* Return the component.
+
+### An admin will be able to:
+* See all the requests
+* Can approve/deny them 
+* Add/remove and edit components in the inventory.
 
 ## Tools and Technologies used
 * Flutter
-* FireStore(for storage and authentication)
+* Google FireStore for storage and authentication)
 
 ## App Screenshots:
 <p align="center">
