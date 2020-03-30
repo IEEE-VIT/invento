@@ -9,7 +9,7 @@ a variety of other things. It would be also be able to display all the component
 
 ## App Screenshots:
 <p align="center">
-<img src="images/main.gif" alt="Kitten" title="A cute kitten" width="300" height="300" />
+<img src="images/main.gif" alt="Kitten" title="A cute kitten" width="500" height="1000" />
  </p>
 ![](images/1.png)
 ![](images/2.png)
