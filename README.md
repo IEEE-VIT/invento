@@ -1,16 +1,17 @@
-# invento
+# Invento
 
-A new Flutter application.
+This is an app that will help us keep track of our inventory. This mainly consists of the electronics components that we used for projects and
+a variety of other things. It would be also be able to display all the components that any certain individual may have at the moment.
 
-## Getting Started
+## Tools and Technologies used
+* Flutter
+* Firebase(for storage)
 
-This project is a starting point for a Flutter application.
+## Images of the app
+![](images/1.jpeg)
+![](images/2.jpeg)
+![](images/3.jpeg)
+![](images/4.jpeg)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## License
+This project is licensed under [MIT License](https://github.com/rish07/Invento/blob/master/LICENSE)
