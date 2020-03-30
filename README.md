@@ -9,12 +9,13 @@ a variety of other things. It would be also be able to display all the component
 
 ## App Screenshots:
 <p align="center">
-<img src="images/main.gif" alt="Kitten" title="A cute kitten" width="150" height="100" />
+<img src="images/main.gif" alt="Kitten" title="A cute kitten" width="300" height="300" />
+ </p>
 ![](images/1.png)
 ![](images/2.png)
 ![](images/3.png)
 ![](images/4.png)
-</p>
+
 
 
 ### To request a component:
