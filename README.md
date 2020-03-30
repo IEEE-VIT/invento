@@ -1,16 +1,59 @@
-# invento
+# Invento
 
-A new Flutter application.
+This app will help us keep track of our inventory at IEEE-VIT Student Branch. It mainly consists of the electronics components that we use for projects and a variety of other things. 
 
-## Getting Started
+### A user will be able to:
 
-This project is a starting point for a Flutter application.
+* Request
+* Check the status of a request application 
+* Return the component.
 
-A few resources to get you started if this is your first Flutter project:
+### An admin will be able to:
+* See all the requests
+* Can approve/deny them 
+* Add/remove and edit components in the inventory.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Tools and Technologies used
+* Flutter
+* Google FireStore for storage and authentication)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## App Screenshots:
+<p align="center">
+<img src="images/main.gif" alt="Kitten" title="A cute kitten" width="300" height="600" />
+<br>
+<br>
+<br>
+<img src="images/1.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+<br>
+<br>
+<br>
+<img src="images/2.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+<br>
+<br>
+<br>
+<img src="images/3.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+<br>
+<br>
+<br>
+<img src="images/4.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+<br>
+<br>
+<br>
+
+
+
+
+### To request a component:
+
+* Go to Inventory page.
+* Click 'Request' on the component you want to request.
+* Enter the quantity.
+* Wait for the admin to approve the request. You can see the status of your application in 'Requested Components'.
+* Once approved, you can see the issued component in your 'Profile Page'.
+
+### To return a component:
+* Go to your 'Profile Page'.
+* Click on 'Return' and confirm to return.
+
+## License
+This project is licensed under [MIT License](https://github.com/rish07/Invento/blob/master/LICENSE)
