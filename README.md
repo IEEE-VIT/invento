@@ -8,11 +8,12 @@ a variety of other things. It would be also be able to display all the component
 * FireStore(for storage and authentication)
 
 ## App Screenshots:
-![Main Page](https://i.ibb.co/7WJm7QK/main.gif){: width=150 height=100 style="float:right; padding:16px"}
-![Main Page](https://i.ibb.co/9rhXMf7/Screenshot-1585602252.png)
-![Main Page](https://i.ibb.co/k5tqDMR/Screenshot-1585602530.png)
-![Main Page](https://i.ibb.co/chN8jSX/Screenshot-1585602639.png)
-![Main Page](https://i.ibb.co/Qcs2THY/Screenshot-1585602755.png)
+![](images/main.gif)
+![](images/1.png)
+![](images/2.png)
+![](images/3.png)
+![](images/4.png)
+
 
 ### To request a component:
 
