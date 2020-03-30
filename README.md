@@ -10,11 +10,16 @@ a variety of other things. It would be also be able to display all the component
 ## App Screenshots:
 <p align="center">
 <img src="images/main.gif" alt="Kitten" title="A cute kitten" width="300" height="600" />
- </p>
-![](images/1.png)
-![](images/2.png)
-![](images/3.png)
-![](images/4.png)
+</p>
+<img src="images/1.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+</p>
+<img src="images/2.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+</p>
+<img src="images/3.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+</p>
+<img src="images/4.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+</p>
+
 
 
 
