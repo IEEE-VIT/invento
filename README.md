@@ -8,7 +8,7 @@ a variety of other things. It would be also be able to display all the component
 * FireStore(for storage and authentication)
 
 ## App Screenshots:
-![](images/main.gif)
+<img src="https://i.ibb.co/7WJm7QK/main.gif" width="256" height="256" title="Github Logo">
 ![](images/1.png)
 ![](images/2.png)
 ![](images/3.png)
