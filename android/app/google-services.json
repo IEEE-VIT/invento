@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:327003783054:android:dbc36bb9168b66c2a02edf",
+        "mobilesdk_app_id": "1:327003783054:android:591f1399b93c3d44a02edf",
         "android_client_info": {
           "package_name": "com.rishi.invento"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "327003783054-7qg9i3ph5ur6s3587tr4t5v5ve7fdgt2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rishi.invento",
+            "certificate_hash": "eb6a46348626e05bb36d81dce6d703aef40a4a65"
+          }
+        },
         {
           "client_id": "327003783054-phg54636q8nn62ubcmfnp7s923o0rqur.apps.googleusercontent.com",
           "client_type": 3

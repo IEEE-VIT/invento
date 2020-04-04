@@ -30,6 +30,8 @@ dependencies:
   intl: ^0.16.1
   connectivity: ^0.4.8+2
   provider: ^4.0.4
+  google_sign_in: ^4.4.0
+  rxdart: ^0.20.0
 
 
 

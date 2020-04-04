@@ -9,6 +9,7 @@ import 'package:page_transition/page_transition.dart';
 import 'inventory_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
+import 'package:invento/Helpers/google_sign_in.dart';
 class LoginScreen extends StatefulWidget {
   final List admins = [];
 
@@ -18,6 +19,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool passwordVisible;
+  Map<String, dynamic> _profile;
+  bool _loading = false;
   @override
   void initState() {
     super.initState();
@@ -241,6 +244,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
+                _signInButton(context),
 
               ],
             ),
@@ -249,4 +253,37 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+
+Widget _signInButton(BuildContext context) {
+  return OutlineButton(
+    splashColor: Colors.grey,
+    onPressed: () async{
+      await signInWithGoogle();
+      Navigator.push(context, PageTransition(child: InventoryPage(), type: PageTransitionType.rightToLeft));
+    },
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+    highlightElevation: 0,
+    borderSide: BorderSide(color: Colors.grey),
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image(image: AssetImage("images/google_logo.png"), height: 35.0),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text(
+              'Sign in with Google',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+          )
+        ],
+      ),
+    ),
+  );
 }

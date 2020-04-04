@@ -19,8 +19,12 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    widget.userUID = user.uid;
-    widget.userEmail = user.email;
+
+    setState(() {
+      widget.userUID = user.uid;
+      widget.userEmail = user.email;
+      widget.userName = user.displayName;
+    });
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
@@ -44,9 +48,6 @@ class _ProfilePageState extends State<ProfilePage> {
     final List<DocumentSnapshot> documents = result.documents;
     documents.forEach((data) {
       widget.userData[data.documentID] = data['Name'];
-    });
-    setState(() {
-      widget.userName = widget.userData[widget.userUID];
     });
   }
 
