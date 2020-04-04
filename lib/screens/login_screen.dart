@@ -216,6 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                           try{
                             final newUser = await _auth.signInWithEmailAndPassword(email: email, password: password);
+
                             if(newUser!=null){
                               if(widget.admins.contains(newUser.user.uid)) {
                                 Navigator.push(context, PageTransition(

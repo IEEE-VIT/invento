@@ -218,6 +218,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           final newUser =
                               await _auth.createUserWithEmailAndPassword(
                                   email: email, password: password);
+                          await newUser.user.sendEmailVerification();
 
 
                           if (newUser != null) {
