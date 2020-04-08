@@ -19,7 +19,7 @@ This app will help us keep track of our inventory at IEEE-VIT Student Branch. It
 
 ## App Screenshots:
 <p align="center">
-<img src="ReadmeMedia/main.gif" alt="Kitten" title="A cute kitten" width="300" height="600" />
+<img src="ReadMeMedia/main.gif" alt="Kitten" title="A cute kitten" width="300" height="600" />
 <br>
 <br>
 <br>
