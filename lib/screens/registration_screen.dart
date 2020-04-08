@@ -52,6 +52,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
+  void _showEmailVerifyDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text('Thankyou for registering!'),
+          content: new Text('Please verify your email ID by clicking on the received link and then click on Log In'),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
@@ -222,12 +245,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
 
                           if (newUser != null) {
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: InventoryPage(),
-                                  type: PageTransitionType.rightToLeft),
-                            );
+                            _showEmailVerifyDialog();
                             Firestore.instance
                                 .collection('users')
                                 .document(newUser.user.uid)
@@ -235,6 +253,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               'Email': newUser.user.email,
                               'UUID': newUser.user.uid,
                               'Name': name
+                            });
+                            setState(() {
+                              showSpinner=false;
                             });
                           }
 

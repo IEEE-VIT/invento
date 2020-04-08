@@ -57,6 +57,28 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     );
   }
+  void _showEmailFailedDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text('Could not log in'),
+          content: new Text('Please verify your email address and try again!'),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   Future<bool> _onBackPressed() {
     return showDialog(
       context: context,
@@ -217,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           try{
                             final newUser = await _auth.signInWithEmailAndPassword(email: email, password: password);
 
-                            if(newUser!=null){
+                            if(newUser!=null && newUser.user.isEmailVerified){
                               if(widget.admins.contains(newUser.user.uid)) {
                                 Navigator.push(context, PageTransition(
                                     child: InventoryAdminPage(),
@@ -228,6 +250,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                     child: InventoryPage(),
                                     type: PageTransitionType.rightToLeft),);
                               }
+                            }
+                            else{
+                              _showEmailFailedDialog();
+                              setState(() {
+                                showSpinner =false;
+                              });
                             }
 
                           }
