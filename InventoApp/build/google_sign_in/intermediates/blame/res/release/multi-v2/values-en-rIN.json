@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "/home/creator/AndroidStudioProjects/Invento/App/build/google_sign_in/intermediates/res/merged/release/values-en-rIN/values-en-rIN.xml",
+            "map": [
+                {
+                    "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/9dacf9516413cf5e5b34c6b4508340e4/core-1.0.0/res/values-en-rIN/values-en-rIN.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/home/creator/AndroidStudioProjects/Invento/App/build/google_sign_in/intermediates/incremental/mergeReleaseResources/merged.dir/values-en-rIN/values-en-rIN.xml",
+            "map": [
+                {
+                    "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/9dacf9516413cf5e5b34c6b4508340e4/core-1.0.0/res/values-en-rIN/values-en-rIN.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    }
+                }
+            ]
+        }
+    ]
+}

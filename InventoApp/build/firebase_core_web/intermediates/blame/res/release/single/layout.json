@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_core_web/intermediates/res/merged/release/layout/notification_template_part_time.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/9dacf9516413cf5e5b34c6b4508340e4/core-1.0.0/res/layout/notification_template_part_time.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_core_web/intermediates/res/merged/release/layout/notification_template_part_chronometer.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/9dacf9516413cf5e5b34c6b4508340e4/core-1.0.0/res/layout/notification_template_part_chronometer.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_core_web/intermediates/res/merged/release/layout/notification_template_icon_group.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/9dacf9516413cf5e5b34c6b4508340e4/core-1.0.0/res/layout/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_core_web/intermediates/res/merged/release/layout/notification_action.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/9dacf9516413cf5e5b34c6b4508340e4/core-1.0.0/res/layout/notification_action.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_core_web/intermediates/res/merged/release/layout/notification_action_tombstone.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/9dacf9516413cf5e5b34c6b4508340e4/core-1.0.0/res/layout/notification_action_tombstone.xml"
+    }
+]

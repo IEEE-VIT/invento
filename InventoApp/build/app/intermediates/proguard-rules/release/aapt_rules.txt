@@ -1,0 +1,18 @@
+# Referenced at /home/creator/AndroidStudioProjects/Invento/App/build/app/intermediates/merged_manifests/release/arm64-v8a/AndroidManifest.xml:21
+-keep class androidx.core.app.CoreComponentFactory { <init>(); }
+# Referenced at /home/creator/AndroidStudioProjects/Invento/App/build/app/intermediates/merged_manifests/release/arm64-v8a/AndroidManifest.xml:77
+-keep class com.google.android.gms.auth.api.signin.RevocationBoundService { <init>(); }
+# Referenced at /home/creator/AndroidStudioProjects/Invento/App/build/app/intermediates/merged_manifests/release/arm64-v8a/AndroidManifest.xml:68
+-keep class com.google.android.gms.auth.api.signin.internal.SignInHubActivity { <init>(); }
+# Referenced at /home/creator/AndroidStudioProjects/Invento/App/build/app/intermediates/merged_manifests/release/arm64-v8a/AndroidManifest.xml:96
+-keep class com.google.android.gms.common.api.GoogleApiActivity { <init>(); }
+# Referenced at /home/creator/AndroidStudioProjects/Invento/App/build/app/intermediates/merged_manifests/release/arm64-v8a/AndroidManifest.xml:82
+-keep class com.google.firebase.auth.internal.FederatedSignInActivity { <init>(); }
+# Referenced at /home/creator/AndroidStudioProjects/Invento/App/build/app/intermediates/merged_manifests/release/arm64-v8a/AndroidManifest.xml:47
+-keep class com.google.firebase.components.ComponentDiscoveryService { <init>(); }
+# Referenced at /home/creator/AndroidStudioProjects/Invento/App/build/app/intermediates/merged_manifests/release/arm64-v8a/AndroidManifest.xml:90
+-keep class com.google.firebase.provider.FirebaseInitProvider { <init>(); }
+# Referenced at /home/creator/AndroidStudioProjects/Invento/App/build/app/intermediates/merged_manifests/release/arm64-v8a/AndroidManifest.xml:26
+-keep class com.rishi.invento.MainActivity { <init>(); }
+# Referenced at /home/creator/AndroidStudioProjects/Invento/App/build/app/intermediates/merged_manifests/release/arm64-v8a/AndroidManifest.xml:21
+-keep class io.flutter.app.FlutterApplication { <init>(); }

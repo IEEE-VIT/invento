@@ -1,0 +1,74 @@
+[
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_icon_dark.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_icon_dark.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_text_light_focused.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_text_light_focused.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_text_light_normal.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_text_light_normal.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_text_dark_normal.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_text_dark_normal.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_icon_light.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_icon_light.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/notification_bg.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/9dacf9516413cf5e5b34c6b4508340e4/core-1.0.0/res/drawable/notification_bg.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/notification_icon_background.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/9dacf9516413cf5e5b34c6b4508340e4/core-1.0.0/res/drawable/notification_icon_background.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_icon_light_normal.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_icon_light_normal.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_icon_dark_focused.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_icon_dark_focused.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_text_dark.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_text_dark.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_icon_light_focused.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_icon_light_focused.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_text_disabled.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_text_disabled.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_text_light.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_text_light.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_icon_disabled.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_icon_disabled.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_text_dark_focused.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_text_dark_focused.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/common_google_signin_btn_icon_dark_normal.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/57b0442f3da110455da4760211a188a0/play-services-base-17.1.0/res/drawable/common_google_signin_btn_icon_dark_normal.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/notification_bg_low.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/9dacf9516413cf5e5b34c6b4508340e4/core-1.0.0/res/drawable/notification_bg_low.xml"
+    },
+    {
+        "merged": "/home/creator/AndroidStudioProjects/Invento/App/build/firebase_auth/intermediates/res/merged/release/drawable/notification_tile_bg.xml",
+        "source": "/home/creator/.gradle/caches/transforms-2/files-2.1/9dacf9516413cf5e5b34c6b4508340e4/core-1.0.0/res/drawable/notification_tile_bg.xml"
+    }
+]

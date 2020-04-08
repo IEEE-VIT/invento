@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
+    <CLASSES>
+      <root url="file://$USER_HOME$/Documents/Soft/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in-4.4.0" />
+      <root url="file://$USER_HOME$/Documents/Soft/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity_macos-0.1.0+2" />
+      <root url="file://$USER_HOME$/Documents/Soft/flutter/.pub-cache/hosted/pub.dartlang.org/connectivity-0.4.8+2" />
+      <root url="file://$USER_HOME$/Documents/Soft/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth_web-0.1.2" />
+      <root url="file://$USER_HOME$/Documents/Soft/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-0.15.5+2" />
+      <root url="file://$USER_HOME$/Documents/Soft/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in_web-0.8.4" />
+      <root url="file://$USER_HOME$/Documents/Soft/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.4.4+3" />
+      <root url="file://$USER_HOME$/Documents/Soft/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-0.1.1+2" />
+      <root url="file://$USER_HOME$/Documents/Soft/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-0.1.1+2" />
+      <root url="file://$USER_HOME$/Documents/Soft/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-0.13.4+2" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
