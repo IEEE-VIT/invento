@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:invento/Helpers/drawer.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Component {
   String requestUserUID;
@@ -21,7 +22,7 @@ class Component {
   String documentId;
   Function onPress;
   String collection;
-  String userName;
+  String userNameRegular;
 
   Component(
       {@required this.componentName,
@@ -31,7 +32,7 @@ class Component {
       this.onPress,
       this.userUID,
       this.context,
-      this.userName,
+      this.userNameRegular,
       this.status,
       this.color,
       this.componentID,
@@ -42,6 +43,17 @@ class Component {
 }
 
 final _firestore = Firestore.instance;
+String userNameGoogle;
+bool isGoogle = true;
+
+getCurrentUser() async {
+  FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  userNameGoogle = user.displayName;
+  if(userNameGoogle == null){
+    isGoogle = false;
+  }
+}
+
 
 Card makeCardAdmin(Component component) => Card(
       elevation: 8,
@@ -253,6 +265,7 @@ ListTile makeListTile(Component component) => ListTile(
                     ),
                     FlatButton(
                       onPressed: () {
+                        getCurrentUser();
                         if (component.quantity >= wanted && wanted >= 0) {
                           var uuid = Uuid();
                           String temp = uuid.v1();
@@ -265,7 +278,7 @@ ListTile makeListTile(Component component) => ListTile(
                             'Component Name': component.componentName,
                             'Quantity': wanted,
                             'User UUID': component.userUID,
-                            'User Name': component.userName,
+                            'User Name': isGoogle?userNameGoogle:component.userNameRegular,
                             'Component UUID': component.documentId,
                             'Status': 'Applied'
                           });
@@ -276,7 +289,7 @@ ListTile makeListTile(Component component) => ListTile(
                             'Component Name': component.componentName,
                             'Quantity': wanted,
                             'Component UUID': component.documentId,
-                            'User Name': component.userName,
+                            'User Name': isGoogle?userNameGoogle:component.userNameRegular,
                             'Status': 'Applied',
                             'User UUID': component.userUID,
                           });
@@ -457,7 +470,7 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
         ),
         Expanded(
           child: Text(
-            'User: ${component.userName}',
+            'User:${component.userNameRegular}',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),

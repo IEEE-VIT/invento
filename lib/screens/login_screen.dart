@@ -9,6 +9,7 @@ import 'package:page_transition/page_transition.dart';
 import 'inventory_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
+import 'package:invento/Helpers/google_sign_in.dart';
 class LoginScreen extends StatefulWidget {
   final List admins = [];
 
@@ -18,6 +19,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool passwordVisible;
+  Map<String, dynamic> _profile;
+  bool _loading = false;
   @override
   void initState() {
     super.initState();
@@ -41,6 +44,28 @@ class _LoginScreenState extends State<LoginScreen> {
         return AlertDialog(
           title: new Text('Could not log in'),
           content: new Text('Double check your credentials and try again!'),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void _showEmailFailedDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text('Could not log in'),
+          content: new Text('Please verify your email address and try again!'),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
             new FlatButton(
@@ -213,7 +238,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                           try{
                             final newUser = await _auth.signInWithEmailAndPassword(email: email, password: password);
-                            if(newUser!=null){
+
+                            if(newUser!=null && newUser.user.isEmailVerified){
                               if(widget.admins.contains(newUser.user.uid)) {
                                 Navigator.push(context, PageTransition(
                                     child: InventoryAdminPage(),
@@ -224,6 +250,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                     child: InventoryPage(),
                                     type: PageTransitionType.rightToLeft),);
                               }
+                            }
+                            else{
+                              _showEmailFailedDialog();
+                              setState(() {
+                                showSpinner =false;
+                              });
                             }
 
                           }
@@ -241,6 +273,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
+                _signInButton(context,widget.admins),
 
               ],
             ),
@@ -249,4 +282,54 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+}
+
+Widget _signInButton(BuildContext context,List admins) {
+  return OutlineButton(
+    splashColor: Colors.grey,
+    onPressed: () async{
+      final user = await signInWithGoogle();
+      if(admins.contains(user.uid)) {
+        Navigator.push(context, PageTransition(
+            child: InventoryAdminPage(),
+            type: PageTransitionType.rightToLeft),);
+      }
+      else{
+        Navigator.push(context, PageTransition(
+            child: InventoryPage(),
+            type: PageTransitionType.rightToLeft),);
+      }
+      Firestore.instance
+          .collection('users')
+          .document(user.uid)
+          .setData({
+        'Email':user.email,
+        'UUID': user.uid,
+        'Name': user.displayName
+      });
+    },
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+    highlightElevation: 0,
+    borderSide: BorderSide(color: Colors.grey),
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Image(image: AssetImage("images/google_logo.png"), height: 35.0),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text(
+              'Sign in with Google',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+          )
+        ],
+      ),
+    ),
+  );
 }

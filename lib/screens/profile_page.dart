@@ -9,8 +9,11 @@ import 'package:invento/screens/inventory_page.dart';
 class ProfilePage extends StatefulWidget {
   String userUID;
   var userData = {};
-  String userName;
+  String userNameGoogle;
+  String userNameRegular;
   String userEmail;
+  String imageUrl;
+  bool isGoogle = true;
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -19,8 +22,19 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    widget.userUID = user.uid;
-    widget.userEmail = user.email;
+
+    setState(() {
+      widget.userUID = user.uid;
+      widget.userEmail = user.email;
+      widget.userNameGoogle = user.displayName;
+      if (widget.userNameGoogle == null) {
+        widget.isGoogle = false;
+      } else {
+        if (user.photoUrl != null) {
+          widget.imageUrl = user.photoUrl;
+        }
+      }
+    });
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
@@ -44,9 +58,9 @@ class _ProfilePageState extends State<ProfilePage> {
     final List<DocumentSnapshot> documents = result.documents;
     documents.forEach((data) {
       widget.userData[data.documentID] = data['Name'];
-    });
-    setState(() {
-      widget.userName = widget.userData[widget.userUID];
+      setState(() {
+        widget.userNameRegular = widget.userData[widget.userUID];
+      });
     });
   }
 
@@ -81,13 +95,17 @@ class _ProfilePageState extends State<ProfilePage> {
               children: <Widget>[
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage('images/profile.png'),
+                  backgroundImage: widget.isGoogle
+                      ? NetworkImage(widget.imageUrl)
+                      : AssetImage('images/profile.png'),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 Text(
-                  '${widget.userName}',
+                  widget.isGoogle
+                      ? '${widget.userNameGoogle}'
+                      : '${widget.userNameRegular}',
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(

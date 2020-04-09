@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:invento/Helpers/google_sign_in.dart';
 import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/profile_page.dart';
 import 'package:page_transition/page_transition.dart';
@@ -69,9 +70,11 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
         ListTile(
           leading: Icon(Icons.exit_to_app),
           title: Text('Logout'),
-          onTap: () {
+          onTap: () async{
+            await googleSignIn.signOut();
             Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft));
             FirebaseAuth.instance.signOut();
+
           },
         )
 
@@ -129,9 +132,11 @@ Drawer buildDrawerUser(BuildContext context) {
         ListTile(
           leading: Icon(Icons.exit_to_app),
           title: Text('Logout'),
-          onTap: () {
+          onTap: ()async {
+            await googleSignIn.signOut();
             Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft));
             FirebaseAuth.instance.signOut();
+
           },
         )
 
