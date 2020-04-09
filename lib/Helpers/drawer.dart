@@ -70,9 +70,11 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
         ListTile(
           leading: Icon(Icons.exit_to_app),
           title: Text('Logout'),
-          onTap: () {
+          onTap: () async{
+            await googleSignIn.signOut();
             Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft));
             FirebaseAuth.instance.signOut();
+
           },
         )
 
@@ -131,9 +133,10 @@ Drawer buildDrawerUser(BuildContext context) {
           leading: Icon(Icons.exit_to_app),
           title: Text('Logout'),
           onTap: ()async {
+            await googleSignIn.signOut();
             Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft));
             FirebaseAuth.instance.signOut();
-            await googleSignIn.signOut();
+
           },
         )
 

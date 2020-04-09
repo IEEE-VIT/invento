@@ -24,7 +24,7 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
         userUID: userUID,
         componentID: document['Component UUID'],
         context: context,
-        userName: document['User Name'],
+        userNameRegular: document['User Name'],
         requestUserUID: document['User UUID'],
         collection: 'users',
         componentName: document['Component Name'],

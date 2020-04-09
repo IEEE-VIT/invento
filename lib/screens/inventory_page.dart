@@ -41,7 +41,7 @@ class _InventoryPageState extends State<InventoryPage> {
     return makeListTile(
       Component(
         validate: false,
-        userName: userName,
+        userNameRegular: userName,
         userUID: userUID,
         context: context,
         componentName: document['Component Name'],
