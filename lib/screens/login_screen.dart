@@ -273,7 +273,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                _signInButton(context),
+                _signInButton(context,widget.admins),
 
               ],
             ),
@@ -284,12 +284,29 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-Widget _signInButton(BuildContext context) {
+Widget _signInButton(BuildContext context,List admins) {
   return OutlineButton(
     splashColor: Colors.grey,
     onPressed: () async{
-      await signInWithGoogle();
-      Navigator.push(context, PageTransition(child: InventoryPage(), type: PageTransitionType.rightToLeft));
+      final user = await signInWithGoogle();
+      if(admins.contains(user.uid)) {
+        Navigator.push(context, PageTransition(
+            child: InventoryAdminPage(),
+            type: PageTransitionType.rightToLeft),);
+      }
+      else{
+        Navigator.push(context, PageTransition(
+            child: InventoryPage(),
+            type: PageTransitionType.rightToLeft),);
+      }
+      Firestore.instance
+          .collection('users')
+          .document(user.uid)
+          .setData({
+        'Email':user.email,
+        'UUID': user.uid,
+        'Name': user.displayName
+      });
     },
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
     highlightElevation: 0,
