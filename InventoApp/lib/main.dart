@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'screens/welcome_screen.dart';
 void main() => runApp(Invento());
 
 class Invento extends StatelessWidget {
@@ -7,7 +9,7 @@ class Invento extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: 'welcome',
+      home: WelcomeScreen(),
     );
   }
 }

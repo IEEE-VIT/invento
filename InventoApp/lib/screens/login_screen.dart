@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:invento/screens/inventory_page_admin.dart';
 import 'package:invento/screens/welcome_screen.dart';
@@ -285,16 +287,19 @@ Widget _signInButton(BuildContext context,List admins) {
     splashColor: Colors.grey,
     onPressed: () async{
       final user = await signInWithGoogle();
-      if(admins.contains(user.uid)) {
-        Navigator.push(context, PageTransition(
-            child: InventoryAdminPage(),
-            type: PageTransitionType.rightToLeft),);
-      }
-      else{
-        Navigator.push(context, PageTransition(
-            child: InventoryPage(),
-            type: PageTransitionType.rightToLeft),);
-      }
+      Timer(Duration(seconds: 1 ),(){
+        if(admins.contains(user.uid)) {
+          Navigator.push(context, PageTransition(
+              child: InventoryAdminPage(),
+              type: PageTransitionType.rightToLeft),);
+        }
+        else{
+          Navigator.push(context, PageTransition(
+              child: InventoryPage(),
+              type: PageTransitionType.rightToLeft),);
+        }
+      });
+
       Firestore.instance
           .collection('users')
           .document(user.uid)
