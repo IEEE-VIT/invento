@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
-import 'package:invento/Helpers/drawer.dart';
+import 'package:invento/Helpers/add_request.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -133,6 +133,7 @@ ListTile makeListTileProfile(Component component) => ListTile(
                   ),),
                 actions: <Widget>[
                   MaterialButton(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     color: Colors.black,
                     child: Text('No'),
                     onPressed: () {
@@ -140,6 +141,7 @@ ListTile makeListTileProfile(Component component) => ListTile(
                     },
                   ),
                   MaterialButton(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     color: Colors.black,
                     child: Text('Yes'),
                     onPressed: () {
@@ -242,134 +244,17 @@ ListTile makeListTile(Component component) => ListTile(
         elevation: 5,
         color: Colors.black,
         onPressed: () {
-          int wanted;
-          return showDialog(
+          getCurrentUser();
+          showModalBottomSheet(
               context: component.context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  actions: <Widget>[
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        "CANCEL",
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    FlatButton(
-                      onPressed: () {
-                        getCurrentUser();
-                        if (component.quantity >= wanted && wanted >= 0) {
-                          var uuid = Uuid();
-                          String temp = uuid.v1();
-                          _firestore
-                              .collection('users')
-                              .document(component.userUID)
-                              .collection('RequestedComponents')
-                              .document(temp)
-                              .setData({
-                            'Component Name': component.componentName,
-                            'Quantity': wanted,
-                            'User UUID': component.userUID,
-                            'User Name': isGoogle?userNameGoogle:component.userNameRegular,
-                            'Component UUID': component.documentId,
-                            'Status': 'Applied'
-                          });
-                          _firestore
-                              .collection('requests')
-                              .document(temp)
-                              .setData({
-                            'Component Name': component.componentName,
-                            'Quantity': wanted,
-                            'Component UUID': component.documentId,
-                            'User Name': isGoogle?userNameGoogle:component.userNameRegular,
-                            'Status': 'Applied',
-                            'User UUID': component.userUID,
-                          });
-
-//                        _componentNameController.clear();
-//                        _quantityController.clear();
-                          Navigator.of(context).pop();
-                        } else if (wanted < 0) {
-                          Navigator.of(context).pop();
-                          return showDialog(
-                              context: component.context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title:
-                                      new Text('Could not process the request'),
-                                  content: new Text(
-                                      'Requested quantity can\'t be less than 0'),
-                                  actions: <Widget>[
-                                    // usually buttons at the bottom of the dialog
-                                    new FlatButton(
-                                      child: new Text('Close'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              });
-                        } else {
-                          return showDialog(
-                              context: component.context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title:
-                                      new Text('Could not process the request'),
-                                  content: new Text(
-                                      'Requested quantity is more than the available quantity. Please try again!'),
-                                  actions: <Widget>[
-                                    // usually buttons at the bottom of the dialog
-                                    new FlatButton(
-                                      child: new Text('Close'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              });
-                        }
-                        return null;
-                      },
-                      child: Text(
-                        'REQUEST',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    )
-                  ],
-                  title: Column(
-                    children: <Widget>[
-                      Center(
-                        child: Text('Request ${component.componentName}'),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
-                        autofocus: true,
-                        keyboardType: TextInputType.number,
-                        textInputAction: TextInputAction.next,
-                        onChanged: (value) {
-                          wanted = int.parse(value).floor();
-                        },
-                        decoration: InputDecoration(
-                          hintText: 'Enter Quantity',
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              });
+              isScrollControlled: true,
+              builder: (context) => SingleChildScrollView(
+                  child:Container(
+                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: AddRequest(componentName: component.componentName,documentId: component.documentId,isGoogle: isGoogle,userUID: component.userUID,presentQuantity: component.quantity,userNameRegular: component.userNameRegular,userNameGoogle: userNameGoogle,),
+                  )
+              )
+          );
         },
         child: Text(
           'Request',
@@ -411,12 +296,22 @@ ListTile makeListTileRequest(Component component) => ListTile(
         SizedBox(
           width: 10,
         ),
-        Container(
-          padding: EdgeInsets.all(5),
-          color: component.color,
-          child: Text(
-            component.status,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              color: component.color,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
+
+            child: Center(
+              child: Text(
+                component.status,
+                style: TextStyle(
+                  fontSize: 15,
+                    color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+            ),
           ),
         )
       ]),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:invento/Helpers/drawer.dart';
 import 'package:invento/screens/inventory_page_admin.dart';
-import 'package:invento/screens/request_page.dart';
 import 'package:invento/screens/welcome_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,8 +17,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool passwordVisible;
-  Map<String, dynamic> _profile;
-  bool _loading = false;
   @override
   void initState() {
     super.initState();

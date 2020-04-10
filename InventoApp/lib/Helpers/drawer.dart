@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:invento/Helpers/google_sign_in.dart';
 import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/profile_page.dart';
@@ -26,6 +25,7 @@ void getAdmins() async {
 Future<FirebaseUser> getCurrentUser() async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   userUID = user.uid;
+  return user;
 }
 
 

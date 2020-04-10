@@ -17,7 +17,6 @@ class InventoryPage extends StatefulWidget {
 }
 
 class _InventoryPageState extends State<InventoryPage> {
-  final _auth = FirebaseAuth.instance;
   String userUID;
   String userName;
   List<String> usersID = [];
@@ -53,7 +52,6 @@ class _InventoryPageState extends State<InventoryPage> {
 
 
   void showAdminAuthFailedDialog() {
-    // flutter defined function
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -96,14 +94,6 @@ class _InventoryPageState extends State<InventoryPage> {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     return user.uid;
   }
-
-
-//    getCurrentUser()async {
-//    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-//    userUID = user.uid;
-//    print(userUID);
-//    return userUID;
-//  }
 
   getUsers() async {
     final QuerySnapshot result =
@@ -149,7 +139,6 @@ class _InventoryPageState extends State<InventoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(userUID);
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(

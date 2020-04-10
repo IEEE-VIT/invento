@@ -4,9 +4,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
-String _uIdToken;
-String _userEmail;
-bool _signedInWithGoogle;
 
 Future<FirebaseUser> signInWithGoogle() async {
   try{
@@ -27,11 +24,6 @@ Future<FirebaseUser> signInWithGoogle() async {
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(user.user.uid == currentUser.uid);
 
-    _uIdToken = user.user.uid;
-    _userEmail = user.user.email;
-    _signedInWithGoogle = true;
-    print(_signedInWithGoogle);
-    print(user.user.email);
     return user.user;
   }
 
