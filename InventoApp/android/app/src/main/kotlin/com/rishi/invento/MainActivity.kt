@@ -1,4 +1,4 @@
-package com.rishi.invento
+package com.ieeevit.invento
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

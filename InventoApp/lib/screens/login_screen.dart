@@ -1,6 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:invento/Helpers/drawer.dart';
 import 'package:invento/screens/inventory_page_admin.dart';
 import 'package:invento/screens/welcome_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -10,6 +10,7 @@ import 'inventory_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:invento/Helpers/google_sign_in.dart';
+
 class LoginScreen extends StatefulWidget {
   final List admins = [];
 
@@ -19,6 +20,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool passwordVisible;
+
   @override
   void initState() {
     super.initState();
@@ -26,83 +28,35 @@ class _LoginScreenState extends State<LoginScreen> {
     getAdmins();
   }
 
-  void getAdmins() async {
-    final QuerySnapshot result =
-    await Firestore.instance.collection('admins').getDocuments();
-    final List<DocumentSnapshot> documents = result.documents;
-    documents.forEach((data) => widget.admins.add(data.documentID));
-  }
 
-  void _showAuthFailedDialog() {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text('Could not log in'),
-          content: new Text('Double check your credentials and try again!'),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-  void _showEmailFailedDialog() {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text('Could not log in'),
-          content: new Text('Please verify your email address and try again!'),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+
+
   Future<bool> _onBackPressed() {
     return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Exit'),
-          content: Text('Do you want to exit the app?'),
-          actions: <Widget>[
-            MaterialButton(
-              color: Colors.black,
-              child: Text('No'),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-            ),
-            MaterialButton(
-              color: Colors.black,
-              child: Text('Yes'),
-              onPressed: () {
-                exit(0);
-              },
-            )
-          ],
-        );
-      },
-    ) ??
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Exit'),
+              content: Text('Do you want to exit the app?'),
+              actions: <Widget>[
+                MaterialButton(
+                  color: Colors.black,
+                  child: Text('No'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                MaterialButton(
+                  color: Colors.black,
+                  child: Text('Yes'),
+                  onPressed: () {
+                    exit(0);
+                  },
+                )
+              ],
+            );
+          },
+        ) ??
         false;
   }
 
@@ -126,7 +80,12 @@ class _LoginScreenState extends State<LoginScreen> {
               color: Colors.white,
               icon: Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.push(context, PageTransition(child: WelcomeScreen(), type: PageTransitionType.leftToRight),);
+                Navigator.push(
+                  context,
+                  PageTransition(
+                      child: WelcomeScreen(),
+                      type: PageTransitionType.leftToRight),
+                );
               },
             ),
           ),
@@ -140,16 +99,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 70
-                  ),
+                      fontSize: 70),
                 ),
                 Column(
                   children: <Widget>[
                     Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(32), color: Colors.white),
+                          borderRadius: BorderRadius.circular(32),
+                          color: Colors.white),
                       child: TextField(
-                        onChanged: (value){
+                        onChanged: (value) {
                           email = value.trim();
                         },
                         keyboardType: TextInputType.emailAddress,
@@ -159,18 +118,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           fillColor: Colors.white,
                           hintText: 'Enter your email',
                           hintStyle: TextStyle(color: Colors.black),
-                          contentPadding:
-                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black, width: 1.0),
-                            borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black, width: 2.0),
-                            borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
                           ),
                         ),
                       ),
@@ -180,9 +144,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(32), color: Colors.white),
+                          borderRadius: BorderRadius.circular(32),
+                          color: Colors.white),
                       child: TextField(
-                        onChanged: (value){
+                        onChanged: (value) {
                           password = value;
                         },
                         obscureText: passwordVisible,
@@ -192,11 +157,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           suffixIcon: IconButton(
                               icon: Icon(
                                 passwordVisible
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
                                 color: Colors.black,
                               ),
-                              onPressed: (){
+                              onPressed: () {
                                 setState(() {
                                   passwordVisible = !passwordVisible;
                                 });
@@ -204,18 +169,23 @@ class _LoginScreenState extends State<LoginScreen> {
                           fillColor: Colors.white,
                           hintText: 'Enter your password',
                           hintStyle: TextStyle(color: Colors.black),
-                          contentPadding:
-                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black, width: 1.0),
-                            borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.black, width: 2.0),
-                            borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(32.0)),
                           ),
                         ),
                       ),
@@ -230,49 +200,56 @@ class _LoginScreenState extends State<LoginScreen> {
                           'Login',
                           style: TextStyle(color: Colors.black),
                         ),
-                        onPressed: () async{
+                        onPressed: () async {
                           setState(() {
-                            showSpinner= true;
+                            showSpinner = true;
                           });
-                          try{
-                            final newUser = await _auth.signInWithEmailAndPassword(email: email, password: password);
+                          try {
+                            final newUser =
+                                await _auth.signInWithEmailAndPassword(
+                                    email: email, password: password);
 
-                            if(newUser!=null && newUser.user.isEmailVerified){
-                              if(widget.admins.contains(newUser.user.uid)) {
-                                Navigator.push(context, PageTransition(
-                                    child: InventoryAdminPage(),
-                                    type: PageTransitionType.rightToLeft),);
+                            if (newUser != null &&
+                                newUser.user.isEmailVerified) {
+                              if (widget.admins.contains(newUser.user.uid)) {
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      child: InventoryAdminPage(),
+                                      type: PageTransitionType.rightToLeft),
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      child: InventoryPage(),
+                                      type: PageTransitionType.rightToLeft),
+                                );
                               }
-                              else{
-                                Navigator.push(context, PageTransition(
-                                    child: InventoryPage(),
-                                    type: PageTransitionType.rightToLeft),);
-                              }
-                            }
-                            else{
-                              _showEmailFailedDialog();
+                            } else {
+                              popDialog(title: 'Could Not Log In',context: context,content: 'Please verify your email and try again!');
                               setState(() {
-                                showSpinner =false;
+                                showSpinner = false;
                               });
                             }
-
-                          }
-                          catch(e){
+                          } catch (e) {
                             print(e);
-                            _showAuthFailedDialog();
+                            popDialog(
+                                title: 'Could Not Log In',
+                                context: context,
+                                content:
+                                    'Please recheck your credentials and try again!');
                             setState(() {
                               showSpinner = false;
                             });
                           }
-
                         },
                         minWidth: 150,
                       ),
                     ),
                   ],
                 ),
-                _signInButton(context,widget.admins),
-
+                signInButton(context, widget.admins),
               ],
             ),
           ),
@@ -282,55 +259,4 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-Widget _signInButton(BuildContext context,List admins) {
-  return OutlineButton(
-    splashColor: Colors.grey,
-    onPressed: () async{
-      final user = await signInWithGoogle();
-      Timer(Duration(seconds: 1 ),(){
-        if(admins.contains(user.uid)) {
-          Navigator.push(context, PageTransition(
-              child: InventoryAdminPage(),
-              type: PageTransitionType.rightToLeft),);
-        }
-        else{
-          Navigator.push(context, PageTransition(
-              child: InventoryPage(),
-              type: PageTransitionType.rightToLeft),);
-        }
-      });
 
-      Firestore.instance
-          .collection('users')
-          .document(user.uid)
-          .setData({
-        'Email':user.email,
-        'UUID': user.uid,
-        'Name': user.displayName
-      });
-    },
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-    highlightElevation: 0,
-    borderSide: BorderSide(color: Colors.grey),
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Image(image: AssetImage("images/google_logo.png"), height: 35.0),
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Text(
-              'Sign in with Google',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
-            ),
-          )
-        ],
-      ),
-    ),
-  );
-}

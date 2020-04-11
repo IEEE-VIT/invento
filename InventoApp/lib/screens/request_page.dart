@@ -65,36 +65,6 @@ class _RequestPageState extends State<RequestPage> {
   }
 
 
-  void showAdminAuthFailedDialog() {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text('Could not edit the Inventory'),
-          content: new Text(
-              "You don't have admin access. Try contacting an admin to change the value"),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void getAdmins() async {
-    final QuerySnapshot result =
-        await Firestore.instance.collection('admins').getDocuments();
-    final List<DocumentSnapshot> documents = result.documents;
-    documents.forEach((data) => widget.admins.add(data.documentID));
-  }
 
   getUsers() async {
     final QuerySnapshot result =

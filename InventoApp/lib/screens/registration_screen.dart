@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:invento/Helpers/drawer.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,52 +25,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void initState() {
     super.initState();
     passwordVisible = true;
-  }
-
-  void _showAuthFailedDialog() {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text('Could not register'),
-          content: new Text('Double check your email format and password! Note: The password should be min 6 characters'),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showEmailVerifyDialog() {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text('Thankyou for registering!'),
-          content: new Text('Please verify your email ID by clicking on the received link and then click on Log In'),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -242,7 +197,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
 
                           if (newUser != null) {
-                            _showEmailVerifyDialog();
+                            popDialog(title: 'Thank you for registering!',context: context,content: 'Please verify your email ID by clicking on the received link and then click on Log In');
                             Firestore.instance
                                 .collection('users')
                                 .document(newUser.user.uid)
@@ -257,7 +212,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           }
 
                         } catch (e) {
-                          _showAuthFailedDialog();
+                          popDialog(title: 'Could Not Register',context: context,content: 'Double check your email format and password! Note: The password should be min 6 characters');
                           setState(() {
                             showSpinner = false;
                           });

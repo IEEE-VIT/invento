@@ -26,15 +26,13 @@ class _InventoryPageState extends State<InventoryPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadCurrentUser();
+    _getCurrentUID();
     getAdmins();
     getUsers();
 
   }
 
   final _firestore = Firestore.instance;
-  FirebaseUser loggedInUser;
-  String messageText;
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
     return makeListTile(
@@ -51,48 +49,14 @@ class _InventoryPageState extends State<InventoryPage> {
   }
 
 
-  void showAdminAuthFailedDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text('Could not edit the Inventory'),
-          content: new Text(
-              "You don't have admin access. Try contacting an admin to change the value"),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
 
-  void getAdmins() async {
-    final QuerySnapshot result =
-    await Firestore.instance.collection('admins').getDocuments();
-    final List<DocumentSnapshot> documents = result.documents;
-    documents.forEach((data) => widget.admins.add(data.documentID));
-  }
 
-
-  loadCurrentUser() async {
-    var currentUID = await _getCurrentUID();
-    setState(() {
-      this.userUID = currentUID;
-    });
-  }
 
   Future<String> _getCurrentUID() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    return user.uid;
+    userUID = user.uid;
+    return userUID;
   }
 
   getUsers() async {

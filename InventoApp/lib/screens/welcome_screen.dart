@@ -9,8 +9,8 @@ import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/registration_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:invento/Helpers/drawer.dart';
 
 class WelcomeScreen extends StatefulWidget {
   List admins = [];
@@ -71,6 +71,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             });
           }
           else{
+           // popDialog(title: 'No Internet Connection',context: context,content: 'Please turn on your WiFi or Mobile data and try again!');
             showDialog(
               context: context,
               builder: (context) {
@@ -82,6 +83,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),),
                   actions: <Widget>[
                     MaterialButton(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       color: Colors.black,
                       child: Text('Okay'),
                       onPressed: () {
@@ -107,12 +109,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return await _auth.currentUser();
   }
 
-  void getAdmins() async {
-    final QuerySnapshot result =
-        await Firestore.instance.collection('admins').getDocuments();
-    final List<DocumentSnapshot> documents = result.documents;
-    documents.forEach((data) => widget.admins.add(data.documentID));
-  }
 
   @override
   Widget build(BuildContext context) {
