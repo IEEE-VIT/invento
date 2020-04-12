@@ -29,6 +29,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   void initState() {
+    getCurrentUserUID();
     super.initState();
 
     connectivity = new Connectivity();
