@@ -42,7 +42,7 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadCurrentUser();
+    getCurrentUserUID();
   }
   final _firestore = Firestore.instance;
   TextEditingController _componentNameController = TextEditingController();
@@ -69,19 +69,7 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
       ),
     );
   }
-  String currentUID;
 
-  loadCurrentUser() async {
-    var currentUID = await _getCurrentUID();
-    setState(() {
-      this.currentUID = currentUID;
-    });
-  }
-
-  Future<String> _getCurrentUID() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    return user.uid;
-  }
 
 
   Future<bool> _onBackPressed() {
@@ -121,14 +109,9 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawerAdmin(context,currentUID),
+        drawer: buildDrawerAdmin(context,userUID),
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          elevation: 0,
-          title: Text('Edit Invento'),
-          centerTitle: true,
-        ),
+        appBar: buildAppBar(title: 'Edit Invento'),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('components').snapshots(),

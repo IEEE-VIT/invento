@@ -22,6 +22,16 @@ void getAdmins() async {
   documents.forEach((data) => admins.add(data.documentID));
 }
 
+
+AppBar buildAppBar({String title}) {
+  return AppBar(
+    backgroundColor: Colors.black,
+    elevation: 0,
+    title: Text(title),
+    centerTitle: true,
+  );
+}
+
 Widget signInButton(BuildContext context, List admins) {
   return OutlineButton(
     splashColor: Colors.grey,
@@ -104,7 +114,7 @@ void popDialog({String title, BuildContext context, String content}) {
   );
 }
 
-Future<FirebaseUser> getCurrentUser() async {
+Future<FirebaseUser> getCurrentUserUID() async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   userUID = user.uid;
   return user;
@@ -125,7 +135,7 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
           leading: Icon(Icons.edit),
           title: Text('Edit Inventory (Admin)'),
           onTap: () {
-            getCurrentUser();
+            getCurrentUserUID();
             getAdmins();
             Navigator.push(
               context,
@@ -140,7 +150,7 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
           title: Text('All Requested Components (Admin)'),
           onTap: () {
             getAdmins();
-            getCurrentUser();
+            getCurrentUserUID();
             Navigator.push(
               context,
               PageTransition(

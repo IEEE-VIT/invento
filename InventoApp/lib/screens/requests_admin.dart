@@ -38,20 +38,13 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCurrentUser();
+    getCurrentUserUID();
     getUsers();
   }
 
   final _firestore = Firestore.instance;
-  String userUID;
 
-  getCurrentUser() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
-    setState(() {
-      userUID = user.uid;
-    });
-  }
 
 
 
@@ -106,12 +99,7 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
       child: Scaffold(
         drawer: buildDrawerAdmin(context,userUID),
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          elevation: 0,
-          title: Text('All Requested Components'),
-          centerTitle: true,
-        ),
+        appBar: buildAppBar(title: 'All Requested Components'),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('requests').snapshots(),

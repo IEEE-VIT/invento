@@ -10,23 +10,20 @@ FirebaseUser loggedInUser;
 
 
 class InventoryPage extends StatefulWidget {
-  final List admins = [];
 
   @override
   _InventoryPageState createState() => _InventoryPageState();
 }
 
 class _InventoryPageState extends State<InventoryPage> {
-  String userUID;
   String userName;
-  List<String> usersID = [];
   var userData = {};
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _getCurrentUID();
+    getCurrentUserUID();
     getAdmins();
     getUsers();
 
@@ -49,15 +46,6 @@ class _InventoryPageState extends State<InventoryPage> {
   }
 
 
-
-
-
-
-  Future<String> _getCurrentUID() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    userUID = user.uid;
-    return userUID;
-  }
 
   getUsers() async {
     final QuerySnapshot result =
@@ -108,12 +96,7 @@ class _InventoryPageState extends State<InventoryPage> {
       child: Scaffold(
         drawer: buildDrawerUser(context),
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          elevation: 0,
-          title: Text('Invento'),
-          centerTitle: true,
-        ),
+        appBar: buildAppBar(title: 'Invento'),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('components').snapshots(),
@@ -160,6 +143,8 @@ class _InventoryPageState extends State<InventoryPage> {
       ),
     );
   }
+
+
 
 
 }

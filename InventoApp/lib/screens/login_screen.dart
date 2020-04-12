@@ -7,12 +7,9 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:page_transition/page_transition.dart';
 import 'inventory_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
-import 'package:invento/Helpers/google_sign_in.dart';
 
 class LoginScreen extends StatefulWidget {
-  final List admins = [];
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -211,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                             if (newUser != null &&
                                 newUser.user.isEmailVerified) {
-                              if (widget.admins.contains(newUser.user.uid)) {
+                              if (admins.contains(newUser.user.uid)) {
                                 Navigator.push(
                                   context,
                                   PageTransition(
@@ -249,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                signInButton(context, widget.admins),
+                signInButton(context, admins),
               ],
             ),
           ),

@@ -13,7 +13,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:invento/Helpers/drawer.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  List admins = [];
 
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
@@ -49,7 +48,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     });
               getUser().then((user) {
                 try {
-                  if (widget.admins.contains(user.uid)) {
+                  if (admins.contains(user.uid)) {
                     Navigator.push(
                       context,
                       PageTransition(

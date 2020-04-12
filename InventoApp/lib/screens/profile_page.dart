@@ -77,11 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: Text('Profile'),
-        centerTitle: true,
-      ),
+      appBar: buildAppBar(title: 'Profile'),
       drawer: buildDrawerUser(context),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

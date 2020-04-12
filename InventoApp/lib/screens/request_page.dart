@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/rendering.dart';
 import 'package:invento/Helpers/drawer.dart';
 import 'package:invento/Helpers/color_loader.dart';
@@ -11,13 +10,9 @@ import 'package:page_transition/page_transition.dart';
 import '../Helpers/component_fields.dart';
 
 class RequestPage extends StatefulWidget {
-  List admins = [];
-  List<String> usersID = [];
   var userData = {};
   String userName;
-  String status;
   Color color;
-  String userUID;
 
   @override
   _RequestPageState createState() => _RequestPageState();
@@ -37,7 +32,7 @@ class _RequestPageState extends State<RequestPage> {
         requestUserUID: document['User UUID'],
         color: widget.color,
         status: document['Status'],
-        userUID: widget.userUID,
+        userUID: userUID,
         collection: 'users',
         componentName: document['Component Name'],
         quantity: document['Quantity'],
@@ -50,19 +45,13 @@ class _RequestPageState extends State<RequestPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getCurrentUser();
+    getCurrentUserUID();
     getUsers();
   }
 
   final _firestore = Firestore.instance;
 
-  getCurrentUser() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
-    setState(() {
-      widget.userUID = user.uid;
-    });
-  }
 
 
 
@@ -75,7 +64,7 @@ class _RequestPageState extends State<RequestPage> {
     });
 
     setState(() {
-      widget.userName = widget.userData[widget.userUID];
+      widget.userName = widget.userData[userUID];
     });
   }
 
@@ -125,7 +114,7 @@ class _RequestPageState extends State<RequestPage> {
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore
                 .collection('users')
-                .document(widget.userUID)
+                .document(userUID)
                 .collection('RequestedComponents')
                 .snapshots(),
             builder: (context, snapshot) {
