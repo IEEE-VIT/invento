@@ -40,7 +40,7 @@ AppBar buildAppBar({String title,BuildContext context}) {
             tag: 'pro',
             child: CircleAvatar(
               radius: 20,
-              backgroundImage: NetworkImage(imageUrl),
+              backgroundImage: isGoogle?NetworkImage(imageUrl):AssetImage('images/profile.png'),
             ),
           ),
         ),
@@ -135,7 +135,7 @@ Future<FirebaseUser> getCurrentUserUID() async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   userUID = user.uid;
   imageUrl = user.photoUrl;
-  if(user.uid==null){
+  if(user.displayName==null){
     isGoogle = false;
   }
   return user;

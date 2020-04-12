@@ -15,27 +15,31 @@ This app will help us keep track of our inventory at IEEE-VIT Student Branch. It
 
 ## Tools and Technologies used
 * Flutter
-* Google FireStore for storage and authentication)
+* Google FireStore for storage and authentication
 
 ## App Screenshots:
 <p align="center">
-<img src="ReadMeMedia/main.gif" alt="Kitten" title="A cute kitten" width="300" height="600" />
+<img src="ReadMeMedia/main.gif"alt="Welcome"  width="300" height="600" />
 <br>
 <br>
 <br>
-<img src="ReadMeMedia/1.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+<img src="ReadMeMedia/1.jpg" alt="Inventory"  width="300" height="600" />
 <br>
 <br>
 <br>
-<img src="ReadMeMedia/2.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+<img src="ReadMeMedia/2.jpg" alt="Request"  width="300" height="600" />
 <br>
 <br>
 <br>
-<img src="ReadMeMedia/3.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+<img src="ReadMeMedia/3.jpg" alt="Drawer"  width="300" height="600" />
 <br>
 <br>
 <br>
-<img src="ReadMeMedia/4.png" alt="Kitten" title="A cute kitten" width="300" height="600" />
+<img src="ReadMeMedia/4.jpg" alt="Status"  width="300" height="600" />
+<br>
+<br>
+<br>
+<img src="ReadMeMedia/5.jpg" alt="Profile" width="300" height="600" />
 <br>
 <br>
 <br>
@@ -45,8 +49,8 @@ This app will help us keep track of our inventory at IEEE-VIT Student Branch. It
 
 ### To request a component:
 
-* Go to Inventory page.
-* Click 'Request' on the component you want to request.
+* Go to the Inventory page.
+* Click the 'Request' button next to the component you want to request.
 * Enter the quantity.
 * Wait for the admin to approve the request. You can see the status of your application in 'Requested Components'.
 * Once approved, you can see the issued component in your 'Profile Page'.
