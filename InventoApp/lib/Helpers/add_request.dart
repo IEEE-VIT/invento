@@ -1,4 +1,7 @@
+import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:invento/Helpers/drawer.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -113,7 +116,7 @@ class _AddRequestState extends State<AddRequest> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30)),
               child: Text(
-                'Add',
+                'Add Request',
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -177,4 +180,23 @@ class _AddRequestState extends State<AddRequest> {
       ),
     );
   }
+}
+
+showToast(BuildContext context, String message) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text("Name of App"),
+          content: Text(message),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      });
 }

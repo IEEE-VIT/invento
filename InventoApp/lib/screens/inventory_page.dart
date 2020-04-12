@@ -96,7 +96,7 @@ class _InventoryPageState extends State<InventoryPage> {
       child: Scaffold(
         drawer: buildDrawerUser(context),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(title: 'Invento'),
+        appBar: buildAppBar(title: 'Invento',context:context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('components').snapshots(),

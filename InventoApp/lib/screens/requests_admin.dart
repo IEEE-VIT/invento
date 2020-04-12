@@ -99,7 +99,7 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
       child: Scaffold(
         drawer: buildDrawerAdmin(context,userUID),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(title: 'All Requested Components'),
+        appBar: buildAppBar(title: 'All Requested Components',context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('requests').snapshots(),

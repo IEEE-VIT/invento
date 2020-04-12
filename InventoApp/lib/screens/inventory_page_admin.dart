@@ -111,7 +111,7 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
       child: Scaffold(
         drawer: buildDrawerAdmin(context,userUID),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(title: 'Edit Invento'),
+        appBar: buildAppBar(title: 'Edit Invento',context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('components').snapshots(),

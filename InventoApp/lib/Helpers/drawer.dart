@@ -13,22 +13,39 @@ import 'dart:async';
 
 List admins = [];
 String userUID;
-
+String imageUrl;
+bool isGoogle = true;
 
 void getAdmins() async {
   final QuerySnapshot result =
-  await Firestore.instance.collection('admins').getDocuments();
+      await Firestore.instance.collection('admins').getDocuments();
   final List<DocumentSnapshot> documents = result.documents;
   documents.forEach((data) => admins.add(data.documentID));
 }
 
-
-AppBar buildAppBar({String title}) {
+AppBar buildAppBar({String title,BuildContext context}) {
   return AppBar(
     backgroundColor: Colors.black,
     elevation: 0,
     title: Text(title),
     centerTitle: true,
+    actions: <Widget>[
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+        child: GestureDetector(
+          onTap: (){
+            Navigator.push(context, PageTransition(child: ProfilePage(), type: PageTransitionType.rightToLeft));
+          },
+          child: Hero(
+            tag: 'pro',
+            child: CircleAvatar(
+              radius: 20,
+              backgroundImage: NetworkImage(imageUrl),
+            ),
+          ),
+        ),
+      ),
+    ],
   );
 }
 
@@ -90,13 +107,13 @@ void popDialog({String title, BuildContext context, String content}) {
     builder: (BuildContext context) {
       // return object of type Dialog
       return AlertDialog(
-        title: Text(title),
+        title: Center(child: Text(title)),
         content: Text(content),
         actions: <Widget>[
           // usually buttons at the bottom of the dialog
           new MaterialButton(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             color: Colors.black,
             child: new Text(
               'Close',
@@ -117,9 +134,12 @@ void popDialog({String title, BuildContext context, String content}) {
 Future<FirebaseUser> getCurrentUserUID() async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   userUID = user.uid;
+  imageUrl = user.photoUrl;
+  if(user.uid==null){
+    isGoogle = false;
+  }
   return user;
 }
-
 
 Drawer buildDrawerAdmin(BuildContext context, String userUID) {
   return Drawer(
@@ -162,14 +182,16 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
         ListTile(
           leading: Icon(Icons.exit_to_app),
           title: Text('Logout'),
-          onTap: () async{
+          onTap: () async {
             await googleSignIn.signOut();
-            Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft));
+            Navigator.push(
+                context,
+                PageTransition(
+                    child: LoginScreen(),
+                    type: PageTransitionType.rightToLeft));
             FirebaseAuth.instance.signOut();
-
           },
         )
-
       ],
     ),
   );
@@ -192,8 +214,7 @@ Drawer buildDrawerUser(BuildContext context) {
             Navigator.push(
               context,
               PageTransition(
-                  child: InventoryPage(),
-                  type: PageTransitionType.rightToLeft),
+                  child: InventoryPage(), type: PageTransitionType.rightToLeft),
             );
           },
         ),
@@ -204,8 +225,7 @@ Drawer buildDrawerUser(BuildContext context) {
             Navigator.push(
               context,
               PageTransition(
-                  child: ProfilePage(),
-                  type: PageTransitionType.rightToLeft),
+                  child: ProfilePage(), type: PageTransitionType.rightToLeft),
             );
           },
         ),
@@ -216,22 +236,23 @@ Drawer buildDrawerUser(BuildContext context) {
             Navigator.push(
               context,
               PageTransition(
-                  child: RequestPage(),
-                  type: PageTransitionType.rightToLeft),
+                  child: RequestPage(), type: PageTransitionType.rightToLeft),
             );
           },
         ),
         ListTile(
           leading: Icon(Icons.exit_to_app),
           title: Text('Logout'),
-          onTap: ()async {
+          onTap: () async {
             await googleSignIn.signOut();
-            Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeft));
+            Navigator.push(
+                context,
+                PageTransition(
+                    child: LoginScreen(),
+                    type: PageTransitionType.rightToLeft));
             FirebaseAuth.instance.signOut();
-
           },
         )
-
       ],
     ),
   );

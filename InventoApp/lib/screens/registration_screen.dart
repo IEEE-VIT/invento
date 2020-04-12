@@ -25,6 +25,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   void initState() {
     super.initState();
     passwordVisible = true;
+    getAdmins();
   }
 
   @override
@@ -68,7 +69,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       },
                       keyboardType: TextInputType.emailAddress,
                       cursorRadius: Radius.circular(20),
-                      autofocus: true,
+                      autofocus: false,
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         hintText: 'Enter your name',
@@ -104,7 +105,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       },
                       keyboardType: TextInputType.emailAddress,
                       cursorRadius: Radius.circular(20),
-                      autofocus: true,
+                      autofocus: false,
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         hintText: 'Enter your email',
@@ -140,7 +141,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       },
                       obscureText: passwordVisible,
                       cursorRadius: Radius.circular(20),
-                      autofocus: true,
+                      autofocus: false,
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
                             icon: Icon(
@@ -224,6 +225,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                 ],
               ),
+              signInButton(context, admins)
             ],
           ),
         ),

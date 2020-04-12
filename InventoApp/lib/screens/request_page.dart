@@ -104,12 +104,7 @@ class _RequestPageState extends State<RequestPage> {
       child: Scaffold(
         drawer: buildDrawerUser(context),
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          elevation: 0,
-          title: Text('Requested Components'),
-          centerTitle: true,
-        ),
+        appBar: buildAppBar(title: 'Requested Components',context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore
