@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
 import 'package:invento/Helpers/add_request.dart';
 import 'package:uuid/uuid.dart';
-import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 class Component {
   String requestUserUID;
@@ -21,6 +21,7 @@ class Component {
   int quantity;
   String documentId;
   Function onPress;
+  Future<void> emailOnPress;
   String collection;
   String userNameRegular;
 
@@ -39,7 +40,8 @@ class Component {
       this.validate,
       this.date,
       this.issueID,
-      this.requestUserUID});
+      this.requestUserUID,
+      this.emailOnPress});
 }
 
 final _firestore = Firestore.instance;
@@ -72,6 +74,70 @@ Card makeCard(Component component) => Card(
         child: makeListTile(component),
       ),
     );
+
+ListTile makeListTileIssued(Component component) => ListTile(
+  contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+  leading: Container(
+    padding: EdgeInsets.only(right: 12),
+    decoration: BoxDecoration(
+      border: Border(
+        right: BorderSide(width: 1, color: Colors.blue),
+      ),
+    ),
+    child: Icon(
+      Icons.arrow_forward,
+      color: Colors.black,
+    ),
+  ),
+  title: Text(
+    component.componentName,
+    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+  ),
+  subtitle: Container(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Text(
+              'Quantity: ${component.quantity.toString()}',
+              style:
+              TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: Text(
+                "On: ${component.date}",
+                style:
+                TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 2,),
+        Text('To: ${component.userNameRegular}',
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.w600,
+        ),),
+      ],
+    ),
+  ),
+  trailing: MaterialButton(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+    child: Text(
+      'Request Return',
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+    color: Colors.black,
+    onPressed: (){}
+  ),
+);
+
 
 ListTile makeListTileProfile(Component component) => ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -162,6 +228,7 @@ ListTile makeListTileProfile(Component component) => ListTile(
                           .document(component.componentID)
                           .updateData(
                           {'Quantity': FieldValue.increment(component.quantity)});
+                      _firestore.collection('issued').document(component.issueID).delete();
                       Navigator.of(context).pop();
                     },
                   )
@@ -431,6 +498,8 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                               borderRadius: BorderRadius.circular(30)),
                           color: Colors.green,
                           onPressed: () async {
+                           var uuid = Uuid();
+                           String id = uuid.v1();
                             final DocumentReference document = Firestore
                                 .instance
                                 .collection("components")
@@ -443,7 +512,7 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                                 component.quantity) {
                               DateTime now = DateTime.now();
                               String formattedDate =
-                                  DateFormat('EEE d MMM').format(now);
+                                  DateFormat('d MMM').format(now);
                               _firestore
                                   .collection('requests')
                                   .document(component.documentId)
@@ -472,6 +541,13 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                                 'Quantity': component.quantity,
                                 'Date': formattedDate,
                                 'Issue ID': component.documentId,
+                              });
+                              _firestore.collection('issued').document(component.documentId).setData({
+                                'User Name':isGoogle?userNameGoogle:component.userNameRegular,
+                                'Component Name': component.componentName,
+                                'Component UUID': component.componentID,
+                                'Quantity': component.quantity,
+                                'Date': formattedDate,
                               });
                               Navigator.of(context).pop();
                             } else {

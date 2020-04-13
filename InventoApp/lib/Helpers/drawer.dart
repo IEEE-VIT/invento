@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invento/Helpers/google_sign_in.dart';
+import 'package:invento/screens/issued_components.dart';
 import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/profile_page.dart';
 import 'package:page_transition/page_transition.dart';
@@ -14,6 +15,7 @@ import 'dart:async';
 List admins = [];
 String userUID;
 String imageUrl;
+String userEmail;
 bool isGoogle = true;
 
 void getAdmins() async {
@@ -145,6 +147,7 @@ Future<FirebaseUser> getCurrentUserUID() async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   userUID = user.uid;
   imageUrl = user.photoUrl;
+  userEmail = user.email;
   if (user.displayName == null) {
     isGoogle = false;
   }
@@ -165,8 +168,6 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
           leading: Icon(Icons.edit),
           title: Text('Edit Inventory (Admin)'),
           onTap: () {
-            getCurrentUserUID();
-            getAdmins();
             Navigator.push(
               context,
               PageTransition(
@@ -179,12 +180,22 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
           leading: Icon(Icons.list),
           title: Text('All Requested Components (Admin)'),
           onTap: () {
-            getAdmins();
-            getCurrentUserUID();
             Navigator.push(
               context,
               PageTransition(
                   child: RequestPageAdmin(),
+                  type: PageTransitionType.rightToLeft),
+            );
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.list),
+          title: Text('All Issued Components (Admin)'),
+          onTap: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                  child: IssuedPage(),
                   type: PageTransitionType.rightToLeft),
             );
           },
