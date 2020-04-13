@@ -23,7 +23,7 @@ void getAdmins() async {
   documents.forEach((data) => admins.add(data.documentID));
 }
 
-AppBar buildAppBar({String title,BuildContext context}) {
+AppBar buildAppBar({String title, BuildContext context}) {
   return AppBar(
     backgroundColor: Colors.black,
     elevation: 0,
@@ -31,16 +31,26 @@ AppBar buildAppBar({String title,BuildContext context}) {
     centerTitle: true,
     actions: <Widget>[
       Padding(
-        padding: EdgeInsets.symmetric(vertical: 8,horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
         child: GestureDetector(
-          onTap: (){
-            Navigator.push(context, PageTransition(child: ProfilePage(), type: PageTransitionType.rightToLeft));
+          onTap: () {
+            if (admins.contains(userUID)) {
+              return null;
+            } else {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: ProfilePage(),
+                      type: PageTransitionType.rightToLeft));
+            }
           },
           child: Hero(
             tag: 'pro',
             child: CircleAvatar(
               radius: 20,
-              backgroundImage: isGoogle?NetworkImage(imageUrl):AssetImage('images/profile.png'),
+              backgroundImage: isGoogle
+                  ? NetworkImage(imageUrl)
+                  : AssetImage('images/profile.png'),
             ),
           ),
         ),
@@ -135,7 +145,7 @@ Future<FirebaseUser> getCurrentUserUID() async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   userUID = user.uid;
   imageUrl = user.photoUrl;
-  if(user.displayName==null){
+  if (user.displayName == null) {
     isGoogle = false;
   }
   return user;

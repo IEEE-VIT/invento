@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:invento/Helpers/drawer.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import 'package:invento/Helpers/component_fields.dart';
-import 'package:invento/screens/inventory_page.dart';
-import 'package:page_transition/page_transition.dart';
+
 
 class ProfilePage extends StatefulWidget {
   String userUID;
