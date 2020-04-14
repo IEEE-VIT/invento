@@ -7,7 +7,6 @@ import 'package:invento/Helpers/drawer.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import '../Helpers/component_fields.dart';
 
-
 class RequestPageAdmin extends StatefulWidget {
   List<String> usersID = [];
   var userData = {};
@@ -21,7 +20,6 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
   Widget buildListItem(BuildContext context, DocumentSnapshot document) {
     return makeListTileRequestAdmin(
       Component(
-        userUID: userUID,
         componentID: document['Component UUID'],
         context: context,
         userNameRegular: document['User Name'],
@@ -43,12 +41,6 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
   }
 
   final _firestore = Firestore.instance;
-
-
-
-
-
-
 
   getUsers() async {
     final QuerySnapshot result =
@@ -97,9 +89,10 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawerAdmin(context,userUID),
+        drawer: buildDrawerAdmin(context, userUID),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(title: 'All Requested Components',context: context),
+        appBar:
+            buildAppBar(title: 'All Requested Components', context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('requests').snapshots(),
@@ -125,10 +118,9 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
                     child: Text(
                       'No Requests',
                       style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey
-                      ),
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
                     ),
                   ),
                 );

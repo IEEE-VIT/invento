@@ -16,10 +16,10 @@ class IssuedPage extends StatefulWidget {
 }
 
 class _IssuedPageState extends State<IssuedPage> {
-
   Widget buildListItem(BuildContext context, DocumentSnapshot document) {
     return makeListTileIssued(
       Component(
+        userUID: document['User UUID'],
         date: document['Date'],
         context: context,
         userNameRegular: document['User Name'],
