@@ -5,7 +5,7 @@ import 'package:invento/Helpers/drawer.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import 'package:invento/Helpers/component_fields.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePageAdmin extends StatefulWidget {
   String userUID;
   var userData = {};
   String userNameGoogle;
@@ -15,10 +15,10 @@ class ProfilePage extends StatefulWidget {
   bool isGoogle = true;
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _ProfilePageAdminState createState() => _ProfilePageAdminState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageAdminState extends State<ProfilePageAdmin> {
   Future<FirebaseUser> getCurrentUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
@@ -38,19 +38,16 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
-    return makeListTileProfile(
+    return makeListTileProfileAdmin(
       Component(
-        userNameRegular: document['User Name'],
-        componentID: document['Component UUID'],
-        issueID: document['Issue ID'],
-        date: document['Date'],
-        userUID: widget.userUID,
-        context: context,
-        requestUserUID: document['User UUID'],
-        componentName: document['Component Name'],
-        quantity: document['Quantity'],
-        documentId: document.documentID,
-      ),
+          userNameRegular: document['User Name'],
+          componentName: document['componentName'],
+          requestUserUID: document['userUid'],
+          componentID: document['Component UUID'],
+          issueID: document['Issue ID'],
+          quantity: document['Quantity'],
+          context: context,
+          documentId: document.documentID),
     );
   }
 
@@ -136,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'Components Issued',
+                  'Requesting to Return',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                 ),
                 SizedBox(
@@ -150,11 +147,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   child: Container(
                     child: StreamBuilder<QuerySnapshot>(
-                      stream: _firestore
-                          .collection('users')
-                          .document(widget.userUID)
-                          .collection('ComponentsIssued')
-                          .snapshots(),
+                      stream:
+                          _firestore.collection('returnRequest').snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return ColorLoader(
@@ -176,7 +170,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                                 Center(
                                   child: Text(
-                                    'No Issues',
+                                    'No Requests',
                                     style: TextStyle(
                                         fontSize: 30,
                                         fontWeight: FontWeight.bold,

@@ -41,8 +41,7 @@ class _InventoryPageState extends State<InventoryPage> {
         popDialog(
             title: _message,
             context: context,
-            content:
-                'Admin has requested you to return the component. Please do it asap!');
+            content: message["notification"]["body"]);
       });
     }, onResume: (Map<String, dynamic> message) async {
       print('on resume $message');

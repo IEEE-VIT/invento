@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
 import 'package:invento/Helpers/add_request.dart';
+import 'package:invento/Helpers/drawer.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
@@ -139,10 +140,8 @@ ListTile makeListTileIssued(Component component) => ListTile(
           ),
           color: Colors.black,
           onPressed: () {
-            _firestore
-                .collection('returns')
-                .document(component.userUID)
-                .setData({
+            String temp = Uuid().v1();
+            _firestore.collection('returns').document(temp).setData({
               'uid': component.userUID,
               'component': component.componentName
             });
@@ -224,32 +223,22 @@ ListTile makeListTileProfile(Component component) => ListTile(
                     child: Text('Yes'),
                     onPressed: () {
                       _firestore
-                          .collection('users')
-                          .document(component.userUID)
-                          .collection('ComponentsIssued')
-                          .document(component.documentId)
-                          .delete();
-                      _firestore
-                          .collection('users')
-                          .document(component.userUID)
-                          .collection('RequestedComponents')
+                          .collection('returnRequest')
                           .document(component.issueID)
-                          .delete();
-                      _firestore
-                          .collection('components')
-                          .document(component.componentID)
-                          .updateData({
-                        'Quantity': FieldValue.increment(component.quantity)
+                          .setData({
+                        'componentName': component.componentName,
+                        'User Name': component.userNameRegular,
+                        'userUid': component.requestUserUID,
+                        'Component UUID': component.componentID,
+                        'Issue ID': component.issueID,
+                        'Quantity': component.quantity
                       });
-                      _firestore
-                          .collection('issued')
-                          .document(component.issueID)
-                          .delete();
-                      _firestore
-                          .collection('returns')
-                          .document(component.userUID)
-                          .delete();
                       Navigator.of(context).pop();
+                      popDialog(
+                          title: 'Return Request Made',
+                          context: context,
+                          content:
+                              'Please wait till the admin approves this return request. You will receive a notification when it\'s done.');
                     },
                   )
                 ],
@@ -258,8 +247,101 @@ ListTile makeListTileProfile(Component component) => ListTile(
           );
         },
       ),
-      onTap: component.onPress,
     );
+
+ListTile makeListTileProfileAdmin(Component component) => ListTile(
+    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    leading: Container(
+      padding: EdgeInsets.only(right: 12),
+      decoration: BoxDecoration(
+        border: Border(
+          right: BorderSide(width: 1, color: Colors.blue),
+        ),
+      ),
+      child: Icon(
+        Icons.arrow_forward,
+        color: Colors.black,
+      ),
+    ),
+    title: Text(
+      component.userNameRegular,
+      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    ),
+    subtitle: Text('is requesting to return ${component.componentName}'),
+    trailing: MaterialButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      child: Text(
+        'Confirm',
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      color: Colors.black,
+      onPressed: () {
+        showDialog(
+          context: component.context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Confirm Return?'),
+              content: Text(
+                'Do you want to accept the return of this component?',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  color: Colors.black,
+                  child: Text('No'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                MaterialButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  color: Colors.black,
+                  child: Text('Yes'),
+                  onPressed: () {
+                    _firestore
+                        .collection('returnRequest')
+                        .document(component.documentId)
+                        .delete();
+                    _firestore
+                        .collection('users')
+                        .document(component.requestUserUID)
+                        .collection('ComponentsIssued')
+                        .document(component.componentID)
+                        .delete();
+                    _firestore
+                        .collection('users')
+                        .document(component.requestUserUID)
+                        .collection('RequestedComponents')
+                        .document(component.issueID)
+                        .delete();
+                    _firestore
+                        .collection('components')
+                        .document(component.componentID)
+                        .updateData({
+                      'Quantity': FieldValue.increment(component.quantity)
+                    });
+                    _firestore
+                        .collection('issued')
+                        .document(component.issueID)
+                        .delete();
+                    _firestore
+                        .collection('returns')
+                        .document(component.requestUserUID)
+                        .delete();
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          },
+        );
+      },
+    ));
 
 ListTile makeListTileAdmin(Component component) => ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -526,7 +608,6 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                           color: Colors.green,
                           onPressed: () async {
                             var uuid = Uuid();
-                            String id = uuid.v1();
                             final DocumentReference document = Firestore
                                 .instance
                                 .collection("components")
@@ -563,6 +644,8 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                                   .collection('ComponentsIssued')
                                   .document(component.componentID)
                                   .setData({
+                                'User UUID': component.requestUserUID,
+                                'User Name': component.userNameRegular,
                                 'Component Name': component.componentName,
                                 'Component UUID': component.componentID,
                                 'Quantity': component.quantity,

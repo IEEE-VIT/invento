@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invento/Helpers/google_sign_in.dart';
+import 'package:invento/screens/admin_profile_page.dart';
 import 'package:invento/screens/issued_components.dart';
 import 'package:invento/screens/login_screen.dart';
 import 'package:invento/screens/profile_page.dart';
@@ -166,7 +167,7 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
             child: Image.asset('images/logo.png')),
         ListTile(
           leading: Icon(Icons.edit),
-          title: Text('Edit Inventory (Admin)'),
+          title: Text('Edit Inventory'),
           onTap: () {
             Navigator.push(
               context,
@@ -177,8 +178,20 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
           },
         ),
         ListTile(
-          leading: Icon(Icons.list),
-          title: Text('All Requested Components (Admin)'),
+          leading: Icon(Icons.account_circle),
+          title: Text('Profile/Return Requests'),
+          onTap: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                  child: ProfilePageAdmin(),
+                  type: PageTransitionType.rightToLeft),
+            );
+          },
+        ),
+        ListTile(
+          leading: Icon(Icons.file_download),
+          title: Text('Requested Components'),
           onTap: () {
             Navigator.push(
               context,
@@ -190,7 +203,7 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
         ),
         ListTile(
           leading: Icon(Icons.list),
-          title: Text('All Issued Components (Admin)'),
+          title: Text('Issued Components'),
           onTap: () {
             Navigator.push(
               context,
