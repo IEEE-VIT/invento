@@ -142,7 +142,10 @@ ListTile makeListTileIssued(Component component) => ListTile(
             _firestore
                 .collection('returns')
                 .document(component.userUID)
-                .setData({'uid': component.userUID});
+                .setData({
+              'uid': component.userUID,
+              'component': component.componentName
+            });
           }),
     );
 
@@ -241,6 +244,10 @@ ListTile makeListTileProfile(Component component) => ListTile(
                       _firestore
                           .collection('issued')
                           .document(component.issueID)
+                          .delete();
+                      _firestore
+                          .collection('returns')
+                          .document(component.userUID)
                           .delete();
                       Navigator.of(context).pop();
                     },

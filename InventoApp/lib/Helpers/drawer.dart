@@ -195,8 +195,7 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
             Navigator.push(
               context,
               PageTransition(
-                  child: IssuedPage(),
-                  type: PageTransitionType.rightToLeft),
+                  child: IssuedPage(), type: PageTransitionType.rightToLeft),
             );
           },
         ),

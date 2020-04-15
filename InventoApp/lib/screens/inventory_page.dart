@@ -41,20 +41,27 @@ class _InventoryPageState extends State<InventoryPage> {
         popDialog(
             title: _message,
             context: context,
-            content: 'Go to the profile section to return the component');
+            content:
+                'Admin has requested you to return the component. Please do it asap!');
       });
     }, onResume: (Map<String, dynamic> message) async {
       print('on resume $message');
       setState(() {
         _message = message["notification"]["title"];
-        Navigator.push(
-            context,
-            PageTransition(
-                child: ProfilePage(), type: PageTransitionType.downToUp));
       });
+      Navigator.push(
+          context,
+          PageTransition(
+              child: ProfilePage(), type: PageTransitionType.downToUp));
     }, onLaunch: (Map<String, dynamic> message) async {
       print('on launch $message');
-      setState(() => _message = message["notification"]["title"]);
+      setState(() {
+        _message = message["notification"]["title"];
+      });
+      Navigator.push(
+          context,
+          PageTransition(
+              child: ProfilePage(), type: PageTransitionType.downToUp));
     });
   }
 
