@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:invento/Helpers/drawer.dart';
 import 'package:invento/screens/inventory_page_admin.dart';
@@ -12,7 +10,6 @@ import 'inventory_page.dart';
 import 'dart:io';
 
 class LoginScreen extends StatefulWidget {
-
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -26,9 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
     passwordVisible = true;
     getAdmins();
   }
-
-
-
 
   Future<bool> _onBackPressed() {
     return showDialog(
@@ -226,7 +220,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
                               }
                             } else {
-                              popDialog(title: 'Could Not Log In',context: context,content: 'Please verify your email and try again!');
+                              popDialog(
+                                  title: 'Could Not Log In',
+                                  context: context,
+                                  content:
+                                      'Please verify your email and try again!');
                               setState(() {
                                 showSpinner = false;
                               });
@@ -257,5 +255,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-

@@ -26,11 +26,11 @@ void getAdmins() async {
   documents.forEach((data) => admins.add(data.documentID));
 }
 
-AppBar buildAppBar({String title, BuildContext context}) {
+AppBar buildAppBar({Widget title, BuildContext context}) {
   return AppBar(
     backgroundColor: Colors.black,
-    elevation: 0,
-    title: Text(title),
+    elevation: 10,
+    title: title,
     centerTitle: true,
     actions: <Widget>[
       Padding(
@@ -161,6 +161,7 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
       padding: EdgeInsets.zero,
       children: <Widget>[
         DrawerHeader(
+            padding: EdgeInsets.all(0),
             decoration: BoxDecoration(
               color: Colors.black,
             ),
@@ -236,10 +237,16 @@ Drawer buildDrawerUser(BuildContext context) {
       padding: EdgeInsets.zero,
       children: <Widget>[
         DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.black,
-            ),
-            child: Image.asset('images/logo.png')),
+          curve: Curves.bounceInOut,
+          padding: EdgeInsets.all(0),
+          decoration: BoxDecoration(
+            color: Colors.black,
+          ),
+          child: Hero(
+            tag: 'logo',
+            child: Image.asset('images/logo.png'),
+          ),
+        ),
         ListTile(
           leading: Icon(Icons.inbox),
           title: Text('Inventory'),

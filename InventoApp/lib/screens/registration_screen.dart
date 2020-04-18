@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
-
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -28,10 +26,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     super.initState();
     passwordVisible = true;
     getAdmins();
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -201,9 +196,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   email: email, password: password);
                           await newUser.user.sendEmailVerification();
 
-
                           if (newUser != null) {
-                            popDialog(title: 'Thank you for registering!',context: context,content: 'Please verify your email ID by clicking on the received link and then click on Log In');
+                            popDialog(
+                                title: 'Thank you for registering!',
+                                context: context,
+                                content:
+                                    'Please verify your email ID by clicking on the received link and then click on Log In');
                             Firestore.instance
                                 .collection('users')
                                 .document(newUser.user.uid)
@@ -213,12 +211,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               'Name': name
                             });
                             setState(() {
-                              showSpinner=false;
+                              showSpinner = false;
                             });
                           }
-
                         } catch (e) {
-                          popDialog(title: 'Could Not Register',context: context,content: 'Double check your email format and password! Note: The password should be min 6 characters');
+                          popDialog(
+                              title: 'Could Not Register',
+                              context: context,
+                              content:
+                                  'Double check your email format and password! Note: The password should be min 6 characters');
                           setState(() {
                             showSpinner = false;
                           });

@@ -146,7 +146,17 @@ class _InventoryPageState extends State<InventoryPage> {
       child: Scaffold(
         drawer: buildDrawerUser(context),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(title: 'Invento', context: context),
+        appBar: buildAppBar(
+          context: context,
+          title: Hero(
+            tag: 'logo',
+            child: Image.asset(
+              'images/logo.png',
+              fit: BoxFit.contain,
+              height: 100,
+            ),
+          ),
+        ),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('components').snapshots(),

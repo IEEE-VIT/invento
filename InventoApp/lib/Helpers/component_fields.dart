@@ -607,7 +607,6 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                               borderRadius: BorderRadius.circular(30)),
                           color: Colors.green,
                           onPressed: () async {
-                            var uuid = Uuid();
                             final DocumentReference document = Firestore
                                 .instance
                                 .collection("components")

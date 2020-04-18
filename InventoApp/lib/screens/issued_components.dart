@@ -88,7 +88,8 @@ class _IssuedPageState extends State<IssuedPage> {
       child: Scaffold(
         drawer: buildDrawerAdmin(context, userUID),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(title: 'All Issued Components', context: context),
+        appBar:
+            buildAppBar(title: Text('All Issued Components'), context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('issued').snapshots(),

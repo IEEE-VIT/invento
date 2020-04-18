@@ -37,13 +37,13 @@ class InventoryAdminPage extends StatefulWidget {
 }
 
 class _InventoryAdminPageState extends State<InventoryAdminPage> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getCurrentUserUID();
   }
+
   final _firestore = Firestore.instance;
   TextEditingController _componentNameController = TextEditingController();
   TextEditingController _quantityController = TextEditingController();
@@ -70,18 +70,16 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
     );
   }
 
-
-
   Future<bool> _onBackPressed() {
     return showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
               title: Text('Exit'),
-              content: Text('Do you want to exit the app?',
-              style: TextStyle(
-                fontWeight: FontWeight.w700
-              ),),
+              content: Text(
+                'Do you want to exit the app?',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
               actions: <Widget>[
                 MaterialButton(
                   color: Colors.black,
@@ -109,9 +107,9 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawerAdmin(context,userUID),
+        drawer: buildDrawerAdmin(context, userUID),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(title: 'Edit Invento',context: context),
+        appBar: buildAppBar(title: Text('Edit Invento'), context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('components').snapshots(),

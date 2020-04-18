@@ -51,10 +51,6 @@ class _RequestPageState extends State<RequestPage> {
 
   final _firestore = Firestore.instance;
 
-
-
-
-
   getUsers() async {
     final QuerySnapshot result =
         await Firestore.instance.collection('users').getDocuments();
@@ -104,7 +100,8 @@ class _RequestPageState extends State<RequestPage> {
       child: Scaffold(
         drawer: buildDrawerUser(context),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(title: 'Requested Components',context: context),
+        appBar:
+            buildAppBar(title: Text('Requested Components'), context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore
