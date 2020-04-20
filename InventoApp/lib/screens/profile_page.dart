@@ -79,18 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        elevation: 0,
-        backgroundColor: Colors.black,
-        centerTitle: true,
-        title: Text('Profile'),
-      ),
-      drawer: buildDrawerUser(context),
+      appBar: buildAppBar(title: Text('Profile'), context: context),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[

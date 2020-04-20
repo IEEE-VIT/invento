@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:invento/Helpers/google_sign_in.dart';
 import 'package:invento/screens/admin_profile_page.dart';
@@ -28,36 +29,28 @@ void getAdmins() async {
 
 AppBar buildAppBar({Widget title, BuildContext context}) {
   return AppBar(
+    leading: Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+      child: Image.asset(
+        'images/logo1.png',
+      ),
+    ),
     backgroundColor: Colors.black,
     elevation: 10,
     title: title,
     centerTitle: true,
     actions: <Widget>[
-      Padding(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-        child: GestureDetector(
-          onTap: () {
-            if (admins.contains(userUID)) {
-              return null;
-            } else {
-              Navigator.push(
-                  context,
-                  PageTransition(
-                      child: ProfilePage(),
-                      type: PageTransitionType.rightToLeft));
-            }
-          },
-          child: Hero(
-            tag: 'pro',
-            child: CircleAvatar(
-              radius: 20,
-              backgroundImage: isGoogle
-                  ? NetworkImage(imageUrl)
-                  : AssetImage('images/profile.png'),
-            ),
-          ),
-        ),
-      ),
+      IconButton(
+          icon: Icon(Icons.exit_to_app),
+          onPressed: () async {
+            await googleSignIn.signOut();
+            Navigator.push(
+                context,
+                PageTransition(
+                    child: LoginScreen(),
+                    type: PageTransitionType.rightToLeft));
+            FirebaseAuth.instance.signOut();
+          })
     ],
   );
 }
@@ -79,7 +72,7 @@ Widget signInButton(BuildContext context, List admins) {
           Navigator.push(
             context,
             PageTransition(
-                child: InventoryPage(), type: PageTransitionType.rightToLeft),
+                child: LandingPage(), type: PageTransitionType.rightToLeft),
           );
         }
       });
@@ -91,12 +84,12 @@ Widget signInButton(BuildContext context, List admins) {
     highlightElevation: 0,
     borderSide: BorderSide(color: Colors.grey),
     child: Padding(
-      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Image(image: AssetImage("images/google_logo.png"), height: 35.0),
+          Image(image: AssetImage("images/google_logo.png"), height: 30.0),
           Padding(
             padding: const EdgeInsets.only(left: 10),
             child: Text(
@@ -231,69 +224,87 @@ Drawer buildDrawerAdmin(BuildContext context, String userUID) {
   );
 }
 
-Drawer buildDrawerUser(BuildContext context) {
-  return Drawer(
-    child: ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        DrawerHeader(
-          curve: Curves.bounceInOut,
-          padding: EdgeInsets.all(0),
-          decoration: BoxDecoration(
-            color: Colors.black,
+class LandingPage extends StatefulWidget {
+  @override
+  _LandingPageState createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<LandingPage> {
+  int _selectedIndex = 0;
+  final List<Widget> _children = [
+    InventoryPage(),
+    RequestPage(),
+    ProfilePage(),
+  ];
+
+  final _pageController = PageController();
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  Color color = Colors.black;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PageView(
+        controller: _pageController,
+        children: _children,
+        onPageChanged: (int index) {
+          setState(() {
+            _pageController.jumpToPage(index);
+          });
+        },
+      ),
+      bottomNavigationBar: CurvedNavigationBar(
+        items: [
+          CurvedNavigationItem(
+            icon: Icon(
+              Icons.inbox,
+              size: 25,
+              color: Colors.white,
+            ),
+            text: Text(
+              'Inventory',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
-          child: Hero(
-            tag: 'logo',
-            child: Image.asset('images/logo.png'),
+          CurvedNavigationItem(
+            icon: Icon(
+              Icons.file_download,
+              color: Colors.white,
+              size: 25,
+            ),
+            text: Text(
+              'Requested Items',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
-        ),
-        ListTile(
-          leading: Icon(Icons.inbox),
-          title: Text('Inventory'),
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                  child: InventoryPage(), type: PageTransitionType.rightToLeft),
-            );
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.account_circle),
-          title: Text('Profile'),
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                  child: ProfilePage(), type: PageTransitionType.rightToLeft),
-            );
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.get_app),
-          title: Text('Requested Components'),
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                  child: RequestPage(), type: PageTransitionType.rightToLeft),
-            );
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.exit_to_app),
-          title: Text('Logout'),
-          onTap: () async {
-            await googleSignIn.signOut();
-            Navigator.push(
-                context,
-                PageTransition(
-                    child: LoginScreen(),
-                    type: PageTransitionType.rightToLeft));
-            FirebaseAuth.instance.signOut();
-          },
-        )
-      ],
-    ),
-  );
+          CurvedNavigationItem(
+            icon: Icon(
+              Icons.account_circle,
+              color: Colors.white,
+              size: 25,
+            ),
+            text: Text(
+              'Profile',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+        color: Colors.black,
+        buttonBackgroundColor: Colors.black,
+        backgroundColor: Colors.white,
+        animationCurve: Curves.easeInOut,
+        animationDuration: Duration(milliseconds: 600),
+        onTap: (index) {
+          setState(() {
+            _pageController.jumpToPage(index);
+          });
+        },
+      ),
+    );
+  }
 }

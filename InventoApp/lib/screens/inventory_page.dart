@@ -141,20 +141,17 @@ class _InventoryPageState extends State<InventoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    precacheImage(AssetImage("images/logo.png"), context);
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawerUser(context),
         backgroundColor: Colors.white,
         appBar: buildAppBar(
           context: context,
-          title: Hero(
-            tag: 'logo',
-            child: Image.asset(
-              'images/logo.png',
-              fit: BoxFit.contain,
-              height: 100,
-            ),
+          title: Image.asset(
+            'images/logo.png',
+            fit: BoxFit.contain,
+            height: 100,
           ),
         ),
         body: Container(

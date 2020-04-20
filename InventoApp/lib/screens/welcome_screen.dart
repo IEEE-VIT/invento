@@ -13,94 +13,92 @@ import 'package:connectivity/connectivity.dart';
 import 'package:invento/Helpers/drawer.dart';
 
 class WelcomeScreen extends StatefulWidget {
-
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  bool _showSpinner = false;
   final _auth = FirebaseAuth.instance;
   var _connectionStatus = 'Unknown';
   Connectivity connectivity;
   StreamSubscription<ConnectivityResult> subscription;
 
-
-
   @override
   void initState() {
     getCurrentUserUID();
     super.initState();
-
+    getAdmins();
     connectivity = new Connectivity();
     subscription =
         connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-          _connectionStatus = result.toString();
-          print(_connectionStatus);
-          if (result == ConnectivityResult.wifi ||
-              result == ConnectivityResult.mobile) {
-            setState(() {
-              _showSpinner = true;
-            });
-            getAdmins();
-            Timer(Duration(milliseconds: 2500), () {
-                    setState(() {
-                      _showSpinner=false;
-                    });
-              getUser().then((user) {
-                try {
-                  if (admins.contains(user.uid)) {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                          child: InventoryAdminPage(),
-                          type: PageTransitionType.rightToLeft),
-                    );
-                  } else {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                          child: InventoryPage(), type: PageTransitionType.rightToLeft),
-                    );
-                  }
+      _connectionStatus = result.toString();
+      print(_connectionStatus);
+      if (result == ConnectivityResult.wifi ||
+          result == ConnectivityResult.mobile) {
+        getAdmins();
+        Timer(Duration(milliseconds: 2500), () {
+          getUser().then((user) {
+            if (user != null) {
+              try {
+                if (admins.contains(user.uid)) {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                        child: InventoryAdminPage(),
+                        type: PageTransitionType.rightToLeft),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                        child: LandingPage(),
+                        type: PageTransitionType.rightToLeft),
+                  );
                 }
-                catch(e){
-                  print(e);
-                }
-              });
-            });
-          }
-          else{
-           // popDialog(title: 'No Internet Connection',context: context,content: 'Please turn on your WiFi or Mobile data and try again!');
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text('No Internet Connection'),
-                  content: Text('Please turn on your WiFi or Mobile data and try again!',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w700
-                    ),),
-                  actions: <Widget>[
-                    MaterialButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      color: Colors.black,
-                      child: Text('Okay'),
-                      onPressed: () {
-                        SystemChannels.platform.invokeListMethod('SystemNavigator.pop');
-                      },
-                    )
-                  ],
-                );
-              },
-            );
-          }
+              } catch (e) {
+                print(e);
+              }
+            } else {
+              Navigator.push(
+                context,
+                PageTransition(
+                    child: LoginScreen(), type: PageTransitionType.rightToLeft),
+              );
+            }
+          });
         });
-
+      } else {
+        // popDialog(title: 'No Internet Connection',context: context,content: 'Please turn on your WiFi or Mobile data and try again!');
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('No Internet Connection'),
+              content: Text(
+                'Please turn on your WiFi or Mobile data and try again!',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  color: Colors.black,
+                  child: Text('Okay'),
+                  onPressed: () {
+                    SystemChannels.platform
+                        .invokeListMethod('SystemNavigator.pop');
+                  },
+                )
+              ],
+            );
+          },
+        );
+      }
+    });
   }
 
   @override
-  void dispose(){
+  void dispose() {
     subscription.cancel();
     super.dispose();
   }
@@ -109,71 +107,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return await _auth.currentUser();
   }
 
-
   @override
   Widget build(BuildContext context) {
     print(_connectionStatus);
-    return ModalProgressHUD(
-      inAsyncCall: _showSpinner,
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            TypewriterAnimatedTextKit(
-              isRepeatingAnimation: true,
-              speed: Duration(milliseconds: 500),
-              text: ['Invento'],
-              textStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: 75.0,
-                  fontWeight: FontWeight.bold),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Material(
-                  borderRadius: BorderRadius.circular(30.0),
-                  child: MaterialButton(
-                    child: Text(
-                      'Login',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                            child: LoginScreen(),
-                            type: PageTransitionType.rightToLeft),
-                      );
-                    },
-                    minWidth: 150,
-                  ),
-                ),
-                SizedBox(
-                  width: 10.0,
-                ),
-                Material(
-                  borderRadius: BorderRadius.circular(30.0),
-                  child: MaterialButton(
-                    child: Text(
-                      'Register',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                            child: RegistrationScreen(),
-                            type: PageTransitionType.rightToLeft),
-                      );
-                    },
-                    minWidth: 150,
-                  ),
-                ),
-              ],
-            )
-          ],
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: TypewriterAnimatedTextKit(
+          isRepeatingAnimation: true,
+          speed: Duration(milliseconds: 500),
+          text: ['Invento'],
+          textStyle: TextStyle(
+              color: Colors.white, fontSize: 75.0, fontWeight: FontWeight.bold),
         ),
       ),
     );

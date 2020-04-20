@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:invento/Helpers/drawer.dart';
 import 'package:invento/screens/inventory_page_admin.dart';
+import 'package:invento/screens/registration_screen.dart';
 import 'package:invento/screens/welcome_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -69,21 +70,9 @@ class _LoginScreenState extends State<LoginScreen> {
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Colors.black,
-            leading: IconButton(
-              color: Colors.white,
-              icon: Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                      child: WelcomeScreen(),
-                      type: PageTransitionType.leftToRight),
-                );
-              },
-            ),
           ),
           body: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(10.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -106,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         keyboardType: TextInputType.emailAddress,
                         cursorRadius: Radius.circular(20),
-                        autofocus: true,
+                        autofocus: false,
                         decoration: InputDecoration(
                           fillColor: Colors.white,
                           hintText: 'Enter your email',
@@ -145,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         obscureText: passwordVisible,
                         cursorRadius: Radius.circular(20),
-                        autofocus: true,
+                        autofocus: false,
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
                               icon: Icon(
@@ -241,12 +230,76 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
                           }
                         },
-                        minWidth: 150,
+                        minWidth: 250,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: new Container(
+                                margin: const EdgeInsets.only(
+                                    left: 90.0, right: 15.0),
+                                child: Divider(
+                                  color: Colors.white,
+//                          height: 50,
+                                )),
+                          ),
+                          Text(
+                            "OR",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Expanded(
+                            child: new Container(
+                              margin: const EdgeInsets.only(
+                                  left: 15.0, right: 90.0),
+                              child: Divider(
+                                color: Colors.white,
+//                          height: 50,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    signInButton(context, admins),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 28.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "New User?",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30)),
+                            color: Colors.white,
+                            child: new Text(
+                              'Register here!',
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: RegistrationScreen(),
+                                    type: PageTransitionType.rightToLeft),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-                signInButton(context, admins),
               ],
             ),
           ),

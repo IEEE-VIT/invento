@@ -98,7 +98,6 @@ class _RequestPageState extends State<RequestPage> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawerUser(context),
         backgroundColor: Colors.white,
         appBar:
             buildAppBar(title: Text('Requested Components'), context: context),
@@ -152,13 +151,11 @@ class _RequestPageState extends State<RequestPage> {
               Icons.add,
               color: Colors.white,
             ),
-            elevation: 20,
             onPressed: () {
               Navigator.push(
                 context,
                 PageTransition(
-                    child: InventoryPage(),
-                    type: PageTransitionType.rightToLeft),
+                    child: LandingPage(), type: PageTransitionType.rightToLeft),
               );
             }),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

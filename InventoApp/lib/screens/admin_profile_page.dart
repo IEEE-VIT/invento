@@ -87,7 +87,6 @@ class _ProfilePageAdminState extends State<ProfilePageAdmin> {
         centerTitle: true,
         title: Text('Profile'),
       ),
-      drawer: buildDrawerUser(context),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
