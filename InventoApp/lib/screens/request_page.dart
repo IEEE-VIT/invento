@@ -99,8 +99,6 @@ class _RequestPageState extends State<RequestPage> {
       onWillPop: _onBackPressed,
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar:
-            buildAppBar(title: Text('Requested Components'), context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore

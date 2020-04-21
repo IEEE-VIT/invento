@@ -68,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Scaffold(
           backgroundColor: Colors.black,
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             elevation: 0,
             backgroundColor: Colors.black,
           ),
@@ -197,14 +198,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 Navigator.push(
                                   context,
                                   PageTransition(
-                                      child: InventoryAdminPage(),
+                                      child: LandingPageAdmin(),
                                       type: PageTransitionType.rightToLeft),
                                 );
                               } else {
                                 Navigator.push(
                                   context,
                                   PageTransition(
-                                      child: InventoryPage(),
+                                      child: LandingPage(),
                                       type: PageTransitionType.rightToLeft),
                                 );
                               }

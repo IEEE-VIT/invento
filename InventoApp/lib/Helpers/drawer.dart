@@ -27,7 +27,7 @@ void getAdmins() async {
   documents.forEach((data) => admins.add(data.documentID));
 }
 
-AppBar buildAppBar({Widget title, BuildContext context}) {
+AppBar buildAppBar(BuildContext context) {
   return AppBar(
     leading: Padding(
       padding: const EdgeInsets.only(left: 8.0),
@@ -37,19 +37,46 @@ AppBar buildAppBar({Widget title, BuildContext context}) {
     ),
     backgroundColor: Colors.black,
     elevation: 10,
-    title: title,
+    title: Image.asset(
+      'images/logo.png',
+      fit: BoxFit.contain,
+      height: 100,
+    ),
     centerTitle: true,
     actions: <Widget>[
       IconButton(
           icon: Icon(Icons.exit_to_app),
-          onPressed: () async {
-            await googleSignIn.signOut();
-            Navigator.push(
-                context,
-                PageTransition(
-                    child: LoginScreen(),
-                    type: PageTransitionType.rightToLeft));
-            FirebaseAuth.instance.signOut();
+          onPressed: () {
+            return showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Center(
+                      child: Text('Logout?'),
+                    ),
+                    content: Text('Are you sure you wanna log out?'),
+                    actions: <Widget>[
+                      MaterialButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                        onPressed: () async {
+                          await googleSignIn.signOut();
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: LoginScreen(),
+                                  type: PageTransitionType.rightToLeft));
+                          FirebaseAuth.instance.signOut();
+                        },
+                        color: Colors.black,
+                        child: Text(
+                          'Confirm',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  );
+                });
           })
     ],
   );
@@ -65,7 +92,7 @@ Widget signInButton(BuildContext context, List admins) {
           Navigator.push(
             context,
             PageTransition(
-                child: InventoryAdminPage(),
+                child: LandingPageAdmin(),
                 type: PageTransitionType.rightToLeft),
           );
         } else {
@@ -148,80 +175,99 @@ Future<FirebaseUser> getCurrentUserUID() async {
   return user;
 }
 
-Drawer buildDrawerAdmin(BuildContext context, String userUID) {
-  return Drawer(
-    child: ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        DrawerHeader(
-            padding: EdgeInsets.all(0),
-            decoration: BoxDecoration(
-              color: Colors.black,
+class LandingPageAdmin extends StatefulWidget {
+  @override
+  _LandingPageAdminState createState() => _LandingPageAdminState();
+}
+
+class _LandingPageAdminState extends State<LandingPageAdmin> {
+  int _selectedIndex = 0;
+  final List<Widget> _children = [
+    InventoryAdminPage(),
+    RequestPageAdmin(),
+    ProfilePageAdmin(),
+    IssuedPage(),
+  ];
+
+  final _pageController = PageController();
+
+  Color color = Colors.black;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: buildAppBar(context),
+      body: PageView(
+        controller: _pageController,
+        children: _children,
+        onPageChanged: (int index) {
+          setState(() {
+            _selectedIndex = index;
+            _pageController.jumpToPage(index);
+          });
+        },
+      ),
+      bottomNavigationBar: CurvedNavigationBar(
+        index: _selectedIndex,
+        items: [
+          CurvedNavigationItem(
+            icon: Icon(
+              Icons.edit,
+              size: 25,
+              color: Colors.white,
             ),
-            child: Image.asset('images/logo.png')),
-        ListTile(
-          leading: Icon(Icons.edit),
-          title: Text('Edit Inventory'),
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                  child: InventoryAdminPage(),
-                  type: PageTransitionType.rightToLeft),
-            );
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.account_circle),
-          title: Text('Profile/Return Requests'),
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                  child: ProfilePageAdmin(),
-                  type: PageTransitionType.rightToLeft),
-            );
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.file_download),
-          title: Text('Requested Components'),
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                  child: RequestPageAdmin(),
-                  type: PageTransitionType.rightToLeft),
-            );
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.list),
-          title: Text('Issued Components'),
-          onTap: () {
-            Navigator.push(
-              context,
-              PageTransition(
-                  child: IssuedPage(), type: PageTransitionType.rightToLeft),
-            );
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.exit_to_app),
-          title: Text('Logout'),
-          onTap: () async {
-            await googleSignIn.signOut();
-            Navigator.push(
-                context,
-                PageTransition(
-                    child: LoginScreen(),
-                    type: PageTransitionType.rightToLeft));
-            FirebaseAuth.instance.signOut();
-          },
-        )
-      ],
-    ),
-  );
+            text: Text(
+              'Edit Inventory',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          CurvedNavigationItem(
+            icon: Icon(
+              Icons.file_download,
+              color: Colors.white,
+              size: 25,
+            ),
+            text: Text(
+              'Requested',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          CurvedNavigationItem(
+            icon: Icon(
+              Icons.reply,
+              color: Colors.white,
+              size: 25,
+            ),
+            text: Text(
+              'Returns',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          CurvedNavigationItem(
+            icon: Icon(
+              Icons.local_shipping,
+              color: Colors.white,
+              size: 25,
+            ),
+            text: Text(
+              'Issued',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+        color: Colors.black,
+        buttonBackgroundColor: Colors.black,
+        backgroundColor: Colors.white,
+        animationCurve: Curves.easeInOut,
+        animationDuration: Duration(milliseconds: 600),
+        onTap: (index) {
+          setState(() {
+            _pageController.jumpToPage(index);
+          });
+        },
+      ),
+    );
+  }
 }
 
 class LandingPage extends StatefulWidget {
@@ -238,27 +284,26 @@ class _LandingPageState extends State<LandingPage> {
   ];
 
   final _pageController = PageController();
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   Color color = Colors.black;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: buildAppBar(context),
       body: PageView(
+        pageSnapping: true,
         controller: _pageController,
         children: _children,
         onPageChanged: (int index) {
           setState(() {
+            _selectedIndex = index;
             _pageController.jumpToPage(index);
           });
         },
       ),
       bottomNavigationBar: CurvedNavigationBar(
+        height: 65,
+        index: _selectedIndex,
         items: [
           CurvedNavigationItem(
             icon: Icon(

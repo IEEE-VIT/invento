@@ -48,19 +48,11 @@ class _InventoryPageState extends State<InventoryPage> {
       setState(() {
         _message = message["notification"]["title"];
       });
-      Navigator.push(
-          context,
-          PageTransition(
-              child: ProfilePage(), type: PageTransitionType.downToUp));
     }, onLaunch: (Map<String, dynamic> message) async {
       print('on launch $message');
       setState(() {
         _message = message["notification"]["title"];
       });
-      Navigator.push(
-          context,
-          PageTransition(
-              child: ProfilePage(), type: PageTransitionType.downToUp));
     });
   }
 
@@ -146,14 +138,6 @@ class _InventoryPageState extends State<InventoryPage> {
       onWillPop: _onBackPressed,
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: buildAppBar(
-          context: context,
-          title: Image.asset(
-            'images/logo.png',
-            fit: BoxFit.contain,
-            height: 100,
-          ),
-        ),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('components').snapshots(),

@@ -86,10 +86,7 @@ class _IssuedPageState extends State<IssuedPage> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawerAdmin(context, userUID),
         backgroundColor: Colors.white,
-        appBar:
-            buildAppBar(title: Text('All Issued Components'), context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('issued').snapshots(),

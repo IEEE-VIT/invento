@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
@@ -480,12 +481,20 @@ ListTile makeListTileRequest(Component component) => ListTile(
             ),
             padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             child: Center(
-              child: Text(
-                component.status,
-                style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Flexible(
+                    child: AutoSizeText(
+                      component.status,
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -541,7 +550,7 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
         ),
         Expanded(
           child: Text(
-            'User:${component.userNameRegular}',
+            'User:${component.userNameRegular.split(' ')[0]}',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),

@@ -44,7 +44,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   Navigator.push(
                     context,
                     PageTransition(
-                        child: InventoryAdminPage(),
+                        child: LandingPageAdmin(),
                         type: PageTransitionType.rightToLeft),
                   );
                 } else {

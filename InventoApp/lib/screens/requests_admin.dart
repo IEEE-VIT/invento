@@ -55,7 +55,7 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
     });
   }
 
-  Future<bool> _onBackPressed() {
+  Future<bool> onBackPressed() {
     return showDialog(
           context: context,
           builder: (context) {
@@ -87,12 +87,9 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _onBackPressed,
+      onWillPop: onBackPressed,
       child: Scaffold(
-        drawer: buildDrawerAdmin(context, userUID),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(
-            title: Text('All Requested Components'), context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('requests').snapshots(),

@@ -107,9 +107,7 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawerAdmin(context, userUID),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(title: Text('Edit Invento'), context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('components').snapshots(),
