@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-import 'package:invento/Helpers/drawer.dart';
+import 'package:invento/screens/landing_page.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -49,140 +47,162 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Text(
-                'Register',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 70),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Image.asset('images/leading.png'),
+                    Text(
+                      'Register',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 50),
+                    ),
+                  ],
+                ),
               ),
-              Column(
-                children: <Widget>[
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(32),
-                        color: Colors.white),
-                    child: TextField(
-                      onChanged: (value) {
-                        name = value.trim();
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                      cursorRadius: Radius.circular(20),
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        hintText: 'Enter your name',
-                        hintStyle: TextStyle(color: Colors.black),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 2.0),
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(32),
-                        color: Colors.white),
-                    child: TextField(
-                      onChanged: (value) {
-                        email = value;
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                      cursorRadius: Radius.circular(20),
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        hintText: 'Enter your email',
-                        hintStyle: TextStyle(color: Colors.black),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 2.0),
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white),
+                      child: TextField(
+                        onChanged: (value) {
+                          name = value.trim();
+                        },
+                        keyboardType: TextInputType.emailAddress,
+                        cursorRadius: Radius.circular(20),
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          hintText: 'Enter your name',
+                          hintStyle: TextStyle(color: Colors.black),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(32),
-                        color: Colors.white),
-                    child: TextField(
-                      onChanged: (value) {
-                        password = value;
-                      },
-                      obscureText: passwordVisible,
-                      cursorRadius: Radius.circular(20),
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        suffixIcon: IconButton(
-                            icon: Icon(
-                              passwordVisible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: Colors.black,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                passwordVisible = !passwordVisible;
-                              });
-                            }),
-                        fillColor: Colors.white,
-                        hintText: 'Enter your password',
-                        hintStyle: TextStyle(color: Colors.black),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 1.0),
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black, width: 2.0),
-                          borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white),
+                      child: TextField(
+                        onChanged: (value) {
+                          email = value;
+                        },
+                        keyboardType: TextInputType.emailAddress,
+                        cursorRadius: Radius.circular(20),
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          hintText: 'Enter your email',
+                          hintStyle: TextStyle(color: Colors.black),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 80,
-                  ),
-                  Material(
-                    borderRadius: BorderRadius.circular(30.0),
-                    child: MaterialButton(
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 16, right: 16),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white),
+                      child: TextField(
+                        onChanged: (value) {
+                          password = value;
+                        },
+                        obscureText: passwordVisible,
+                        cursorRadius: Radius.circular(20),
+                        autofocus: false,
+                        decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                              icon: Icon(
+                                passwordVisible
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.black,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  passwordVisible = !passwordVisible;
+                                });
+                              }),
+                          fillColor: Colors.white,
+                          hintText: 'Enter your password',
+                          hintStyle: TextStyle(color: Colors.black),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 20.0),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 1.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 2.0),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 80,
+                    ),
+                    MaterialButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      color: Colors.white,
                       child: Text(
                         'Register',
                         style: TextStyle(color: Colors.black),
@@ -229,8 +249,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       },
                       minWidth: 150,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

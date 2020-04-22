@@ -5,9 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:invento/Helpers/component_fields.dart';
 import 'dart:io';
 import 'package:invento/Helpers/color_loader.dart';
-import 'package:invento/Helpers/drawer.dart';
-import 'package:invento/screens/profile_page.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:invento/screens/landing_page.dart';
 
 FirebaseUser loggedInUser;
 
@@ -23,7 +21,6 @@ class _InventoryPageState extends State<InventoryPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUserUID();
     getAdmins();

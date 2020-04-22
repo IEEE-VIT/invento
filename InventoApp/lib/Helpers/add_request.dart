@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -180,23 +179,4 @@ class _AddRequestState extends State<AddRequest> {
       ),
     );
   }
-}
-
-showToast(BuildContext context, String message) {
-  showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text("Name of App"),
-          content: Text(message),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        );
-      });
 }

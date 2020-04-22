@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
 import 'package:invento/Helpers/add_request.dart';
-import 'package:invento/Helpers/drawer.dart';
+import 'package:invento/screens/landing_page.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
@@ -146,6 +146,11 @@ ListTile makeListTileIssued(Component component) => ListTile(
               'uid': component.userUID,
               'component': component.componentName
             });
+            popDialog(
+                context: component.context,
+                title: 'Notification Sent',
+                content:
+                    'A reminder notification has been sent to ${component.userNameRegular.split(" ")[0]} to return ${component.componentName}');
           }),
     );
 

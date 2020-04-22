@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/rendering.dart';
-import 'package:invento/Helpers/drawer.dart';
+import 'package:invento/screens/landing_page.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import 'package:invento/screens/detail_page.dart';
 import '../Helpers/component_fields.dart';
@@ -39,7 +39,6 @@ class InventoryAdminPage extends StatefulWidget {
 class _InventoryAdminPageState extends State<InventoryAdminPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUserUID();
   }

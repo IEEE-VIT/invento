@@ -107,22 +107,22 @@ Widget signInButton(BuildContext context, List admins) {
       Firestore.instance.collection('users').document(user.uid).setData(
           {'Email': user.email, 'UUID': user.uid, 'Name': user.displayName});
     },
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     highlightElevation: 0,
     borderSide: BorderSide(color: Colors.grey),
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Image(image: AssetImage("images/google_logo.png"), height: 30.0),
+          Image(image: AssetImage("images/google_logo.png"), height: 25.0),
           Padding(
             padding: const EdgeInsets.only(left: 10),
             child: Text(
               'Sign in with Google',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 color: Colors.white,
               ),
             ),

@@ -1,9 +1,7 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:invento/Helpers/drawer.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import 'package:invento/Helpers/component_fields.dart';
 
@@ -96,7 +94,6 @@ class _ProfilePageAdminState extends State<ProfilePageAdmin> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUser();
     getUsers();

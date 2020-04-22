@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:invento/Helpers/drawer.dart';
-import 'package:invento/screens/inventory_page_admin.dart';
+import 'package:invento/screens/landing_page.dart';
 import 'package:invento/screens/registration_screen.dart';
-import 'package:invento/screens/welcome_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:page_transition/page_transition.dart';
-import 'inventory_page.dart';
 import 'dart:io';
 
 class LoginScreen extends StatefulWidget {
@@ -73,112 +70,162 @@ class _LoginScreenState extends State<LoginScreen> {
             backgroundColor: Colors.black,
           ),
           body: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Text(
-                  'Login',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 70),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Image.asset('images/leading.png'),
+                      Text(
+                        'Login',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 50),
+                      ),
+                    ],
+                  ),
                 ),
-                Column(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(32),
-                          color: Colors.white),
-                      child: TextField(
-                        onChanged: (value) {
-                          email = value.trim();
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        cursorRadius: Radius.circular(20),
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          hintText: 'Enter your email',
-                          hintStyle: TextStyle(color: Colors.black),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
-                          border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(32.0)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 1.0),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(32.0)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2.0),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(32.0)),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(32),
-                          color: Colors.white),
-                      child: TextField(
-                        onChanged: (value) {
-                          password = value;
-                        },
-                        obscureText: passwordVisible,
-                        cursorRadius: Radius.circular(20),
-                        autofocus: false,
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                              icon: Icon(
-                                passwordVisible
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                                color: Colors.black,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  passwordVisible = !passwordVisible;
-                                });
-                              }),
-                          fillColor: Colors.white,
-                          hintText: 'Enter your password',
-                          hintStyle: TextStyle(color: Colors.black),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
-                          border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(32.0)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 1.0),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(32.0)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 2.0),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(32.0)),
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white),
+                        child: TextField(
+                          onChanged: (value) {
+                            email = value.trim();
+                          },
+                          keyboardType: TextInputType.emailAddress,
+                          cursorRadius: Radius.circular(8),
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            hintText: 'Enter your email',
+                            hintStyle: TextStyle(color: Colors.black),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 20.0),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.black, width: 2.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Material(
-                      borderRadius: BorderRadius.circular(30.0),
-                      child: MaterialButton(
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        margin:
+                            EdgeInsets.only(left: 16, right: 16, bottom: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white),
+                        child: TextField(
+                          onChanged: (value) {
+                            password = value;
+                          },
+                          obscureText: passwordVisible,
+                          cursorRadius: Radius.circular(8),
+                          autofocus: false,
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                                icon: Icon(
+                                  passwordVisible
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                  color: Colors.black,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    passwordVisible = !passwordVisible;
+                                  });
+                                }),
+                            fillColor: Colors.white,
+                            hintText: 'Enter your password',
+                            hintStyle: TextStyle(color: Colors.black),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 20.0),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.black, width: 1.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.black, width: 2.0),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        alignment: Alignment.centerLeft,
+                        child: FlatButton(
+                          padding: EdgeInsets.only(left: 16),
+                          child: RichText(
+                            text: TextSpan(
+                                style: TextStyle(
+                                    fontSize: 13, color: Colors.white),
+                                children: <TextSpan>[
+                                  TextSpan(text: 'Forgot Password? '),
+                                  TextSpan(
+                                      text: 'Click here!',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          decoration: TextDecoration.underline,
+                                          decorationStyle:
+                                              TextDecorationStyle.double)),
+                                ]),
+                          ),
+                          onPressed: () async {
+                            if (email != null) {
+                              await _auth.sendPasswordResetEmail(email: email);
+                              popDialog(
+                                  title: 'Reset Password',
+                                  context: context,
+                                  content:
+                                      'Please check your email for further instructions!');
+                            } else {
+                              popDialog(
+                                  title: 'Reset Password',
+                                  context: context,
+                                  content:
+                                      'Please recheck your email and try again!');
+                            }
+                          },
+                        ),
+                      ),
+                      MaterialButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        color: Colors.white,
                         child: Text(
                           'Login',
                           style: TextStyle(color: Colors.black),
@@ -233,73 +280,70 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         minWidth: 250,
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: new Container(
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: new Container(
+                                  margin: const EdgeInsets.only(
+                                      left: 90.0, right: 15.0),
+                                  child: Divider(
+                                    color: Colors.white,
+                                  )),
+                            ),
+                            Text(
+                              "OR",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            Expanded(
+                              child: new Container(
                                 margin: const EdgeInsets.only(
-                                    left: 90.0, right: 15.0),
+                                    left: 15.0, right: 90.0),
                                 child: Divider(
                                   color: Colors.white,
-//                          height: 50,
-                                )),
-                          ),
-                          Text(
-                            "OR",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Expanded(
-                            child: new Container(
-                              margin: const EdgeInsets.only(
-                                  left: 15.0, right: 90.0),
-                              child: Divider(
-                                color: Colors.white,
-//                          height: 50,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    signInButton(context, admins),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 28.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "New User?",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          MaterialButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                            color: Colors.white,
-                            child: new Text(
-                              'Register here!',
-                              style: TextStyle(
+                      signInButton(context, admins),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 28.0, bottom: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "New User?",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30)),
                                 color: Colors.black,
+                                child: new Text(
+                                  'Register here!',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        child: RegistrationScreen(),
+                                        type: PageTransitionType.rightToLeft),
+                                  );
+                                },
                               ),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: RegistrationScreen(),
-                                    type: PageTransitionType.rightToLeft),
-                              );
-                            },
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

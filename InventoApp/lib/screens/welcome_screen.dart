@@ -3,14 +3,10 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:invento/screens/inventory_page.dart';
-import 'package:invento/screens/inventory_page_admin.dart';
 import 'package:invento/screens/login_screen.dart';
-import 'package:invento/screens/registration_screen.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:invento/Helpers/drawer.dart';
+import 'package:invento/screens/landing_page.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -68,7 +64,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           });
         });
       } else {
-        // popDialog(title: 'No Internet Connection',context: context,content: 'Please turn on your WiFi or Mobile data and try again!');
         showDialog(
           context: context,
           builder: (context) {

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:invento/Helpers/drawer.dart';
+import 'package:invento/screens/landing_page.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import '../Helpers/component_fields.dart';
 
@@ -31,7 +31,6 @@ class _IssuedPageState extends State<IssuedPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUserUID();
     getUsers();
@@ -110,7 +109,7 @@ class _IssuedPageState extends State<IssuedPage> {
                 return Container(
                   child: Center(
                     child: Text(
-                      'No Requests',
+                      'No Issued Components',
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,

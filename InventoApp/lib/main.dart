@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:invento/Helpers/drawer.dart';
-
 import 'screens/welcome_screen.dart';
 
 void main() => runApp(Invento());
