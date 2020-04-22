@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:invento/Helpers/drawer.dart';
+import 'package:invento/screens/landing_page.dart';
 import 'package:invento/Helpers/color_loader.dart';
-import 'package:invento/screens/inventory_page.dart';
 import 'package:page_transition/page_transition.dart';
 import '../Helpers/component_fields.dart';
 
@@ -43,17 +41,12 @@ class _RequestPageState extends State<RequestPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUserUID();
     getUsers();
   }
 
   final _firestore = Firestore.instance;
-
-
-
-
 
   getUsers() async {
     final QuerySnapshot result =
@@ -102,9 +95,7 @@ class _RequestPageState extends State<RequestPage> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawerUser(context),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(title: 'Requested Components',context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore
@@ -155,13 +146,11 @@ class _RequestPageState extends State<RequestPage> {
               Icons.add,
               color: Colors.white,
             ),
-            elevation: 20,
             onPressed: () {
               Navigator.push(
                 context,
                 PageTransition(
-                    child: InventoryPage(),
-                    type: PageTransitionType.rightToLeft),
+                    child: LandingPage(), type: PageTransitionType.rightToLeft),
               );
             }),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

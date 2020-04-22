@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:invento/Helpers/reusable%20_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:invento/screens/inventory_page_admin.dart';
+import 'package:invento/screens/landing_page.dart';
 import 'package:page_transition/page_transition.dart';
 
 class DetailPage extends StatefulWidget {
@@ -35,7 +36,7 @@ class _DetailPageState extends State<DetailPage> {
               Navigator.push(
                 context,
                 PageTransition(
-                    child: InventoryAdminPage(),
+                    child: LandingPageAdmin(),
                     type: PageTransitionType.leftToRight),
               );
             }),
@@ -54,7 +55,9 @@ class _DetailPageState extends State<DetailPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  SizedBox(height: 30,),
+                  SizedBox(
+                    height: 30,
+                  ),
                   Expanded(
                     flex: 1,
                     child: Text(
@@ -66,7 +69,6 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                   ),
-
                   Expanded(
                     flex: 3,
                     child: Row(
@@ -85,12 +87,12 @@ class _DetailPageState extends State<DetailPage> {
                                 Icons.remove,
                               ),
                               onPressed: () {
-                                if(widget.quantity>0) {
+                                if (widget.quantity > 0) {
                                   widget._firestore
                                       .collection('components')
                                       .document(widget.documentID)
                                       .updateData(
-                                      {'Quantity': widget.quantity - 1});
+                                          {'Quantity': widget.quantity - 1});
                                   setState(() {
                                     widget.quantity--;
                                   });
@@ -121,19 +123,17 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                               onPressed: () {
                                 {
-                                    widget._firestore
-                                        .collection('components')
-                                        .document(widget.documentID)
-                                        .updateData(
-                                            {'Quantity': widget.quantity + 1});
-                                    setState(() {
-                                      widget.quantity++;
-                                    });
-
+                                  widget._firestore
+                                      .collection('components')
+                                      .document(widget.documentID)
+                                      .updateData(
+                                          {'Quantity': widget.quantity + 1});
+                                  setState(() {
+                                    widget.quantity++;
+                                  });
                                 }
                               }),
                         ),
-
                       ],
                     ),
                   )

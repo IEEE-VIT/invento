@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/rendering.dart';
-import 'package:invento/Helpers/drawer.dart';
+import 'package:invento/screens/landing_page.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import '../Helpers/component_fields.dart';
-
 
 class RequestPageAdmin extends StatefulWidget {
   List<String> usersID = [];
@@ -21,7 +20,6 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
   Widget buildListItem(BuildContext context, DocumentSnapshot document) {
     return makeListTileRequestAdmin(
       Component(
-        userUID: userUID,
         componentID: document['Component UUID'],
         context: context,
         userNameRegular: document['User Name'],
@@ -36,19 +34,12 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUserUID();
     getUsers();
   }
 
   final _firestore = Firestore.instance;
-
-
-
-
-
-
 
   getUsers() async {
     final QuerySnapshot result =
@@ -63,7 +54,7 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
     });
   }
 
-  Future<bool> _onBackPressed() {
+  Future<bool> onBackPressed() {
     return showDialog(
           context: context,
           builder: (context) {
@@ -95,11 +86,9 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _onBackPressed,
+      onWillPop: onBackPressed,
       child: Scaffold(
-        drawer: buildDrawerAdmin(context,userUID),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(title: 'All Requested Components',context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('requests').snapshots(),
@@ -125,10 +114,9 @@ class _RequestPageAdminState extends State<RequestPageAdmin> {
                     child: Text(
                       'No Requests',
                       style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey
-                      ),
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey),
                     ),
                   ),
                 );

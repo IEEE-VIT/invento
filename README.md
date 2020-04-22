@@ -4,18 +4,18 @@ This app will help us keep track of our inventory at IEEE-VIT Student Branch. It
 
 ### A user will be able to:
 
-* Request
-* Check the status of a request application 
+* Request a component
+* Check the status of a request application .
 * Return the component.
 
 ### An admin will be able to:
-* See all the requests
-* Can approve/deny them 
+* Remind borrowers to return the component by sending a push notification.
+* See all the requests and approve/deny them.
 * Add/remove and edit components in the inventory.
 
 ## Tools and Technologies used
 * Flutter
-* Google FireStore for storage and authentication
+* Google FireStore for storage, authentication and cloud messaging.
 
 ## App Screenshots:
 <p align="center">
@@ -23,23 +23,19 @@ This app will help us keep track of our inventory at IEEE-VIT Student Branch. It
 <br>
 <br>
 <br>
-<img src="ReadMeMedia/1.jpg" alt="Inventory"  width="300" height="600" />
+<img src="ReadMeMedia/1.png" alt="Inventory"  width="300" height="600" />
 <br>
 <br>
 <br>
-<img src="ReadMeMedia/2.jpg" alt="Request"  width="300" height="600" />
+<img src="ReadMeMedia/2.png" alt="Request"  width="300" height="600" />
 <br>
 <br>
 <br>
-<img src="ReadMeMedia/3.jpg" alt="Drawer"  width="300" height="600" />
+<img src="ReadMeMedia/4.png" alt="Status"  width="300" height="600" />
 <br>
 <br>
 <br>
-<img src="ReadMeMedia/4.jpg" alt="Status"  width="300" height="600" />
-<br>
-<br>
-<br>
-<img src="ReadMeMedia/5.jpg" alt="Profile" width="300" height="600" />
+<img src="ReadMeMedia/5.png" alt="Profile" width="300" height="600" />
 <br>
 <br>
 <br>
@@ -58,6 +54,12 @@ This app will help us keep track of our inventory at IEEE-VIT Student Branch. It
 ### To return a component:
 * Go to your 'Profile Page'.
 * Click on 'Return' and confirm to return.
+* Wait for the admin to approve your return request. You will be notified when your request is approved.
+
+## Contributors:
+* Rishi Raj Singh (<a href="https://github.com/rish07">@rish07</a>)
+
+
 
 ## License
 This project is licensed under [MIT License](https://github.com/rish07/Invento/blob/master/LICENSE)

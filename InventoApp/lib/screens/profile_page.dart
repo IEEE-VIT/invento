@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:invento/Helpers/drawer.dart';
+import 'package:flutter/rendering.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import 'package:invento/Helpers/component_fields.dart';
-import 'package:invento/screens/inventory_page.dart';
-import 'package:page_transition/page_transition.dart';
 
 class ProfilePage extends StatefulWidget {
   String userUID;
@@ -42,11 +40,13 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildListItem(BuildContext context, DocumentSnapshot document) {
     return makeListTileProfile(
       Component(
+        userNameRegular: document['User Name'],
         componentID: document['Component UUID'],
         issueID: document['Issue ID'],
         date: document['Date'],
         userUID: widget.userUID,
         context: context,
+        requestUserUID: document['User UUID'],
         componentName: document['Component Name'],
         quantity: document['Quantity'],
         documentId: document.documentID,
@@ -68,7 +68,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUser();
     getUsers();
@@ -79,18 +78,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        elevation: 0,
-        backgroundColor: Colors.black,
-        centerTitle: true,
-        title: Text('Profile'),
-      ),
-      drawer: buildDrawerUser(context),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
@@ -148,56 +135,53 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 Container(
-                  child: Container(
-                    child: StreamBuilder<QuerySnapshot>(
-                      stream: _firestore
-                          .collection('users')
-                          .document(widget.userUID)
-                          .collection('ComponentsIssued')
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return ColorLoader(
-                            colors: [
-                              Colors.red,
-                              Colors.green,
-                              Colors.indigo,
-                              Colors.pinkAccent,
-                              Colors.blue
-                            ],
-                            duration: Duration(milliseconds: 1200),
-                          );
-                        } else if (snapshot.data.documents.length == 0) {
-                          return Container(
-                            child: Column(
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 200,
-                                ),
-                                Center(
-                                  child: Text(
-                                    'No Issues',
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.grey),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                        return ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: snapshot.data.documents.length,
-                          itemBuilder: (context, index) {
-                            return _buildListItem(
-                                context, snapshot.data.documents[index]);
-                          },
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: _firestore
+                        .collection('users')
+                        .document(widget.userUID)
+                        .collection('ComponentsIssued')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return ColorLoader(
+                          colors: [
+                            Colors.red,
+                            Colors.green,
+                            Colors.indigo,
+                            Colors.pinkAccent,
+                            Colors.blue
+                          ],
+                          duration: Duration(milliseconds: 1200),
                         );
-                      },
-                    ),
+                      } else if (snapshot.data.documents.length == 0) {
+                        return Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 100,
+                              ),
+                              Text(
+                                'No Issues',
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: snapshot.data.documents.length,
+                        itemBuilder: (context, index) {
+                          return _buildListItem(
+                              context, snapshot.data.documents[index]);
+                        },
+                      );
+                    },
                   ),
                 ),
               ],

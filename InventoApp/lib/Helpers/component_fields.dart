@@ -1,10 +1,12 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
 import 'package:invento/Helpers/add_request.dart';
+import 'package:invento/screens/landing_page.dart';
 import 'package:uuid/uuid.dart';
-import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 class Component {
   String requestUserUID;
@@ -21,6 +23,7 @@ class Component {
   int quantity;
   String documentId;
   Function onPress;
+  Future<void> emailOnPress;
   String collection;
   String userNameRegular;
 
@@ -39,7 +42,8 @@ class Component {
       this.validate,
       this.date,
       this.issueID,
-      this.requestUserUID});
+      this.requestUserUID,
+      this.emailOnPress});
 }
 
 final _firestore = Firestore.instance;
@@ -49,11 +53,10 @@ bool isGoogle = true;
 getCurrentUser() async {
   FirebaseUser user = await FirebaseAuth.instance.currentUser();
   userNameGoogle = user.displayName;
-  if(userNameGoogle == null){
+  if (userNameGoogle == null) {
     isGoogle = false;
   }
 }
-
 
 Card makeCardAdmin(Component component) => Card(
       elevation: 8,
@@ -71,6 +74,84 @@ Card makeCard(Component component) => Card(
         decoration: BoxDecoration(),
         child: makeListTile(component),
       ),
+    );
+
+ListTile makeListTileIssued(Component component) => ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      leading: Container(
+        padding: EdgeInsets.only(right: 12),
+        decoration: BoxDecoration(
+          border: Border(
+            right: BorderSide(width: 1, color: Colors.blue),
+          ),
+        ),
+        child: Icon(
+          Icons.arrow_forward,
+          color: Colors.black,
+        ),
+      ),
+      title: Text(
+        component.componentName,
+        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      ),
+      subtitle: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text(
+                  'Quantity: ${component.quantity.toString()}',
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Text(
+                    "On: ${component.date}",
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 2,
+            ),
+            Text(
+              'To: ${component.userNameRegular}',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+      trailing: MaterialButton(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          child: Text(
+            'Request Return',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          color: Colors.black,
+          onPressed: () {
+            String temp = Uuid().v1();
+            _firestore.collection('returns').document(temp).setData({
+              'uid': component.userUID,
+              'component': component.componentName
+            });
+            popDialog(
+                context: component.context,
+                title: 'Notification Sent',
+                content:
+                    'A reminder notification has been sent to ${component.userNameRegular.split(" ")[0]} to return ${component.componentName}');
+          }),
     );
 
 ListTile makeListTileProfile(Component component) => ListTile(
@@ -127,13 +208,14 @@ ListTile makeListTileProfile(Component component) => ListTile(
             builder: (context) {
               return AlertDialog(
                 title: Text('Confirm Return?'),
-                content: Text('Do you want to return this component?',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700
-                  ),),
+                content: Text(
+                  'Do you want to return this component?',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
                 actions: <Widget>[
                   MaterialButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
                     color: Colors.black,
                     child: Text('No'),
                     onPressed: () {
@@ -141,28 +223,28 @@ ListTile makeListTileProfile(Component component) => ListTile(
                     },
                   ),
                   MaterialButton(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
                     color: Colors.black,
                     child: Text('Yes'),
                     onPressed: () {
                       _firestore
-                          .collection('users')
-                          .document(component.userUID)
-                          .collection('ComponentsIssued')
-                          .document(component.documentId)
-                          .delete();
-                      _firestore
-                          .collection('users')
-                          .document(component.userUID)
-                          .collection('RequestedComponents')
+                          .collection('returnRequest')
                           .document(component.issueID)
-                          .delete();
-                      _firestore
-                          .collection('components')
-                          .document(component.componentID)
-                          .updateData(
-                          {'Quantity': FieldValue.increment(component.quantity)});
+                          .setData({
+                        'componentName': component.componentName,
+                        'User Name': component.userNameRegular,
+                        'userUid': component.requestUserUID,
+                        'Component UUID': component.componentID,
+                        'Issue ID': component.issueID,
+                        'Quantity': component.quantity
+                      });
                       Navigator.of(context).pop();
+                      popDialog(
+                          title: 'Return Request Made',
+                          context: context,
+                          content:
+                              'Please wait till the admin approves this return request. You will receive a notification when it\'s done.');
                     },
                   )
                 ],
@@ -171,8 +253,101 @@ ListTile makeListTileProfile(Component component) => ListTile(
           );
         },
       ),
-      onTap: component.onPress,
     );
+
+ListTile makeListTileProfileAdmin(Component component) => ListTile(
+    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    leading: Container(
+      padding: EdgeInsets.only(right: 12),
+      decoration: BoxDecoration(
+        border: Border(
+          right: BorderSide(width: 1, color: Colors.blue),
+        ),
+      ),
+      child: Icon(
+        Icons.arrow_forward,
+        color: Colors.black,
+      ),
+    ),
+    title: Text(
+      component.userNameRegular,
+      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+    ),
+    subtitle: Text('is requesting to return ${component.componentName}'),
+    trailing: MaterialButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+      child: Text(
+        'Confirm',
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      color: Colors.black,
+      onPressed: () {
+        showDialog(
+          context: component.context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Confirm Return?'),
+              content: Text(
+                'Do you want to accept the return of this component?',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  color: Colors.black,
+                  child: Text('No'),
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                ),
+                MaterialButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  color: Colors.black,
+                  child: Text('Yes'),
+                  onPressed: () {
+                    _firestore
+                        .collection('returnRequest')
+                        .document(component.documentId)
+                        .delete();
+                    _firestore
+                        .collection('users')
+                        .document(component.requestUserUID)
+                        .collection('ComponentsIssued')
+                        .document(component.componentID)
+                        .delete();
+                    _firestore
+                        .collection('users')
+                        .document(component.requestUserUID)
+                        .collection('RequestedComponents')
+                        .document(component.issueID)
+                        .delete();
+                    _firestore
+                        .collection('components')
+                        .document(component.componentID)
+                        .updateData({
+                      'Quantity': FieldValue.increment(component.quantity)
+                    });
+                    _firestore
+                        .collection('issued')
+                        .document(component.issueID)
+                        .delete();
+                    _firestore
+                        .collection('returns')
+                        .document(component.requestUserUID)
+                        .delete();
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          },
+        );
+      },
+    ));
 
 ListTile makeListTileAdmin(Component component) => ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -249,12 +424,19 @@ ListTile makeListTile(Component component) => ListTile(
               context: component.context,
               isScrollControlled: true,
               builder: (context) => SingleChildScrollView(
-                  child:Container(
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: AddRequest(componentName: component.componentName,documentId: component.documentId,isGoogle: isGoogle,userUID: component.userUID,presentQuantity: component.quantity,userNameRegular: component.userNameRegular,userNameGoogle: userNameGoogle,),
-                  )
-              )
-          );
+                      child: Container(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: AddRequest(
+                      componentName: component.componentName,
+                      documentId: component.documentId,
+                      isGoogle: isGoogle,
+                      userUID: component.userUID,
+                      presentQuantity: component.quantity,
+                      userNameRegular: component.userNameRegular,
+                      userNameGoogle: userNameGoogle,
+                    ),
+                  )));
         },
         child: Text(
           'Request',
@@ -302,14 +484,22 @@ ListTile makeListTileRequest(Component component) => ListTile(
               color: component.color,
               borderRadius: BorderRadius.circular(10),
             ),
-            padding: EdgeInsets.symmetric(vertical: 5,horizontal: 10),
-
+            padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             child: Center(
-              child: Text(
-                component.status,
-                style: TextStyle(
-                  fontSize: 15,
-                    color: Colors.black, fontWeight: FontWeight.bold),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Flexible(
+                    child: AutoSizeText(
+                      component.status,
+                      maxLines: 1,
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -365,7 +555,7 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
         ),
         Expanded(
           child: Text(
-            'User:${component.userNameRegular}',
+            'User:${component.userNameRegular.split(' ')[0]}',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
@@ -443,7 +633,7 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                                 component.quantity) {
                               DateTime now = DateTime.now();
                               String formattedDate =
-                                  DateFormat('EEE d MMM').format(now);
+                                  DateFormat('d MMM').format(now);
                               _firestore
                                   .collection('requests')
                                   .document(component.documentId)
@@ -467,11 +657,24 @@ ListTile makeListTileRequestAdmin(Component component) => ListTile(
                                   .collection('ComponentsIssued')
                                   .document(component.componentID)
                                   .setData({
+                                'User UUID': component.requestUserUID,
+                                'User Name': component.userNameRegular,
                                 'Component Name': component.componentName,
                                 'Component UUID': component.componentID,
                                 'Quantity': component.quantity,
                                 'Date': formattedDate,
                                 'Issue ID': component.documentId,
+                              });
+                              _firestore
+                                  .collection('issued')
+                                  .document(component.documentId)
+                                  .setData({
+                                'User Name': component.userNameRegular,
+                                'Component Name': component.componentName,
+                                'Component UUID': component.componentID,
+                                'Quantity': component.quantity,
+                                'Date': formattedDate,
+                                'User UUID': component.requestUserUID
                               });
                               Navigator.of(context).pop();
                             } else {

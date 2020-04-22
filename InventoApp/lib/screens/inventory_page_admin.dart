@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/rendering.dart';
-import 'package:invento/Helpers/drawer.dart';
+import 'package:invento/screens/landing_page.dart';
 import 'package:invento/Helpers/color_loader.dart';
 import 'package:invento/screens/detail_page.dart';
 import '../Helpers/component_fields.dart';
@@ -37,13 +37,12 @@ class InventoryAdminPage extends StatefulWidget {
 }
 
 class _InventoryAdminPageState extends State<InventoryAdminPage> {
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getCurrentUserUID();
   }
+
   final _firestore = Firestore.instance;
   TextEditingController _componentNameController = TextEditingController();
   TextEditingController _quantityController = TextEditingController();
@@ -70,18 +69,16 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
     );
   }
 
-
-
   Future<bool> _onBackPressed() {
     return showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
               title: Text('Exit'),
-              content: Text('Do you want to exit the app?',
-              style: TextStyle(
-                fontWeight: FontWeight.w700
-              ),),
+              content: Text(
+                'Do you want to exit the app?',
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
               actions: <Widget>[
                 MaterialButton(
                   color: Colors.black,
@@ -109,9 +106,7 @@ class _InventoryAdminPageState extends State<InventoryAdminPage> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        drawer: buildDrawerAdmin(context,userUID),
         backgroundColor: Colors.white,
-        appBar: buildAppBar(title: 'Edit Invento',context: context),
         body: Container(
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore.collection('components').snapshots(),
