@@ -16,7 +16,7 @@ export const sendToDevice1 = functions.firestore.document('returns/{returnsId}')
     const payload: admin.messaging.MessagingPayload={
         notification:{
             title:('Request to return '+returns?.component),
-            body:'Click here to return',
+            body:'Please go to your Profile Section to return the component',
             clickAction:'FLUTTER_NOTIFICATION_CLICK'
         }
     };
