@@ -31,10 +31,6 @@ This app will help us keep track of our inventory at IEEE-VIT Student Branch. It
 <br>
 <br>
 <br>
-<img src="ReadMeMedia/3.png" alt="Drawer"  width="300" height="600" />
-<br>
-<br>
-<br>
 <img src="ReadMeMedia/4.png" alt="Status"  width="300" height="600" />
 <br>
 <br>
