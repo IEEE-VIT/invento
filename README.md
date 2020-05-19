@@ -13,6 +13,19 @@ This app will help us keep track of our inventory at IEEE-VIT Student Branch. It
 * See all the requests and approve/deny them.
 * Add/remove and edit components in the inventory.
 
+### To request a component:
+
+* Go to the Inventory page.
+* Click the 'Request' button next to the component you want to request.
+* Enter the quantity.
+* Wait for the admin to approve the request. You can see the status of your application in 'Requested Components'.
+* Once approved, you can see the issued component in your 'Profile Page'.
+
+### To return a component:
+* Go to your 'Profile Page'.
+* Click on 'Return' and confirm to return.
+* Wait for the admin to approve your return request. You will be notified when your request is approved.
+
 ## Tools and Technologies used
 * Flutter
 * Google FireStore for storage, authentication and cloud messaging.
@@ -39,22 +52,6 @@ This app will help us keep track of our inventory at IEEE-VIT Student Branch. It
 <br>
 <br>
 <br>
-
-
-
-
-### To request a component:
-
-* Go to the Inventory page.
-* Click the 'Request' button next to the component you want to request.
-* Enter the quantity.
-* Wait for the admin to approve the request. You can see the status of your application in 'Requested Components'.
-* Once approved, you can see the issued component in your 'Profile Page'.
-
-### To return a component:
-* Go to your 'Profile Page'.
-* Click on 'Return' and confirm to return.
-* Wait for the admin to approve your return request. You will be notified when your request is approved.
 
 ## Contributors:
 * Rishi Raj Singh (<a href="https://github.com/rish07">@rish07</a>)
